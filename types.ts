@@ -1,23 +1,10 @@
 
 export interface Fighter {
-  id: string;
-  name: string;
-  nickname: string;
-  weightClass: string;
-  record: {
-    wins: number;
-    losses: number;
-    draws: number;
-  };
-  rank: number;
-  image: string;
-  fightingStyle: string;
-  stats: {
-    striking: number;
-    grappling: number;
-    stamina: number;
-    power: number;
-  };
+  _id: string
+  name: string
+  weight_class: string
+  record: string
+  bio: string
 }
 
 export interface FightEvent {
