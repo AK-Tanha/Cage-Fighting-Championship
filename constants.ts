@@ -86,3 +86,4 @@ export const EVENTS: FightEvent[] = [
     image: 'https://picsum.photos/seed/event3/1200/600'
   }
 ];
+
