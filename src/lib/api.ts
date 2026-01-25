@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    // Using relative paths to leverage Next.js rewrites in next.config.ts.
-    // This avoids CORS errors by proxying requests through the Next.js server.
+    baseURL: process.env.NEXT_PUBLIC_URL || 'http://127.0.0.1:8000',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -12,7 +11,7 @@ const api = axios.create({
 
 export const getAllFighters = async () => {
     try {
-        const response = await api.get('/api/fighters/');
+        const response = await api.get('/fighters/');
         console.log('API Response data:', response.data);
         return response.data;
     } catch (error) {

@@ -93,8 +93,7 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$Cage$2d$Fighting$2d$Championship$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Cage-Fighting-Championship/node_modules/axios/lib/axios.js [app-ssr] (ecmascript)");
 ;
 const api = __TURBOPACK__imported__module__$5b$project$5d2f$Cage$2d$Fighting$2d$Championship$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].create({
-    // Using relative paths to leverage Next.js rewrites in next.config.ts.
-    // This avoids CORS errors by proxying requests through the Next.js server.
+    baseURL: ("TURBOPACK compile-time value", "http://127.0.0.1:8000") || 'http://127.0.0.1:8000',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -102,7 +101,7 @@ const api = __TURBOPACK__imported__module__$5b$project$5d2f$Cage$2d$Fighting$2d$
 });
 const getAllFighters = async ()=>{
     try {
-        const response = await api.get('/api/fighters/');
+        const response = await api.get('/fighters/');
         console.log('API Response data:', response.data);
         return response.data;
     } catch (error) {
