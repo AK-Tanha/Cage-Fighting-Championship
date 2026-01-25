@@ -13,6 +13,7 @@ const api = axios.create({
 export const getAllFighters = async () => {
     try {
         const response = await api.get('/fighters/');
+        console.log('API Response data:', response.data);
         return response.data;
     } catch (error) {
         console.error('API Error:', error);

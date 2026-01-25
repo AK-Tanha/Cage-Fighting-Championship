@@ -98,8 +98,11 @@ const Fighters: React.FC = () => {
                     // In the last step, I manually passed rank={index+1}.
                     // Let's reinstate that map logic if the data doesn't have rank.
 
-                    // MAPPING rank if missing:
-                    const rankedData = data.map((f: any, index: number) => ({
+                    console.log('Fighters data:', data);
+
+                    const fightersToShow = Array.isArray(data) ? data : (data && typeof data === 'object' && Array.isArray(data.data) ? data.data : []);
+
+                    const rankedData = fightersToShow.map((f: any, index: number) => ({
                         ...f,
                         rank: f.rank ?? (index + 1)
                     }));

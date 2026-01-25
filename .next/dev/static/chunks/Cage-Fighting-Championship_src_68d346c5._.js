@@ -19,6 +19,7 @@ const api = __TURBOPACK__imported__module__$5b$project$5d2f$Cage$2d$Fighting$2d$
 const getAllFighters = async ()=>{
     try {
         const response = await api.get('/fighters/');
+        console.log('API Response data:', response.data);
         return response.data;
     } catch (error) {
         console.error('API Error:', error);
@@ -299,8 +300,9 @@ const Fighters = ()=>{
                             // For now, assume API returns data consistent with Fighter.
                             // In the last step, I manually passed rank={index+1}.
                             // Let's reinstate that map logic if the data doesn't have rank.
-                            // MAPPING rank if missing:
-                            const rankedData = data.map({
+                            console.log('Fighters data:', data);
+                            const fightersToShow = Array.isArray(data) ? data : data && typeof data === 'object' && Array.isArray(data.data) ? data.data : [];
+                            const rankedData = fightersToShow.map({
                                 "Fighters.useEffect.loadFighters.rankedData": (f, index)=>({
                                         ...f,
                                         rank: f.rank ?? index + 1
@@ -336,12 +338,12 @@ const Fighters = ()=>{
                 children: "Loading Elite Roster..."
             }, void 0, false, {
                 fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-                lineNumber: 131,
+                lineNumber: 134,
                 columnNumber: 17
             }, ("TURBOPACK compile-time value", void 0))
         }, void 0, false, {
             fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-            lineNumber: 130,
+            lineNumber: 133,
             columnNumber: 13
         }, ("TURBOPACK compile-time value", void 0));
     }
@@ -354,7 +356,7 @@ const Fighters = ()=>{
                     children: error
                 }, void 0, false, {
                     fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-                    lineNumber: 141,
+                    lineNumber: 144,
                     columnNumber: 17
                 }, ("TURBOPACK compile-time value", void 0)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Cage$2d$Fighting$2d$Championship$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -365,13 +367,13 @@ const Fighters = ()=>{
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-                    lineNumber: 142,
+                    lineNumber: 145,
                     columnNumber: 17
                 }, ("TURBOPACK compile-time value", void 0))
             ]
         }, void 0, true, {
             fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-            lineNumber: 140,
+            lineNumber: 143,
             columnNumber: 13
         }, ("TURBOPACK compile-time value", void 0));
     }
@@ -390,13 +392,13 @@ const Fighters = ()=>{
                                 children: "ROSTER"
                             }, void 0, false, {
                                 fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-                                lineNumber: 154,
+                                lineNumber: 157,
                                 columnNumber: 27
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-                        lineNumber: 153,
+                        lineNumber: 156,
                         columnNumber: 17
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Cage$2d$Fighting$2d$Championship$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -411,18 +413,18 @@ const Fighters = ()=>{
                                 children: cat
                             }, cat, false, {
                                 fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-                                lineNumber: 158,
+                                lineNumber: 161,
                                 columnNumber: 25
                             }, ("TURBOPACK compile-time value", void 0)))
                     }, void 0, false, {
                         fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-                        lineNumber: 156,
+                        lineNumber: 159,
                         columnNumber: 17
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-                lineNumber: 152,
+                lineNumber: 155,
                 columnNumber: 13
             }, ("TURBOPACK compile-time value", void 0)),
             fighters.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Cage$2d$Fighting$2d$Championship$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -431,7 +433,7 @@ const Fighters = ()=>{
                     "No fighters found in the database yet.",
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Cage$2d$Fighting$2d$Championship$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                         fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-                        lineNumber: 171,
+                        lineNumber: 174,
                         columnNumber: 21
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Cage$2d$Fighting$2d$Championship$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -439,13 +441,13 @@ const Fighters = ()=>{
                         children: "Add some via Swagger at /docs"
                     }, void 0, false, {
                         fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-                        lineNumber: 172,
+                        lineNumber: 175,
                         columnNumber: 21
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-                lineNumber: 169,
+                lineNumber: 172,
                 columnNumber: 17
             }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Cage$2d$Fighting$2d$Championship$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8",
@@ -453,18 +455,18 @@ const Fighters = ()=>{
                         fighter: fighter
                     }, fighter._id, false, {
                         fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-                        lineNumber: 177,
+                        lineNumber: 180,
                         columnNumber: 25
                     }, ("TURBOPACK compile-time value", void 0)))
             }, void 0, false, {
                 fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-                lineNumber: 175,
+                lineNumber: 178,
                 columnNumber: 17
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/Cage-Fighting-Championship/src/components/Fighters.tsx",
-        lineNumber: 151,
+        lineNumber: 154,
         columnNumber: 9
     }, ("TURBOPACK compile-time value", void 0));
 };
