@@ -102,7 +102,7 @@ const api = __TURBOPACK__imported__module__$5b$project$5d2f$Cage$2d$Fighting$2d$
 });
 const getAllFighters = async ()=>{
     try {
-        const response = await api.get('/fighters/');
+        const response = await api.get('/api/fighters/');
         console.log('API Response data:', response.data);
         return response.data;
     } catch (error) {

@@ -5,16 +5,16 @@ type AppRoutes = "/" | "/events" | "/fighters"
 type PageRoutes = never
 type LayoutRoutes = "/"
 type RedirectRoutes = never
-type RewriteRoutes = "/events/[[...path]]" | "/fighters/[[...path]]"
+type RewriteRoutes = "/api/events/[[...path]]" | "/api/fighters/[[...path]]"
 type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRoutes
 
 
 interface ParamMap {
   "/": {}
+  "/api/events/[[...path]]": { "path"?: string[]; }
+  "/api/fighters/[[...path]]": { "path"?: string[]; }
   "/events": {}
-  "/events/[[...path]]": { "path"?: string[]; }
   "/fighters": {}
-  "/fighters/[[...path]]": { "path"?: string[]; }
 }
 
 

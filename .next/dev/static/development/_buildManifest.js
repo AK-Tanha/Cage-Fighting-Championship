@@ -2,10 +2,10 @@ self.__BUILD_MANIFEST = {
   "__rewrites": {
     "afterFiles": [
       {
-        "source": "/fighters/:path*"
+        "source": "/api/fighters/:path*"
       },
       {
-        "source": "/events/:path*"
+        "source": "/api/events/:path*"
       }
     ],
     "beforeFiles": [],

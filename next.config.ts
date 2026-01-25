@@ -5,11 +5,11 @@ const nextConfig: NextConfig = {
         const apiUrl = (process.env.NEXT_PUBLIC_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
         return [
             {
-                source: '/fighters/:path*',
+                source: '/api/fighters/:path*',
                 destination: `${apiUrl}/fighters/:path*`,
             },
             {
-                source: '/events/:path*',
+                source: '/api/events/:path*',
                 destination: `${apiUrl}/events/:path*`,
             },
         ];

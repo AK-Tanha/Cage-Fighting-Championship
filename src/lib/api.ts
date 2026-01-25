@@ -12,7 +12,7 @@ const api = axios.create({
 
 export const getAllFighters = async () => {
     try {
-        const response = await api.get('/fighters/');
+        const response = await api.get('/api/fighters/');
         console.log('API Response data:', response.data);
         return response.data;
     } catch (error) {
