@@ -1,0 +1,90 @@
+[00:00:00.879] Server  LOG     ✓ Ready in 653ms
+[00:00:01.907] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/fighters" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/Cage-Figh...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="en">
+                          <head>
+                          <body
+                            className="oswald_e654837b-module__he9M-q__variable inter_5901b7c6-module__ec5Qua__variabl..."
+-                           cz-shortcut-listen="true"
+                          >
+                  ...
+
+[00:00:02.063] Browser ERROR   API Error: {}
+[00:00:02.063] Browser ERROR   Fetch error: {}
+[00:00:03.235] Browser ERROR   API Error: {}
+[00:00:03.235] Browser ERROR   Fetch error: {}
+[00:00:06.672] Browser ERROR   API Error: {}
+[00:00:06.673] Browser ERROR   Fetch error: {}
+[00:01:16.917] Server  LOG     ✓ Compiled in 415ms
+[00:01:19.592] Server  LOG     ✓ Compiled in 24ms
+[00:03:52.273] Server  LOG     ✓ Compiled in 603ms
+[00:04:07.383] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/fighters" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/Cage-Figh...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="en">
+                          <head>
+                          <body
+                            className="oswald_e654837b-module__he9M-q__variable inter_5901b7c6-module__ec5Qua__variabl..."
+-                           cz-shortcut-listen="true"
+                          >
+                  ...
+
+[00:04:08.452] Browser ERROR   API Error: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://127.0.0.1:8000","env":{},"headers":{"Accept":"application/json","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/fighters/","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3000/_next/static/chunks/4c020_362f9173._.js:4040:25)\n    at Axios.request (http://localhost:3000/_next/static/chunks/4c020_362f9173._.js:4798:49)\n    at async getAllFighters (http://localhost:3000/_next/static/chunks/Cage-Fighting-Championship_src_68d346c5._.js:21:26)\n    at async Fighters.useEffect.loadFighters (http://localhost:3000/_next/static/chunks/Cage-Fighting-Championship_src_68d346c5._.js:296:38)"}
+[00:04:08.452] Browser ERROR   Fetch error: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://127.0.0.1:8000","env":{},"headers":{"Accept":"application/json","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/fighters/","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3000/_next/static/chunks/4c020_362f9173._.js:4040:25)\n    at Axios.request (http://localhost:3000/_next/static/chunks/4c020_362f9173._.js:4798:49)\n    at async getAllFighters (http://localhost:3000/_next/static/chunks/Cage-Fighting-Championship_src_68d346c5._.js:21:26)\n    at async Fighters.useEffect.loadFighters (http://localhost:3000/_next/static/chunks/Cage-Fighting-Championship_src_68d346c5._.js:296:38)"}
+[00:04:59.726] Browser ERROR   API Error: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://127.0.0.1:8000","env":{},"headers":{"Accept":"application/json","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/fighters/","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3000/_next/static/chunks/4c020_362f9173._.js:4040:25)\n    at Axios.request (http://localhost:3000/_next/static/chunks/4c020_362f9173._.js:4798:49)\n    at async getAllFighters (http://localhost:3000/_next/static/chunks/Cage-Fighting-Championship_src_68d346c5._.js:21:26)\n    at async Fighters.useEffect.loadFighters (http://localhost:3000/_next/static/chunks/Cage-Fighting-Championship_src_68d346c5._.js:296:38)"}
+[00:04:59.726] Browser ERROR   Fetch error: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://127.0.0.1:8000","env":{},"headers":{"Accept":"application/json","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/fighters/","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3000/_next/static/chunks/4c020_362f9173._.js:4040:25)\n    at Axios.request (http://localhost:3000/_next/static/chunks/4c020_362f9173._.js:4798:49)\n    at async getAllFighters (http://localhost:3000/_next/static/chunks/Cage-Fighting-Championship_src_68d346c5._.js:21:26)\n    at async Fighters.useEffect.loadFighters (http://localhost:3000/_next/static/chunks/Cage-Fighting-Championship_src_68d346c5._.js:296:38)"}
+[00:05:37.564] Server  LOG     ✓ Compiled in 161ms
+[00:06:05.614] Browser ERROR   Fetch error: {}

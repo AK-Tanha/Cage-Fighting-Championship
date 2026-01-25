@@ -1,0 +1,13 @@
+var R=require("../../chunks/ssr/[turbopack]_runtime.js")("server/app/_not-found/page.js")
+R.c("server/chunks/ssr/Cage-Fighting-Championship_9d1d4265._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__b77d6c04._.js")
+R.c("server/chunks/ssr/4c020_next_dist_esm_build_templates_app-page_79823aaf.js")
+R.c("server/chunks/ssr/[root-of-the-server]__22842f7f._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__f98f7df2._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__f90d5b95._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__6b276bd4._.js")
+R.c("server/chunks/ssr/4c020_next_dist_client_components_604d63f2._.js")
+R.c("server/chunks/ssr/4c020_next_dist_client_components_builtin_forbidden_e7e69677.js")
+R.c("server/chunks/ssr/5741c_Fighting-Championship__next-internal_server_app__not-found_page_actions_7adbd22b.js")
+R.m(50810)
+module.exports=R.m(50810).exports

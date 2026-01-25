@@ -1,0 +1,3 @@
+module.exports=[81960,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(62655);a.n(d("[project]/Cage-Fighting-Championship/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},62937,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(62655);a.n(d("[project]/Cage-Fighting-Championship/node_modules/next/dist/client/components/builtin/global-error.js"))},89553,a=>{"use strict";a.i(81960);var b=a.i(62937);a.n(b)}];
+
+//# sourceMappingURL=4c020_next_dist_client_components_builtin_global-error_36a0c399.js.map

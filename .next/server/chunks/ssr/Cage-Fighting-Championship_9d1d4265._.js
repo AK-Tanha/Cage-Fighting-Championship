@@ -1,0 +1,3 @@
+module.exports=[80110,a=>{a.n(a.i(6468))},29041,a=>{a.n(a.i(5433))},26087,a=>{a.n(a.i(85821))},81534,a=>{a.n(a.i(91142))},72158,a=>{a.n(a.i(89553))},91142,(a,b,c)=>{"use strict";Object.defineProperty(c,"__esModule",{value:!0}),Object.defineProperty(c,"default",{enumerable:!0,get:function(){return f}});let d=a.r(81486),e=a.r(77561);function f(){return(0,d.jsx)(e.HTTPAccessErrorFallback,{status:401,message:"You're not authorized to access this page."})}("function"==typeof c.default||"object"==typeof c.default&&null!==c.default)&&void 0===c.default.__esModule&&(Object.defineProperty(c.default,"__esModule",{value:!0}),Object.assign(c.default,c),b.exports=c.default)}];
+
+//# sourceMappingURL=Cage-Fighting-Championship_9d1d4265._.js.map
