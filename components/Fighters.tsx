@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getAllFighters } from '../API/fighters'; // your API file
 import { Fighter } from '../types';
 
