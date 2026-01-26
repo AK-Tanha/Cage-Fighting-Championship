@@ -1,21 +1,20 @@
 import axios from 'axios';
 
+// The proxy prefix handles CORS issues by bridging to the real backend server-side
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_URL || 'http://127.0.0.1:8000',
+    baseURL: '/api/proxy',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
 });
 
-
 export const getAllFighters = async () => {
     try {
         const response = await api.get('/fighters/');
-        console.log('API Response data:', response.data);
         return response.data;
-    } catch (error) {
-        console.error('API Error:', error);
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
 };

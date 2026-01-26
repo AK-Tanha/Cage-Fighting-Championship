@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAllFighters } from '../lib/api';
 import { Fighter } from '../types';
+import BouncingDotsLoader from './Loader';
 
 const StatBar: React.FC<{ label: string; value: number }> = ({ label, value }) => (
     <div className="mb-2">
@@ -131,7 +132,9 @@ const Fighters: React.FC = () => {
     if (loading) {
         return (
             <div className="pt-32 pb-20 flex justify-center items-center min-h-[60vh]">
+                    <BouncingDotsLoader size="lg" color="lime-400" />
                 <div className="text-2xl md:text-3xl text-gray-300 animate-pulse">
+                    <div className="w-12 h-12 border-2 border-[#FE0002] rounded-full animate-spin mr-2"></div>
                     Loading Elite Roster...
                 </div>
             </div>
