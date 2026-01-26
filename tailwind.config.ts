@@ -9,8 +9,10 @@ const config: Config = {
     theme: {
         extend: {
             fontFamily: {
-                oswald: ['var(--font-oswald)', 'sans-serif'],
-                sans: ['var(--font-inter)', 'sans-serif'],
+                montserrat: ['var(--font-montserrat)', 'sans-serif'],
+                rubik: ['var(--font-rubik)', 'sans-serif'],
+                display: ['var(--font-montserrat)', 'sans-serif'],
+                sans: ['var(--font-rubik)', 'sans-serif'],
             },
             backgroundImage: {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

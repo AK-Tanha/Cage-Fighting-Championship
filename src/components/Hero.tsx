@@ -18,26 +18,26 @@ const Hero: React.FC = () => {
 
             <div className="relative z-10 max-w-7xl mx-auto px-4 w-full">
                 <div className="max-w-2xl">
-                    <div className="flex items-center gap-2 mb-6 animate-bounce">
-                        <span className="bg-[#FE0002] text-xs font-bold px-2 py-1 rounded">LIVE NOW</span>
-                        <span className="text-white/80 font-bold uppercase tracking-widest text-sm">CFC 101: LAS VEGAS</span>
+                    <div className="flex items-center gap-3 mb-6">
+                        <span className="bg-[#FE0002] text-white text-[10px] font-black px-3 py-1 uppercase tracking-[0.2em] rounded-sm">LIVE NOW</span>
+                        <span className="text-white/40 font-bold uppercase tracking-[0.3em] text-[10px]">CFC 101: LAS VEGAS</span>
                     </div>
-                    <h1 className="text-7xl md:text-9xl font-oswald font-black leading-[0.85] mb-6 italic tracking-tighter">
+                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black leading-[0.9] mb-8 uppercase tracking-[-0.04em] text-glow-red italic">
                         WHERE <span className="text-[#FE0002]">LEGENDS</span> <br /> ARE FORGED
                     </h1>
-                    <p className="text-lg text-gray-300 mb-8 max-w-lg leading-relaxed font-light">
-                        Experience the world's premier mixed martial arts promotion. Witness the elite athletes as they step into the Octagon to battle for the CFC World Championship titles.
+                    <p className="text-base md:text-lg text-gray-500 mb-10 max-w-lg leading-relaxed font-light tracking-wide">
+                        Experience the world's premier mixed martial arts promotion. Witness the elite athletes as they step into the Octagon to battle for championship titles.
                     </p>
-                    <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-wrap gap-6 mt-12">
                         <Link
                             href="/events"
-                            className="bg-white text-black px-10 py-4 font-oswald font-black uppercase tracking-widest border-2 border-white hover:bg-[#FE0002] hover:border-[#FE0002] hover:text-white transition-all transform hover:scale-105 inline-block text-center"
+                            className="bg-[#FE0002] text-white px-10 py-5 font-display font-black uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all inline-block text-center border-2 border-[#FE0002] hover:border-white shadow-[0_0_30px_rgba(254,0,2,0.5)] transform hover:-translate-y-1"
                         >
-                            Watch Fight Pass
+                            Get Tickets
                         </Link>
                         <Link
                             href="/fighters"
-                            className="bg-transparent text-white px-10 py-4 font-oswald font-black uppercase tracking-widest border-2 border-white/20 hover:border-[#FE0002] transition-all transform hover:scale-105 inline-block text-center"
+                            className="bg-transparent text-white px-10 py-5 font-display font-bold uppercase tracking-[0.2em] border-2 border-white/20 hover:border-white transition-all inline-block text-center transform hover:-translate-y-1"
                         >
                             View Roster
                         </Link>

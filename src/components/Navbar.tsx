@@ -21,12 +21,12 @@ const Navbar: React.FC = () => {
                     <div className="bg-[#FE0002] p-2 rounded-sm rotate-45 group-hover:rotate-0 transition-transform duration-300">
                         <i className="fa-solid fa-hand-fist text-white -rotate-45 group-hover:rotate-0 transition-transform"></i>
                     </div>
-                    <span className="font-oswald text-2xl font-black tracking-tighter text-white">
+                    <span className="font-display text-lg md:text-xl font-black tracking-tighter text-white whitespace-nowrap uppercase">
                         CAGE FIGHTING <span className="text-[#FE0002]">CHAMPIONSHIP</span>
                     </span>
                 </Link>
 
-                <div className="hidden md:flex items-center gap-8 font-oswald text-sm font-bold tracking-widest uppercase">
+                <div className="hidden md:flex items-center gap-10 font-display font-medium text-xs tracking-[0.2em] uppercase">
                     {[
                         { path: '/', label: 'Home' },
                         { path: '/events', label: 'Events' },
@@ -47,8 +47,8 @@ const Navbar: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <button className="bg-[#FE0002] text-white px-6 py-2 font-oswald font-bold uppercase tracking-wider skew-x-[-15deg] hover:bg-white hover:text-black transition-all">
-                        <span className="inline-block skew-x-[15deg]">Buy Tickets</span>
+                    <button className="bg-white text-black px-6 py-2 font-display font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#FE0002] hover:text-white transition-all shadow-lg active:scale-95">
+                        Buy Tickets
                     </button>
                 </div>
             </div>

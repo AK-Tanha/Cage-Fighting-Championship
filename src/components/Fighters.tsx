@@ -1,24 +1,10 @@
 "use client";
 
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { getAllFighters } from '../lib/api';
 import { Fighter } from '../types';
-import BouncingDotsLoader from './Loader';
-
-const StatBar: React.FC<{ label: string; value: number }> = ({ label, value }) => (
-    <div className="mb-2">
-        <div className="flex justify-between text-[10px] font-bold uppercase mb-1">
-            <span>{label}</span>
-            <span>{value}%</span>
-        </div>
-        <div className="h-1 bg-white/10 overflow-hidden rounded-full">
-            <div
-                className="h-full bg-[#FE0002] transition-all duration-1000 ease-out"
-                style={{ width: `${value}%` }}
-            />
-        </div>
-    </div>
-);
+import CircularLoader from './CircularLoader';
 
 const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
     const record = typeof fighter.record === 'string'
@@ -26,59 +12,57 @@ const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
         : `${fighter.record?.wins ?? 0}-${fighter.record?.losses ?? 0}-${fighter.record?.draws ?? 0}`;
 
     return (
-        <div className="group relative bg-[#171715] border border-white/5 hover:border-[#FE0002]/50 transition-all duration-500 overflow-hidden rounded-xl shadow-lg hover:shadow-2xl">
-            <div className="aspect-[4/5] overflow-hidden">
+        <Link
+            href={`/fighters/${fighter._id}`}
+            className="group relative bg-[#0D0D0D] overflow-hidden rounded-sm border border-white/5 hover:border-[#FE0002]/40 transition-all duration-700 aspect-[4/5] flex flex-col justify-end shadow-2xl"
+        >
+            {/* Fighter Portrait */}
+            <div className="absolute inset-0 z-0">
                 <img
-                    src={fighter.image || 'https://via.placeholder.com/400x500?text=Fighter'}
+                    src='https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3022677.png&w=350&h=254'
                     alt={fighter.name}
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
+                    className="w-full h-full object-cover grayscale brightness-[0.6] group-hover:grayscale-0 group-hover:brightness-100 group-hover:scale-110 transition-all duration-1000 ease-out"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-100 group-hover:opacity-80 transition-opacity" />
             </div>
 
-            {fighter.rank !== undefined && (
-                <div className="absolute top-4 left-4 bg-[#FE0002] text-white font-bold text-lg w-10 h-10 rounded-full flex items-center justify-center shadow-lg border-2 border-white/30 z-10">
-                    {fighter.rank}
-                </div>
-            )}
-
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
-
-            <div className="absolute bottom-0 left-0 right-0 p-6 transform group-hover:-translate-y-2 transition-transform duration-500">
-                <div className="flex justify-between items-end mb-3">
-                    <div>
-                        <p className="text-[#FE0002] font-bold text-sm uppercase tracking-tighter">
-                            {fighter.weight_class ?? 'Unknown'}
-                        </p>
-                        <h3 className="text-3xl md:text-4xl font-oswald font-black uppercase tracking-tighter italic">
-                            {fighter.name}
-                        </h3>
-                        <p className="text-gray-300 text-sm italic mt-1">
-                            "{fighter.nickname || 'No nickname'}"
-                        </p>
+            {/* Fighter Info Overlay */}
+            <div className="relative z-10 p-6 md:p-8 transform transition-all duration-500 group-hover:pb-12">
+                <div className="space-y-0.5">
+                    {/* Rank & Weightclass */}
+                    <div className="flex items-center gap-2 mb-1">
+                        {fighter.rank !== undefined && (
+                            <span className="text-[#FE0002] font-display font-black text-xs md:text-sm italic">
+                                #{fighter.rank}
+                            </span>
+                        )}
+                        <span className="text-white/50 font-display font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em]">
+                            {fighter.weight_class}
+                        </span>
                     </div>
-                    <div className="text-right">
-                        <p className="font-oswald font-bold text-2xl leading-none">
+
+                    {/* Name */}
+                    <h3 className="text-xl md:text-2xl font-display font-black uppercase italic leading-none tracking-tighter text-white whitespace-nowrap overflow-hidden text-ellipsis drop-shadow-lg">
+                        {fighter.name}
+                    </h3>
+
+                    {/* Record */}
+                    <div className="pt-2">
+                        <p className="font-display font-black text-lg md:text-xl tracking-tighter text-white leading-none">
                             {record}
                         </p>
-                        <p className="text-[11px] text-gray-500 uppercase mt-1">Pro Record</p>
                     </div>
-                </div>
 
-                <div className="mt-5 max-h-0 group-hover:max-h-48 overflow-hidden transition-all duration-700 opacity-0 group-hover:opacity-100">
-                    <div className="grid grid-cols-2 gap-x-5 gap-y-3">
-                        <StatBar label="Striking" value={fighter.stats?.striking ?? 0} />
-                        <StatBar label="Grappling" value={fighter.stats?.grappling ?? 0} />
-                        <StatBar label="Stamina" value={fighter.stats?.stamina ?? 0} />
-                        <StatBar label="Power" value={fighter.stats?.power ?? 0} />
-                    </div>
-                    {fighter.fightingStyle && (
-                        <p className="text-[11px] text-white/70 mt-4 italic uppercase tracking-wide">
-                            Style: {fighter.fightingStyle}
-                        </p>
-                    )}
+                    {/* Pro Label */}
+                    <p className="text-[9px] text-[#FE0002] uppercase font-black tracking-[0.3em] pt-0.5">
+                        PRO
+                    </p>
                 </div>
             </div>
-        </div>
+
+            {/* Decorative Grid Accent */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(rgba(254,0,2,0.1)_1px,transparent_1px)] [background-size:8px_8px] opacity-0 group-hover:opacity-100 transition-opacity" />
+        </Link>
     );
 };
 
@@ -86,104 +70,113 @@ const Fighters: React.FC = () => {
     const [fighters, setFighters] = useState<Fighter[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [activeFilter, setActiveFilter] = useState('ALL');
 
     useEffect(() => {
         let isMounted = true;
-
         const loadFighters = async () => {
             try {
                 const data = await getAllFighters();
                 if (isMounted) {
-                    // If the API returns rank, we trust it. If not, we might need to compute or mock.
-                    // For now, assume API returns data consistent with Fighter.
-                    // In the last step, I manually passed rank={index+1}.
-                    // Let's reinstate that map logic if the data doesn't have rank.
-
-                    console.log('Fighters data:', data);
-
                     const fightersToShow = Array.isArray(data) ? data : (data && typeof data === 'object' && Array.isArray(data.data) ? data.data : []);
-
                     const rankedData = fightersToShow.map((f: any, index: number) => ({
                         ...f,
                         rank: f.rank ?? (index + 1)
                     }));
-
                     setFighters(rankedData);
                 }
             } catch (err: any) {
-                if (isMounted) {
-                    setError(err.message || 'Failed to load the roster');
-                    console.error('Fetch error:', err);
-                }
+                if (isMounted) setError(err.message || 'Failed to load the roster');
             } finally {
-                if (isMounted) {
-                    setLoading(false);
-                }
+                if (isMounted) setLoading(false);
             }
         };
-
         loadFighters();
-
-        return () => {
-            isMounted = false;
-        };
+        return () => { isMounted = false; };
     }, []);
 
-    if (loading) {
-        return (
-            <div className="pt-32 pb-20 flex justify-center items-center min-h-[60vh]">
-                    <BouncingDotsLoader size="lg" color="lime-400" />
-                <div className="text-2xl md:text-3xl text-gray-300 animate-pulse">
-                    <div className="w-12 h-12 border-2 border-[#FE0002] rounded-full animate-spin mr-2"></div>
-                    Loading Elite Roster...
-                </div>
-            </div>
-        );
-    }
+    const filteredFighters = activeFilter === 'ALL'
+        ? fighters
+        : fighters.filter(f => f.weight_class?.toUpperCase() === activeFilter);
 
-    if (error) {
-        return (
-            <div className="pt-32 pb-20 text-center min-h-[60vh]">
-                <p className="text-2xl md:text-3xl text-red-500 mb-4">{error}</p>
-                <p className="text-gray-400">
-                    Make sure your backend is running at {process.env.NEXT_PUBLIC_URL || 'http://127.0.0.1:8000'}
-                </p>
-
+    if (loading) return (
+        <div className="pt-40 pb-20 flex flex-col justify-center items-center min-h-[80vh] bg-black">
+            <CircularLoader isLoader={true} size="w-32 h-32" />
+            <div className="mt-12 text-sm text-gray-500 font-display font-black uppercase tracking-[0.5em] animate-pulse">
+                Establishing Neural Connection to Roster
             </div>
-        );
-    }
+        </div>
+    );
 
     return (
-        <div className="pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-16 border-b-4 border-[#FE0002] pb-6">
-                <h2 className="text-5xl md:text-7xl font-oswald font-black italic uppercase tracking-tighter mb-4 md:mb-0">
-                    ELITE <span className="text-[#FE0002]">ROSTER</span>
-                </h2>
-                <div className="flex flex-wrap gap-5">
-                    {['ALL', 'LIGHTWEIGHT', 'WELTERWEIGHT', 'HEAVYWEIGHT'].map((cat) => (
-                        <button
-                            key={cat}
-                            className="text-xs md:text-sm font-bold tracking-widest text-gray-400 hover:text-white transition-colors duration-300"
-                        >
-                            {cat}
-                        </button>
-                    ))}
+        <div className="min-h-screen bg-black text-white selection:bg-[#FE0002]">
+            {/* High-Impact Hero Section */}
+            <div className="relative pt-24 pb-6 md:pt-28 overflow-hidden border-b border-white/5">
+                <div className="absolute inset-0 z-0">
+                    <div className="absolute inset-0 bg-[radial-gradient(rgba(254,0,2,0.1)_1px,transparent_1px)] [background-size:32px_32px]" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black" />
+                </div>
+
+                <div className="max-w-7xl mx-auto px-6 relative z-10">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-12">
+                        <div className="flex-1">
+                            <div className="inline-block mb-4 relative">
+                                <span className="relative bg-[#FE0002] text-white text-[9px] font-black px-4 py-1 uppercase tracking-[0.3em] skew-x-[-15deg]">
+                                    <span className="inline-block skew-x-[15deg]">Official Rankings</span>
+                                </span>
+                            </div>
+
+                            <h2 className="text-5xl md:text-7xl lg:text-8xl font-display font-black italic uppercase tracking-tighter leading-[0.85] mb-4">
+                                ELITE <span className="text-[#FE0002] text-glow-red">ROSTER</span>
+                            </h2>
+                        </div>
+
+                        <div className="max-w-md md:border-l-2 border-[#FE0002] md:pl-8">
+                            <p className="text-gray-500 font-medium tracking-wide text-xs md:text-sm leading-relaxed italic">
+                                Witness the vanguard of combat. These are the elite athletes redefining the Octagon.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            {fighters.length === 0 ? (
-                <div className="text-center py-20 text-xl text-gray-400">
-                    No fighters found in the database yet.
-                    <br />
-                    <span className="text-sm mt-2 block">Add some via Swagger at /docs</span>
+            {/* Premium Category Filter - Sticky and Scrollable */}
+            <div className="sticky top-20 z-40 bg-black/90 backdrop-blur-2xl border-b border-white/5">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="flex items-center gap-10 overflow-x-auto no-scrollbar py-3 pointer-events-auto">
+                        {['ALL', 'LIGHTWEIGHT', 'WELTERWEIGHT', 'HEAVYWEIGHT', 'FEATHERWEIGHT'].map((cat) => (
+                            <button
+                                key={cat}
+                                onClick={() => setActiveFilter(cat)}
+                                className={`text-[10px] font-black tracking-[0.3em] uppercase transition-all relative py-2 whitespace-nowrap ${activeFilter === cat ? 'text-white' : 'text-gray-600 hover:text-white'
+                                    }`}
+                            >
+                                {cat}
+                                {activeFilter === cat && (
+                                    <span className="absolute -bottom-1 left-0 w-full h-1 bg-[#FE0002] rounded-full shadow-[0_0_15px_rgba(254,0,2,0.8)]" />
+                                )}
+                            </button>
+                        ))}
+                    </div>
                 </div>
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {fighters.map((fighter) => (
-                        <FighterCard key={fighter._id} fighter={fighter} />
-                    ))}
-                </div>
-            )}
+            </div>
+
+            {/* Roster Grid Section */}
+            <div className="max-w-7xl mx-auto px-6 py-8 md:py-10">
+                {filteredFighters.length === 0 ? (
+                    <div className="text-center py-40 bg-white/5 border border-dashed border-white/10 rounded-sm">
+                        <p className="text-gray-500 font-display font-black uppercase italic tracking-[0.2em] text-xl">Roster Data Offline</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
+                        {filteredFighters.map((fighter) => (
+                            <FighterCard key={fighter._id} fighter={fighter} />
+                        ))}
+                    </div>
+                )}
+
+                
+            </div>
         </div>
     );
 };

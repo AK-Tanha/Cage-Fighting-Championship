@@ -16,14 +16,22 @@ export interface Fighter {
     fightingStyle?: string;
 }
 
+export interface IndividualFight {
+    fighter1: string; // ID
+    fighter2: string; // ID
+    weight_class: string;
+    title_fight?: boolean;
+    result?: string;
+}
+
 export interface FightEvent {
-    id: string;
-    title: string;
+    _id: string;
+    name: string;
     date: string;
     location: string;
-    mainEvent: string;
-    image: string;
+    image?: string;
     isLive?: boolean;
+    fights?: IndividualFight[];
 }
 
 export type View = 'home' | 'fighters' | 'events';

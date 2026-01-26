@@ -1,28 +1,60 @@
 @import "tailwindcss";
-@config "../../tailwind.config.ts";
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@theme {
+  --font-montserrat: var(--font-montserrat);
+  --font-rubik: var(--font-rubik);
+
+  --font-sans: var(--font-rubik), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), sans-serif;
+
+  /* Fallback aliases for existing components to ensure no breakages */
+  --font-oswald: var(--font-montserrat);
+  --font-inter: var(--font-rubik);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+/* 
+ * BASE STYLES 
+ * Recalibrated for Montserrat (Wide) and Rubik (Geometric)
+ */
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-  background-color: black; /* Override for this specific app */
-  color: white;
+  font-family: var(--font-rubik), ui-sans-serif, system-ui, sans-serif;
+  background-color: #000;
+  color: #fff;
+  font-size: 15px; /* Rubik at 15px feels like Inter at 16px */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-montserrat), sans-serif;
+  text-transform: uppercase;
+  letter-spacing: -0.03em; /* Tighten Montserrat to match fight aesthetic */
+  line-height: 1;
+}
+
+/* 
+ * PREMIUM UTILITIES
+ */
+.fight-title {
+  font-family: var(--font-montserrat), sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-style: italic;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+}
+
+.text-glow-red {
+  text-shadow: 0 0 30px rgba(254, 0, 2, 0.4);
 }

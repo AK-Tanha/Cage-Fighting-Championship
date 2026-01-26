@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
                             <div className="bg-[#FE0002] p-1 rotate-45">
                                 <i className="fa-solid fa-hand-fist text-white text-xs -rotate-45"></i>
                             </div>
-                            <span className="font-oswald text-xl font-black tracking-tighter uppercase">
+                            <span className="font-display text-xl font-black tracking-tighter uppercase">
                                 CAGE FIGHTING <span className="text-[#FE0002]">CHAMPIONSHIP</span>
                             </span>
                         </div>
@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
                     </div>
 
                     <div>
-                        <h4 className="font-oswald font-bold uppercase mb-4 tracking-widest text-[#FE0002]">Navigation</h4>
+                        <h4 className="font-display font-bold uppercase mb-4 tracking-widest text-[#FE0002]">Navigation</h4>
                         <ul className="text-gray-400 text-sm space-y-2">
                             <li className="hover:text-white cursor-pointer transition-colors">
                                 <Link href="/events">Fight Schedule</Link>
@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
                     </div>
 
                     <div>
-                        <h4 className="font-oswald font-bold uppercase mb-4 tracking-widest text-[#FE0002]">Socials</h4>
+                        <h4 className="font-display font-bold uppercase mb-4 tracking-widest text-[#FE0002]">Socials</h4>
                         <div className="flex gap-4">
                             <a href="#" className="w-10 h-10 flex items-center justify-center bg-black hover:bg-[#FE0002] transition-all rounded-sm">
                                 <i className="fa-brands fa-x-twitter"></i>

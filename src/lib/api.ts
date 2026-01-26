@@ -18,3 +18,33 @@ export const getAllFighters = async () => {
         throw error;
     }
 };
+
+export const getFighterById = async (id: string) => {
+    try {
+        const response = await api.get(`/fighters/${id}/`);
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const getAllEvents = async () => {
+    try {
+        const response = await api.get('/events/');
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const getEventById = async (id: string) => {
+    try {
+        const response = await api.get(`/events/${id}/`);
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
