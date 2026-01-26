@@ -65,28 +65,25 @@ export const FIGHTERS: Fighter[] = [
 
 export const EVENTS: FightEvent[] = [
     {
-        id: 'cfc-101',
-        title: 'CFC 101: SILVA vs FORGE',
+        _id: 'cfc-101',
+        name: 'CFC 101: SILVA vs FORGE',
         date: '2024-12-15T20:00:00',
         location: 'Las Vegas, NV',
-        mainEvent: 'Alex Silva vs Jaxson Forge',
         image: 'https://picsum.photos/seed/event1/1200/600',
         isLive: true
     },
     {
-        id: 'cfc-102',
-        title: 'CFC 102: CHAMPIONS NIGHT',
+        _id: 'cfc-102',
+        name: 'CFC 102: CHAMPIONS NIGHT',
         date: '2025-01-20T19:00:00',
         location: 'Miami, FL',
-        mainEvent: 'Marcus Vance vs TBA',
         image: 'https://picsum.photos/seed/event2/1200/600'
     },
     {
-        id: 'cfc-fight-night',
-        title: 'CFC Fight Night: TOKYO',
+        _id: 'cfc-fight-night',
+        name: 'CFC Fight Night: TOKYO',
         date: '2025-02-10T18:00:00',
         location: 'Tokyo, Japan',
-        mainEvent: 'Richter vs Tanaka',
         image: 'https://picsum.photos/seed/event3/1200/600'
     }
 ];
