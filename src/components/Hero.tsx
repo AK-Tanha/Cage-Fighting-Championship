@@ -2,12 +2,17 @@
 
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
 
 const Hero: React.FC = () => {
     const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
 
     const eventImages = [
-        "https://scontent.fdac207-1.fna.fbcdn.net/v/t39.30808-6/505445349_122137136186673115_5983191278971727524_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_ohc=jvGJ8h0FGHoQ7kNvwG4qOlS&_nc_oc=Adndnc2ISHVe7g8CVBewroXifLbyq055mc11IoJYUPtDku9U47flUAFSeUplZuH4IuI&_nc_zt=23&_nc_ht=scontent.fdac207-1.fna&_nc_gid=c_m7WR8LcfqvxaceJE8Fuw&oh=00_Afp2A5IA_HKgeORYflsV8Ey8khAGr3x_tVhZl9TuEtf9-Q&oe=69815C6A"
+        "https://picsum.photos/1920/1080?random=1",
+        "https://picsum.photos/1920/1080?random=2",
+        "https://picsum.photos/1920/1080?random=3",
+        "https://picsum.photos/1920/1080?random=4",
+        "https://picsum.photos/1920/1080?random=5",
     ];
 
     React.useEffect(() => {
@@ -22,7 +27,7 @@ const Hero: React.FC = () => {
             {/* Background */}
             <div className="absolute inset-0 z-0 pointer-events-none">
                 {eventImages.map((src, index) => (
-                    <img
+                    <Image
                         key={index}
                         src={src}
                         alt=""
@@ -32,6 +37,9 @@ const Hero: React.FC = () => {
               transition-opacity duration-1000 ease-in-out
               ${index === currentImageIndex ? "opacity-100 scale-105" : "opacity-0 scale-100"}
             `}
+                        width={1920}
+                        height={1080}
+                        loading="lazy"
                     />
                 ))}
 

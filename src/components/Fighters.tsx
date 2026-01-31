@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { getAllFighters } from '../lib/api';
 import { Fighter } from '../types';
 import CircularLoader from './CircularLoader';
+import Image from 'next/image';
 
 const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
     const record = typeof fighter.record === 'string'
@@ -18,10 +19,12 @@ const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
         >
             {/* Fighter Portrait */}
             <div className="absolute inset-0 z-0">
-                <img
-                    src='https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3022677.png&w=350&h=254'
+                <Image
+                    src={fighter.image || `https://picsum.photos/seed/${fighter.name}/350/254`}
                     alt={fighter.name}
                     className="w-full h-full object-cover grayscale brightness-[0.6] group-hover:grayscale-0 group-hover:brightness-100 group-hover:scale-110 transition-all duration-1000 ease-out"
+                    width={350}
+                    height={254}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-100 group-hover:opacity-80 transition-opacity" />
             </div>
@@ -98,6 +101,10 @@ const Fighters: React.FC = () => {
     const filteredFighters = activeFilter === 'ALL'
         ? fighters
         : fighters.filter(f => f.weight_class?.toUpperCase() === activeFilter);
+    const weightClasses = [
+        "ALL",
+        ...Array.from(new Set(fighters.map(f => f.weight_class?.toUpperCase()).filter(Boolean)))
+    ];
 
     if (loading) return (
         <div className="pt-40 pb-20 flex flex-col justify-center items-center min-h-[80vh] bg-black">
@@ -111,40 +118,27 @@ const Fighters: React.FC = () => {
     return (
         <div className="min-h-screen bg-black text-white selection:bg-[#FE0002]">
             {/* High-Impact Hero Section */}
-            <div className="relative pt-24 pb-6 md:pt-28 overflow-hidden border-b border-white/5">
+            <div className="relative pt-24 pb-4 overflow-hidden border-b border-white/5">
+                {/* Background */}
                 <div className="absolute inset-0 z-0">
-                    <div className="absolute inset-0 bg-[radial-gradient(rgba(254,0,2,0.1)_1px,transparent_1px)] [background-size:32px_32px]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(rgba(254,0,2,0.12)_1px,transparent_1px)] [background-size:32px_32px]" />
                     <div className="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black" />
                 </div>
 
-                <div className="max-w-7xl mx-auto px-6 relative z-10">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-12">
-                        <div className="flex-1">
-                            <div className="inline-block mb-4 relative">
-                                <span className="relative bg-[#FE0002] text-white text-[9px] font-black px-4 py-1 uppercase tracking-[0.3em] skew-x-[-15deg]">
-                                    <span className="inline-block skew-x-[15deg]">Official Rankings</span>
-                                </span>
-                            </div>
-
-                            <h2 className="text-5xl md:text-7xl lg:text-8xl font-display font-black italic uppercase tracking-tighter leading-[0.85] mb-4">
-                                ELITE <span className="text-[#FE0002] text-glow-red">ROSTER</span>
-                            </h2>
-                        </div>
-
-                        <div className="max-w-md md:border-l-2 border-[#FE0002] md:pl-8">
-                            <p className="text-gray-500 font-medium tracking-wide text-xs md:text-sm leading-relaxed italic">
-                                Witness the vanguard of combat. These are the elite athletes redefining the Octagon.
-                            </p>
-                        </div>
-                    </div>
+                {/* HEADER CONTENT */}
+                <div className="relative z-20 max-w-7xl mx-auto px-4 pt-12 pb-2">
+                    <h2 className="text-4xl md:text-5xl font-display font-black italic uppercase tracking-tighter border-b-4 border-[#FE0002] pb-4 inline-block text-white">
+                        ELITE <span className="text-[#FE0002]">FIGHTERS</span>
+                    </h2>
                 </div>
             </div>
+
 
             {/* Premium Category Filter - Sticky and Scrollable */}
             <div className="sticky top-20 z-40 bg-black/90 backdrop-blur-2xl border-b border-white/5">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex items-center gap-10 overflow-x-auto no-scrollbar py-3 pointer-events-auto">
-                        {['ALL', 'LIGHTWEIGHT', 'WELTERWEIGHT', 'HEAVYWEIGHT', 'FEATHERWEIGHT'].map((cat) => (
+                        {weightClasses.map((cat) => (
                             <button
                                 key={cat}
                                 onClick={() => setActiveFilter(cat)}

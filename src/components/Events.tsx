@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { getAllEvents } from '../lib/api';
 import { FightEvent } from '../types';
 import CircularLoader from './CircularLoader';
+import Image from 'next/image';
 
 const Events: React.FC = () => {
     const [events, setEvents] = useState<FightEvent[]>([]);
@@ -58,11 +59,14 @@ const Events: React.FC = () => {
                     {events.map((event) => (
                         <div key={event._id} className="group relative bg-[#171715] rounded-lg overflow-hidden flex flex-col lg:flex-row hover:shadow-[0_0_30px_rgba(254,0,2,0.15)] transition-all border border-white/5">
                             <div className="lg:w-2/5 h-64 lg:h-auto relative overflow-hidden">
-                                <img
+                                <Image
                                     //src={event.image || '/images/event-placeholder.jpg'}
-                                    src='https://scontent.fdac207-1.fna.fbcdn.net/v/t39.30808-6/495306403_122132819954673115_9051019909933529578_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=75d36f&_nc_ohc=rJUIfSC6tCcQ7kNvwHIMlcz&_nc_oc=AdnaoQpIle1jPEK_I-I71qiSIYKmXUI43jWF5rznxKzl7GeSoszysP5NMbqS4nZYBKU&_nc_zt=23&_nc_ht=scontent.fdac207-1.fna&_nc_gid=WPcp4z6oaKQgtvaSw8TMfw&oh=00_Afr0eJ0Hfp5WsIhPTpx0NKHhMTW6mcrvCjapV5YXIY0DiA&oe=697D401A'
+                                    src={`https://picsum.photos/seed/${event._id}/800/500`}
                                     alt={event.name}
                                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                                    width={500}
+                                    height={500}
+                                    loading="lazy"
                                 />
                                 {event.isLive && (
                                     <div className="absolute top-4 left-4 bg-[#FE0002] text-white px-3 py-1 text-xs font-bold uppercase animate-pulse rounded-full flex items-center gap-2">

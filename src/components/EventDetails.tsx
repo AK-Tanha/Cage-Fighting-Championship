@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { getAllFighters, getEventById } from '../lib/api';
 import { FightEvent, Fighter } from '../types';
 import CircularLoader from './CircularLoader';
+import Image from 'next/image';
 
 const FightRow: React.FC<{
     fight: any;
@@ -25,14 +26,16 @@ const FightRow: React.FC<{
                 <div className="flex-1 text-right">
                     <p className="text-xs text-[#FE0002] font-bold uppercase tracking-widest mb-1 italic">Red Corner</p>
                     <h4 className="text-xl md:text-2xl font-display font-black uppercase italic whitespace-nowrap overflow-hidden text-ellipsis">
-                        {f1?.name || "Unknown Fighter"}
+                        <Link href={`/fighters/${f1?._id}`}>
+                            {f1?.name || "Unknown Fighter"}
+                        </Link>
+                        <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">
+                            {f1?.record ? (typeof f1.record === 'string' ? f1.record : `${f1.record.wins}-${f1.record.losses}`) : "0-0"}
+                        </p>
                     </h4>
-                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">
-                        {f1?.record ? (typeof f1.record === 'string' ? f1.record : `${f1.record.wins}-${f1.record.losses}`) : "0-0"}
-                    </p>
                 </div>
                 <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-[#FE0002]/50 transition-all">
-                    <img src={f1?.image || 'https://via.placeholder.com/100'} alt={f1?.name} className="w-full h-full object-cover" />
+                    <Image src={f1?.image || `https://picsum.photos/seed/${f1?._id}/800/500`} alt={f1?.name} className="w-full h-full object-cover" width={800} height={500} loading="lazy" />
                 </div>
             </div>
 
@@ -49,16 +52,18 @@ const FightRow: React.FC<{
             {/* Fighter 2 */}
             <div className="flex-1 flex flex-row-reverse items-center gap-6 w-full md:w-auto">
                 <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-[#FE0002]/50 transition-all">
-                    <img src={f2?.image || 'https://via.placeholder.com/100'} alt={f2?.name} className="w-full h-full object-cover" />
+                    <Image src={f2?.image || `https://picsum.photos/seed/${f2?._id}/800/500`} alt={f2?.name} className="w-full h-full object-cover" width={800} height={500} loading="lazy" />
                 </div>
                 <div className="flex-1 text-left">
                     <p className="text-xs text-blue-500 font-bold uppercase tracking-widest mb-1 italic">Blue Corner</p>
                     <h4 className="text-xl md:text-2xl font-display font-black uppercase italic whitespace-nowrap overflow-hidden text-ellipsis">
-                        {f2?.name || "Unknown Fighter"}
+                        <Link href={`/fighters/${f2?._id}`}>
+                            {f2?.name || "Unknown Fighter"}
+                        </Link>
+                        <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">
+                            {f2?.record ? (typeof f2.record === 'string' ? f2.record : `${f2.record.wins}-${f2.record.losses}`) : "0-0"}
+                        </p>
                     </h4>
-                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">
-                        {f2?.record ? (typeof f2.record === 'string' ? f2.record : `${f2.record.wins}-${f2.record.losses}`) : "0-0"}
-                    </p>
                 </div>
                 <div className="w-8" /> {/* Spacer to balance the index number on the left */}
             </div>
@@ -123,10 +128,13 @@ const EventDetails: React.FC = () => {
         <div className="min-h-screen bg-[#0A0A0A] text-white pb-24">
             {/* Header Banner Image */}
             <div className="w-full pt-20">
-                <img
-                    src="https://scontent.fdac207-1.fna.fbcdn.net/v/t39.30808-6/495306403_122132819954673115_9051019909933529578_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=75d36f&_nc_ohc=rJUIfSC6tCcQ7kNvwHIMlcz&_nc_oc=AdnaoQpIle1jPEK_I-I71qiSIYKmXUI43jWF5rznxKzl7GeSoszysP5NMbqS4nZYBKU&_nc_zt=23&_nc_ht=scontent.fdac207-1.fna&_nc_gid=WPcp4z6oaKQgtvaSw8TMfw&oh=00_Afr0eJ0Hfp5WsIhPTpx0NKHhMTW6mcrvCjapV5YXIY0DiA&oe=697D401A"
+                <Image
+                    src={`https://picsum.photos/seed/${event._id}/1920/1080`}
                     className="w-full h-auto max-h-[80vh] object-cover object-center bg-black"
                     alt={event.name}
+                    width={1920}
+                    height={1080}
+                    loading="lazy"
                 />
             </div>
 

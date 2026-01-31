@@ -4,6 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { getFighterById } from '../lib/api';
 import { Fighter } from '../types';
+import Image from 'next/image';
 
 const DetailItem: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
     <div className="border-l-2 border-[#FE0002] pl-4 py-2 bg-white/5 rounded-r-lg">
@@ -98,11 +99,13 @@ const FighterProfile: React.FC = () => {
                     {/* Left Column: Stats & Info */}
                     <div className="lg:col-span-1 space-y-12">
                         <section>
-                            <img
-                                //src={fighter.image || 'https://via.placeholder.com/1200x800?text=Fighter+Profile'}
-                                src='https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3022677.png&w=350&h=254'
+                            <Image
+                                src={fighter.image || `https://picsum.photos/seed/${fighter.name}/350/350`}
                                 alt={fighter.name}
                                 className="w-full h-full object-cover object-top"
+                                width={350}
+                                height={350}
+                                loading="lazy"
                             />
                         </section>
                         <section>
