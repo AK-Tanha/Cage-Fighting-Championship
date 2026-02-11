@@ -100,7 +100,7 @@ const FighterProfile: React.FC = () => {
                     <div className="lg:col-span-1 space-y-12">
                         <section>
                             <Image
-                                src={fighter.image || `https://picsum.photos/seed/${fighter.name}/350/350`}
+                                src={fighter.image_url || `https://picsum.photos/seed/${fighter.name}/350/350`}
                                 alt={fighter.name}
                                 className="w-full h-full object-cover object-top"
                                 width={350}
