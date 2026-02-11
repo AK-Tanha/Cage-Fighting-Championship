@@ -20,7 +20,7 @@ const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
             {/* Fighter Portrait */}
             <div className="absolute inset-0 z-0">
                 <Image
-                    src={fighter.image || `https://picsum.photos/seed/${fighter.name}/350/254`}
+                    src={fighter.image_url || `https://picsum.photos/seed/${fighter.name}/350/254`}
                     alt={fighter.name}
                     className="w-full h-full object-cover grayscale brightness-[0.6] group-hover:grayscale-0 group-hover:brightness-100 group-hover:scale-110 transition-all duration-1000 ease-out"
                     width={350}

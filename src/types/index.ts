@@ -14,6 +14,7 @@ export interface Fighter {
         power?: number;
     };
     fightingStyle?: string;
+    image_url?: string;
 }
 
 export interface IndividualFight {
