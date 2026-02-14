@@ -20,6 +20,9 @@ const rubik = Rubik({
 export const metadata: Metadata = {
     title: "CFC | Cage Fighting Championship",
     description: "The global leader in elite MMA competition.",
+    icons: {
+        icon: '/favicon.ico',
+    },
 };
 
 export default function RootLayout({
