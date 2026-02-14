@@ -34,7 +34,7 @@ const CircularLoader: React.FC<CircularLoaderProps> = ({
                         stroke="currentColor"
                         strokeWidth="4"
                         fill="transparent"
-                        className="text-white/10"
+                        className="text-gray-500/20"
                     />
                     <circle
                         cx="50"
@@ -50,7 +50,7 @@ const CircularLoader: React.FC<CircularLoaderProps> = ({
                     />
                 </svg>
                 {!isLoader && (
-                    <span className="absolute text-xl font-display font-black italic text-white">
+                    <span className="absolute text-xl font-display font-black italic text-inherit">
                         {value}%
                     </span>
                 )}

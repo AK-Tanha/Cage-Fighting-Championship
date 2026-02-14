@@ -1,11 +1,11 @@
 "use client";
 
+import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { getAllFighters } from '../lib/api';
 import { Fighter } from '../types';
 import CircularLoader from './CircularLoader';
-import Image from 'next/image';
 
 const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
     const record = typeof fighter.record === 'string'
@@ -15,56 +15,59 @@ const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
     return (
         <Link
             href={`/fighters/${fighter._id}`}
-            className="group relative bg-[#0D0D0D] overflow-hidden rounded-sm border border-white/5 hover:border-[#FE0002]/40 transition-all duration-700 aspect-[4/5] flex flex-col justify-end shadow-2xl"
+            className="group relative bg-white overflow-hidden rounded-none border-2 border-black/5 hover:border-[#FE0002] transition-all duration-300 aspect-[3/4] flex flex-col justify-end shadow-sm hover:shadow-xl"
         >
             {/* Fighter Portrait */}
             <div className="absolute inset-0 z-0">
                 <Image
                     src={fighter.image_url || `https://picsum.photos/seed/${fighter.name}/350/254`}
                     alt={fighter.name}
-                    className="w-full h-full object-cover grayscale brightness-[0.6] group-hover:grayscale-0 group-hover:brightness-100 group-hover:scale-110 transition-all duration-1000 ease-out"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
                     width={350}
                     height={254}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-100 group-hover:opacity-80 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent opacity-95 transition-opacity" />
+
+                {/* Diagonal Strike Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#FE0002]/0 via-[#FE0002]/10 to-[#FE0002]/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out z-20" />
             </div>
 
             {/* Fighter Info Overlay */}
-            <div className="relative z-10 p-6 md:p-8 transform transition-all duration-500 group-hover:pb-12">
-                <div className="space-y-0.5">
-                    {/* Rank & Weightclass */}
-                    <div className="flex items-center gap-2 mb-1">
-                        {fighter.rank !== undefined && (
-                            <span className="text-[#FE0002] font-display font-black text-xs md:text-sm italic">
-                                #{fighter.rank}
-                            </span>
-                        )}
-                        <span className="text-white/50 font-display font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em]">
+            <div className="relative z-10 px-5 pb-5 pt-12 flex flex-col justify-end h-full">
+
+                {/* Floating Rank Badge - Top Left */}
+                {fighter.rank !== undefined && (
+                    <div className="absolute top-0 left-0 bg-[#FE0002] text-white px-3 py-1 font-display font-black text-sm italic skew-x-[-15deg] origin-top-left -ml-2 mt-4 shadow-md">
+                        <span className="block skew-x-[15deg]">#{fighter.rank}</span>
+                    </div>
+                )}
+
+                <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    {/* Weightclass */}
+                    <div className="mb-1">
+                        <span className="inline-block bg-black text-white font-display font-black text-[10px] md:text-xs uppercase tracking-[0.2em] px-2 py-0.5 skew-x-[-10deg]">
                             {fighter.weight_class}
                         </span>
                     </div>
 
                     {/* Name */}
-                    <h3 className="text-xl md:text-2xl font-display font-black uppercase italic leading-none tracking-tighter text-white whitespace-nowrap overflow-hidden text-ellipsis drop-shadow-lg">
+                    <h3 className="text-3xl md:text-4xl font-display font-black uppercase italic leading-[0.85] tracking-tighter text-black mb-2 group-hover:text-[#FE0002] transition-colors duration-200 drop-shadow-sm">
                         {fighter.name}
                     </h3>
 
                     {/* Record */}
-                    <div className="pt-2">
-                        <p className="font-display font-black text-lg md:text-xl tracking-tighter text-white leading-none">
+                    <div className="flex items-center gap-3 border-t-2 border-black/10 pt-2 group-hover:border-[#FE0002]/50 transition-colors">
+                        <p className="font-display font-black text-2xl text-black tracking-tighter leading-none">
                             {record}
                         </p>
+                        <span className="text-[#FE0002] font-bold text-[10px] uppercase tracking-widest">Pro Record</span>
                     </div>
-
-                    {/* Pro Label */}
-                    <p className="text-[9px] text-[#FE0002] uppercase font-black tracking-[0.3em] pt-0.5">
-                        PRO
-                    </p>
                 </div>
             </div>
 
-            {/* Decorative Grid Accent */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(rgba(254,0,2,0.1)_1px,transparent_1px)] [background-size:8px_8px] opacity-0 group-hover:opacity-100 transition-opacity" />
+            {/* Corner Accents */}
+            <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-[#FE0002] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-[#FE0002] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </Link>
     );
 };
@@ -107,7 +110,7 @@ const Fighters: React.FC = () => {
     ];
 
     if (loading) return (
-        <div className="pt-40 pb-20 flex flex-col justify-center items-center min-h-[80vh] bg-black">
+        <div className="pt-40 pb-20 flex flex-col justify-center items-center min-h-[80vh] bg-white">
             <CircularLoader isLoader={true} size="w-32 h-32" />
             <div className="mt-12 text-sm text-gray-500 font-display font-black uppercase tracking-[0.5em] animate-pulse">
                 Establishing Neural Connection to Roster
@@ -116,18 +119,18 @@ const Fighters: React.FC = () => {
     );
 
     return (
-        <div className="min-h-screen bg-black text-white selection:bg-[#FE0002]">
+        <div className="min-h-screen bg-white text-black selection:bg-[#FE0002] selection:text-white">
             {/* High-Impact Hero Section */}
-            <div className="relative pt-24 pb-4 overflow-hidden border-b border-white/5">
+            <div className="relative pt-24 pb-4 overflow-hidden border-b border-black/5">
                 {/* Background */}
                 <div className="absolute inset-0 z-0">
-                    <div className="absolute inset-0 bg-[radial-gradient(rgba(254,0,2,0.12)_1px,transparent_1px)] [background-size:32px_32px]" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black" />
+                    <div className="absolute inset-0 bg-[radial-gradient(rgba(0,0,0,0.05)_1px,transparent_1px)] [background-size:32px_32px]" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-white via-white/50 to-white" />
                 </div>
 
                 {/* HEADER CONTENT */}
                 <div className="relative z-20 max-w-7xl mx-auto px-4 pt-12 pb-2">
-                    <h2 className="text-4xl md:text-5xl font-display font-black italic uppercase tracking-tighter border-b-4 border-[#FE0002] pb-4 inline-block text-white">
+                    <h2 className="text-4xl md:text-5xl font-display font-black italic uppercase tracking-tighter border-b-4 border-[#FE0002] pb-4 inline-block text-black">
                         ELITE <span className="text-[#FE0002]">FIGHTERS</span>
                     </h2>
                 </div>
@@ -135,14 +138,14 @@ const Fighters: React.FC = () => {
 
 
             {/* Premium Category Filter - Sticky and Scrollable */}
-            <div className="sticky top-20 z-40 bg-black/90 backdrop-blur-2xl border-b border-white/5">
+            <div className="sticky top-20 z-40 bg-white/90 backdrop-blur-2xl border-b border-black/5 shadow-sm">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex items-center gap-10 overflow-x-auto no-scrollbar py-3 pointer-events-auto">
                         {weightClasses.map((cat) => (
                             <button
                                 key={cat}
                                 onClick={() => setActiveFilter(cat)}
-                                className={`text-[10px] font-black tracking-[0.3em] uppercase transition-all relative py-2 whitespace-nowrap ${activeFilter === cat ? 'text-white' : 'text-gray-600 hover:text-white'
+                                className={`text-[10px] font-black tracking-[0.3em] uppercase transition-all relative py-2 whitespace-nowrap ${activeFilter === cat ? 'text-black' : 'text-gray-400 hover:text-black'
                                     }`}
                             >
                                 {cat}
@@ -158,7 +161,7 @@ const Fighters: React.FC = () => {
             {/* Roster Grid Section */}
             <div className="max-w-7xl mx-auto px-6 py-8 md:py-10">
                 {filteredFighters.length === 0 ? (
-                    <div className="text-center py-40 bg-white/5 border border-dashed border-white/10 rounded-sm">
+                    <div className="text-center py-40 bg-gray-50 border-2 border-dashed border-gray-200 rounded-lg">
                         <p className="text-gray-500 font-display font-black uppercase italic tracking-[0.2em] text-xl">Roster Data Offline</p>
                     </div>
                 ) : (
@@ -169,8 +172,10 @@ const Fighters: React.FC = () => {
                     </div>
                 )}
 
-                
+
             </div>
+            {/* Footer Background Pattern */}
+            <div className="h-20 bg-gradient-to-t from-gray-100 to-transparent" />
         </div>
     );
 };

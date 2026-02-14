@@ -1,19 +1,18 @@
 "use client";
 
+import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { getFighterById } from '../lib/api';
 import { Fighter } from '../types';
-import Image from 'next/image';
+import CircularLoader from './CircularLoader';
 
 const DetailItem: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
-    <div className="border-l-2 border-[#FE0002] pl-4 py-2 bg-white/5 rounded-r-lg">
-        <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">{label}</p>
-        <p className="text-md font-display font-bold uppercase italic text-white">{value}</p>
+    <div className="border-l-4 border-[#FE0002] pl-4 py-3 bg-gray-50 rounded-r-none border-b border-gray-100">
+        <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">{label}</p>
+        <p className="text-xl font-display font-black uppercase italic text-black leading-none">{value}</p>
     </div>
 );
-
-import CircularLoader from './CircularLoader';
 
 const FighterProfile: React.FC = () => {
     const params = useParams();
@@ -38,21 +37,21 @@ const FighterProfile: React.FC = () => {
     }, [params?.id]);
 
     if (loading) return (
-        <div className="min-h-screen bg-black flex flex-col justify-center items-center">
+        <div className="min-h-screen bg-white flex flex-col justify-center items-center">
             <CircularLoader isLoader={true} size="w-32 h-32" />
-            <p className="mt-8 text-gray-500 font-display uppercase tracking-[0.3em] animate-pulse">Syncing Fight-Data Interface...</p>
+            <p className="mt-8 text-gray-400 font-display font-black uppercase tracking-[0.3em] animate-pulse">Syncing Fight-Data Interface...</p>
         </div>
     );
 
     if (error || !fighter) return (
-        <div className="min-h-screen bg-black flex flex-col justify-center items-center p-4">
-            <h1 className="text-4xl text-[#FE0002] font-display font-black italic mb-4">PROFILE NOT FOUND</h1>
-            <p className="text-gray-400 mb-8">{error || 'The fighter ID provided does not exist in our database.'}</p>
+        <div className="min-h-screen bg-white flex flex-col justify-center items-center p-4">
+            <h1 className="text-5xl text-[#FE0002] font-display font-black italic mb-4 uppercase tracking-tighter">Profile Offline</h1>
+            <p className="text-gray-400 mb-8 font-bold tracking-wide uppercase text-sm">{error || 'The fighter ID provided does not exist in our database.'}</p>
             <button
                 onClick={() => router.push('/fighters')}
-                className="px-8 py-3 bg-[#FE0002] text-white font-bold uppercase tracking-tighter hover:bg-white hover:text-black transition-all"
+                className="px-8 py-3 bg-black text-white font-black uppercase tracking-widest hover:bg-[#FE0002] transition-all skew-x-[-10deg]"
             >
-                Return to Roster
+                <div className="skew-x-[10deg]">Return to Roster</div>
             </button>
         </div>
     );
@@ -62,33 +61,33 @@ const FighterProfile: React.FC = () => {
         : `${fighter.record?.wins ?? 0}-${fighter.record?.losses ?? 0}-${fighter.record?.draws ?? 0}`;
 
     return (
-        <div className="min-h-screen bg-[#0A0A0A] text-white selection:bg-[#FE0002] pt-24 md:pt-32">
+        <div className="min-h-screen bg-white text-black selection:bg-[#FE0002] selection:text-white pt-24 md:pt-32">
             {/* Header Content */}
             <div className="max-w-7xl mx-auto px-4 md:px-16 mb-12">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8 border-b-2 border-white/5 pb-10 md:pb-12">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8 border-b-4 border-black/5 pb-10 md:pb-12">
                     <div>
                         <div className="flex items-center gap-3 md:gap-4 mb-4">
-                            <span className="bg-[#FE0002] px-3 md:px-4 py-1 text-xs md:text-sm font-bold skew-x-[-15deg]">
+                            <span className="bg-[#FE0002] text-white px-3 md:px-4 py-1 text-xs md:text-sm font-black italic skew-x-[-15deg] shadow-lg">
                                 <span className="inline-block skew-x-[15deg]">{fighter.weight_class}</span>
                             </span>
                             {fighter.rank && (
-                                <span className="border border-white/30 px-3 md:px-4 py-1 text-xs md:text-sm font-bold">
-                                    RANK #{fighter.rank}
+                                <span className="bg-black text-white border border-black/10 px-3 md:px-4 py-1 text-xs md:text-sm font-black italic skew-x-[-15deg]">
+                                    <span className="inline-block skew-x-[15deg]">RANK #{fighter.rank}</span>
                                 </span>
                             )}
                         </div>
-                        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-black uppercase italic tracking-tighter leading-none mb-2 text-shadow-red break-words">
+                        <h1 className="text-5xl sm:text-6xl md:text-8xl font-display font-black uppercase italic tracking-tighter leading-[0.85] mb-2 text-black break-words drop-shadow-sm">
                             {fighter.name}
                         </h1>
-                        <p className="text-lg md:text-3xl text-[#FE0002] font-display font-bold italic uppercase opacity-80">
+                        <p className="text-xl md:text-3xl text-[#FE0002] font-display font-black italic uppercase opacity-90 tracking-tight">
                             "{fighter.nickname || 'Unknown Identity'}"
                         </p>
                     </div>
                     <div className="flex flex-col items-start md:items-end mt-4 md:mt-0">
-                        <p className="text-4xl sm:text-5xl md:text-7xl font-display font-black italic text-white tracking-widest leading-none">
+                        <p className="text-6xl sm:text-7xl md:text-9xl font-display font-black italic text-black tracking-tighter leading-none opacity-10">
                             {record}
                         </p>
-                        <p className="text-gray-500 uppercase font-bold tracking-[0.3em] mt-2 text-[10px] md:text-xs">Professional Record</p>
+                        <p className="text-[#FE0002] uppercase font-black tracking-[0.4em] -mt-4 md:-mt-6 text-sm md:text-base bg-white px-2">Professional Record</p>
                     </div>
                 </div>
             </div>
@@ -98,21 +97,22 @@ const FighterProfile: React.FC = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
                     {/* Left Column: Stats & Info */}
                     <div className="lg:col-span-1 space-y-12">
-                        <section>
+                        <section className="relative group">
+                            <div className="absolute inset-0 border-2 border-black/5 transform translate-x-2 translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-300" />
                             <Image
                                 src={fighter.image_url || `https://picsum.photos/seed/${fighter.name}/350/350`}
                                 alt={fighter.name}
-                                className="w-full h-full object-cover object-top"
+                                className="w-full h-full object-cover object-top relative z-10 shadow-lg"
                                 width={350}
                                 height={350}
                                 loading="lazy"
                             />
                         </section>
                         <section>
-                            <h2 className="text-2xl font-display font-black uppercase italic mb-8 border-b border-white/10 pb-4">
+                            <h2 className="text-3xl font-display font-black uppercase italic mb-8 border-l-8 border-[#FE0002] pl-4 text-black">
                                 Attributes
                             </h2>
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 gap-y-2">
                                 <DetailItem label="Division" value={fighter.weight_class} />
                                 <DetailItem label="Style" value={fighter.fightingStyle || 'All-Rounder'} />
                                 <DetailItem label="Status" value="Active" />
@@ -121,10 +121,10 @@ const FighterProfile: React.FC = () => {
                         </section>
 
                         <section>
-                            <h2 className="text-2xl font-display font-black uppercase italic mb-8 border-b border-white/10 pb-4">
+                            <h2 className="text-3xl font-display font-black uppercase italic mb-8 border-l-8 border-[#FE0002] pl-4 text-black">
                                 Combat Ratings
                             </h2>
-                            <div className="grid grid-cols-2 gap-y-10">
+                            <div className="grid grid-cols-2 gap-y-10 bg-gray-50 p-6 rounded-none border border-black/5">
                                 <CircularLoader label="Striking" value={fighter.stats?.striking ?? 0} />
                                 <CircularLoader label="Grappling" value={fighter.stats?.grappling ?? 0} />
                                 <CircularLoader label="Stamina" value={fighter.stats?.stamina ?? 0} />
@@ -136,34 +136,36 @@ const FighterProfile: React.FC = () => {
                     {/* Right Column: Bio & More */}
                     <div className="lg:col-span-2 space-y-12">
                         <section>
-                            <h2 className="text-2xl font-display font-black uppercase italic mb-8 border-b border-white/10 pb-4">
+                            <h2 className="text-3xl font-display font-black uppercase italic mb-8 border-l-8 border-[#FE0002] pl-4 text-black">
                                 Biography
                             </h2>
-                            <div className="prose prose-invert max-w-none">
-                                <p className="text-lg text-gray-400 leading-relaxed italic">
+                            <div className="prose prose-lg max-w-none">
+                                <p className="text-xl text-gray-600 leading-relaxed font-medium">
                                     {fighter.bio || "No biography available for this fighter. Legend has it they prefer to let their performances inside the cage speak for themselves."}
                                 </p>
                             </div>
                         </section>
 
-                        <section className="bg-white/5 border border-white/10 p-8 rounded-xl relative overflow-hidden group">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-[#FE0002]/10 blur-3xl -mr-16 -mt-16 group-hover:bg-[#FE0002]/20 transition-colors" />
-                            <h2 className="text-xl font-display font-bold uppercase italic mb-6">Upcoming Bout</h2>
-                            <div className="flex items-center gap-6">
-                                <div className="w-16 h-16 bg-white/10 flex items-center justify-center font-display font-black text-3xl">?</div>
-                                <div>
-                                    <p className="text-gray-400 text-sm uppercase font-bold tracking-widest">Next Event</p>
-                                    <p className="text-xl font-display font-bold uppercase italic">CFC Championship Night</p>
+                        <section className="bg-black text-white p-10 rounded-none relative overflow-hidden group shadow-2xl skew-y-1">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-[#FE0002] rounded-full blur-[80px] opacity-20 -mr-20 -mt-20 group-hover:opacity-40 transition-opacity" />
+                            <div className="-skew-y-1">
+                                <h2 className="text-2xl font-display font-black uppercase italic mb-6 tracking-tight">Upcoming Bout</h2>
+                                <div className="flex items-center gap-8">
+                                    <div className="w-20 h-20 bg-white/10 flex items-center justify-center font-display font-black text-4xl italic text-[#FE0002]">?</div>
+                                    <div>
+                                        <p className="text-gray-400 text-xs uppercase font-black tracking-[0.2em] mb-1">Next Event</p>
+                                        <p className="text-3xl font-display font-black uppercase italic leading-none">CFC Championship Night</p>
+                                    </div>
                                 </div>
                             </div>
                         </section>
 
-                        <div className="pt-8">
+                        <div className="pt-8 flex justify-end">
                             <button
                                 onClick={() => router.push('/fighters')}
-                                className="group flex items-center gap-4 text-gray-500 hover:text-white transition-colors uppercase font-bold tracking-widest text-sm"
+                                className="group flex items-center gap-4 text-black hover:text-[#FE0002] transition-colors uppercase font-black tracking-widest text-sm"
                             >
-                                <span className="w-10 h-px bg-gray-500 group-hover:w-16 group-hover:bg-white transition-all" />
+                                <span className="w-12 h-1 bg-black group-hover:w-20 group-hover:bg-[#FE0002] transition-all" />
                                 Back to Roster
                             </button>
                         </div>
@@ -172,7 +174,7 @@ const FighterProfile: React.FC = () => {
             </div>
 
             {/* Footer Background Pattern */}
-            <div className="h-20 bg-gradient-to-t from-[#FE0002]/5 to-transparent" />
+            <div className="h-24 bg-gradient-to-t from-gray-100 to-transparent mt-12" />
         </div>
     );
 };
