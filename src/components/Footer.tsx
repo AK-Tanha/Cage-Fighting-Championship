@@ -1,5 +1,6 @@
 "use client";
 
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -10,8 +11,13 @@ const Footer: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                     <div className="col-span-1 md:col-span-2">
                         <div className="flex items-center gap-2 mb-6">
-                            <div className="bg-[#FE0002] p-1 rotate-45">
-                                <i className="fa-solid fa-hand-fist text-white text-xs -rotate-45"></i>
+                            <div className="bg-[#FE0002] rounded-sm">
+                                <Image
+                                    src="/favicon.ico"
+                                    alt="Logo"
+                                    width={32}
+                                    height={32}
+                                />
                             </div>
                             <span className="font-display text-xl font-black tracking-tighter uppercase">
                                 CAGE FIGHTING <span className="text-[#FE0002]">CHAMPIONSHIP</span>
@@ -38,8 +44,8 @@ const Footer: React.FC = () => {
                     <div>
                         <h4 className="font-display font-bold uppercase mb-4 tracking-widest text-[#FE0002]">Socials</h4>
                         <div className="flex gap-4">
-                            <a href="#" className="w-10 h-10 flex items-center justify-center bg-black hover:bg-[#FE0002] transition-all rounded-sm">
-                                <i className="fa-brands fa-x-twitter"></i>
+                            <a href="https://www.facebook.com/profile.php?id=61569594516700" className="w-10 h-10 flex items-center justify-center bg-black hover:bg-[#FE0002] transition-all rounded-sm">
+                                <i className="fa-brands fa-facebook"></i>
                             </a>
                             <a href="#" className="w-10 h-10 flex items-center justify-center bg-black hover:bg-[#FE0002] transition-all rounded-sm">
                                 <i className="fa-brands fa-instagram"></i>
