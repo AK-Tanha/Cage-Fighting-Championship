@@ -1,8 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import Image from "next/image";
 
 const Hero: React.FC = () => {
     const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
@@ -44,7 +44,7 @@ const Hero: React.FC = () => {
                 ))}
 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-black/70 hero-gradient"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/40 to-transparent"></div>
             </div>
 
             {/* Content */}
@@ -54,17 +54,17 @@ const Hero: React.FC = () => {
                         <span className="bg-[#FE0002] text-white text-[10px] font-black px-3 py-1 uppercase tracking-[0.2em] rounded-sm">
                             LIVE NOW
                         </span>
-                        <span className="text-white/40 font-bold uppercase tracking-[0.3em] text-[10px]">
+                        <span className="text-gray-500 font-bold uppercase tracking-[0.3em] text-[10px]">
                             CFC 101: LAS VEGAS
                         </span>
                     </div>
 
-                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black leading-[0.9] mb-8 uppercase tracking-[-0.04em] italic text-white">
+                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black leading-[0.9] mb-8 uppercase tracking-[-0.04em] italic text-black">
                         WHERE <span className="text-[#FE0002]">LEGENDS</span>
                         <br /> ARE FORGED
                     </h1>
 
-                    <p className="text-base md:text-lg text-gray-300 mb-10 max-w-lg leading-relaxed font-light">
+                    <p className="text-base md:text-lg text-gray-700 mb-10 max-w-lg leading-relaxed font-medium">
                         Experience the world&apos;s premier mixed martial arts promotion.
                         Witness elite athletes collide inside the cage.
                     </p>
@@ -73,16 +73,16 @@ const Hero: React.FC = () => {
                         <Link
                             href="/events"
                             className="bg-[#FE0002] text-white px-10 py-5 font-display font-black uppercase tracking-[0.2em]
-              hover:bg-white hover:text-black transition-all border-2 border-[#FE0002]
-              shadow-[0_0_30px_rgba(254,0,2,0.5)] transform hover:-translate-y-1"
+              hover:bg-black hover:text-white transition-all border-2 border-[#FE0002]
+              hover:border-black transform hover:-translate-y-1"
                         >
                             Get Tickets
                         </Link>
 
                         <Link
                             href="/fighters"
-                            className="border-2 border-white/30 text-white px-10 py-5 font-display font-bold uppercase tracking-[0.2em]
-              hover:border-white transition-all transform hover:-translate-y-1"
+                            className="border-2 border-black/30 text-black px-10 py-5 font-display font-bold uppercase tracking-[0.2em]
+              hover:border-black transition-all transform hover:-translate-y-1"
                         >
                             View Roster
                         </Link>
@@ -91,8 +91,8 @@ const Hero: React.FC = () => {
             </div>
 
             {/* Decorative lines */}
-            <div className="absolute right-20 inset-y-0 w-px bg-white/5 hidden lg:block"></div>
-            <div className="absolute right-40 inset-y-0 w-px bg-white/5 hidden lg:block"></div>
+            <div className="absolute right-20 inset-y-0 w-px bg-black/5 hidden lg:block"></div>
+            <div className="absolute right-40 inset-y-0 w-px bg-black/5 hidden lg:block"></div>
         </section>
     );
 };

@@ -26,7 +26,7 @@ const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
                     width={350}
                     height={254}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent opacity-95 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-80 transition-opacity" />
 
                 {/* Diagonal Strike Effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-[#FE0002]/0 via-[#FE0002]/10 to-[#FE0002]/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out z-20" />
@@ -125,7 +125,7 @@ const Fighters: React.FC = () => {
                 {/* Background */}
                 <div className="absolute inset-0 z-0">
                     <div className="absolute inset-0 bg-[radial-gradient(rgba(0,0,0,0.05)_1px,transparent_1px)] [background-size:32px_32px]" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-white via-white/50 to-white" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-transparent to-white/90" />
                 </div>
 
                 {/* HEADER CONTENT */}

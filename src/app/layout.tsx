@@ -96,7 +96,7 @@ export default function RootLayout({
                     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
                 />
             </head>
-            <body className="font-sans antialiased min-h-screen flex flex-col bg-black text-white">
+            <body className="font-sans antialiased min-h-screen flex flex-col bg-white text-black selection:bg-[#FE0002] selection:text-white">
                 <Navbar />
                 <main className="flex-1">{children}</main>
                 <Footer />

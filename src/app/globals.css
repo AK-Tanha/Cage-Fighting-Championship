@@ -17,15 +17,15 @@
  * Recalibrated for Montserrat (Wide) and Rubik (Geometric)
  */
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 0, 0, 0;
-  --background-end-rgb: 0, 0, 0;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 255, 255, 255;
 }
 
 body {
   font-family: var(--font-rubik), ui-sans-serif, system-ui, sans-serif;
-  background-color: #000;
-  color: #fff;
+  background-color: #fff;
+  color: #000;
   font-size: 15px; /* Rubik at 15px feels like Inter at 16px */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

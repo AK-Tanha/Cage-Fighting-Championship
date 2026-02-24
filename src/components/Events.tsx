@@ -1,11 +1,11 @@
 "use client";
 
+import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { getAllEvents } from '../lib/api';
 import { FightEvent } from '../types';
 import CircularLoader from './CircularLoader';
-import Image from 'next/image';
 
 const Events: React.FC = () => {
     const [events, setEvents] = useState<FightEvent[]>([]);
@@ -57,13 +57,13 @@ const Events: React.FC = () => {
             ) : (
                 <div className="space-y-12">
                     {events.map((event) => (
-                        <div key={event._id} className="group relative bg-[#171715] rounded-lg overflow-hidden flex flex-col lg:flex-row hover:shadow-[0_0_30px_rgba(254,0,2,0.15)] transition-all border border-white/5">
+                        <div key={event._id} className="group relative bg-white rounded-lg overflow-hidden flex flex-col lg:flex-row hover:shadow-[0_0_30px_rgba(0,0,0,0.1)] transition-all border border-black/5">
                             <div className="lg:w-2/5 h-64 lg:h-auto relative overflow-hidden">
                                 <Image
                                     //src={event.image || '/images/event-placeholder.jpg'}
                                     src={`https://picsum.photos/seed/${event._id}/800/500`}
                                     alt={event.name}
-                                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
                                     width={500}
                                     height={500}
                                     loading="lazy"
@@ -81,19 +81,19 @@ const Events: React.FC = () => {
                                     {new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                                 </p>
                                 <h3 className="text-3xl md:text-4xl font-display font-black uppercase mb-4 group-hover:text-[#FE0002] transition-colors">{event.name}</h3>
-                                <div className="flex items-center gap-6 mb-8 text-gray-400 font-medium">
+                                <div className="flex items-center gap-6 mb-8 text-gray-500 font-medium">
                                     <span className="flex items-center gap-2"><i className="fa-solid fa-location-dot text-[#FE0002]"></i> {event.location}</span>
                                     {event.fights && event.fights.length > 0 && (
                                         <span className="flex items-center gap-2"><i className="fa-solid fa-trophy text-[#FE0002]"></i> {event.fights.length} Fights Card</span>
                                     )}
                                 </div>
                                 <div className="flex gap-4">
-                                    <button className="bg-[#FE0002] text-white px-8 py-3 font-display font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+                                    <button className="bg-[#FE0002] text-white px-8 py-3 font-display font-bold uppercase tracking-widest hover:bg-black transition-all">
                                         Get Tickets
                                     </button>
                                     <Link
                                         href={`/events/${event._id}`}
-                                        className="border border-white/20 text-center text-white px-8 py-3 font-display font-bold uppercase tracking-widest hover:border-[#FE0002] transition-all"
+                                        className="border border-black/20 text-center text-black px-8 py-3 font-display font-bold uppercase tracking-widest hover:border-[#FE0002] transition-all"
                                     >
                                         Fight Details
                                     </Link>
