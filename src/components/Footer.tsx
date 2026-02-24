@@ -4,7 +4,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
+import { usePathname } from 'next/navigation';
+
 const Footer: React.FC = () => {
+    const pathname = usePathname();
+
+    if (pathname?.startsWith('/admin')) return null;
+
     return (
         <footer className="bg-gray-50 py-12 border-t border-black/5">
             <div className="max-w-7xl mx-auto px-4">

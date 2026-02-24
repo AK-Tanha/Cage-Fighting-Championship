@@ -8,6 +8,8 @@ import React from 'react';
 const Navbar: React.FC = () => {
     const pathname = usePathname();
 
+    if (pathname?.startsWith('/admin')) return null;
+
     // Helper to determine active state. Simplified logic: check if pathname starts with the section, or exact match for home.
     const isActive = (path: string) => {
         if (path === '/' && pathname === '/') return true;
