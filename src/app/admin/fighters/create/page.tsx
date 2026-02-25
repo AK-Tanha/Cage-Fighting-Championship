@@ -1,15 +1,15 @@
-'use client'
+"use client";
 
-import { createFighter } from "@/lib/api"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { createFighter } from "@/lib/api";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const FighterCreate = () => {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const [data, setData] = useState({
     name: "",
@@ -19,42 +19,51 @@ const FighterCreate = () => {
     club: "",
     date_of_birth: "",
     bio: "",
-    image_url: ""
-  })
+    image_url: "",
+  });
 
-  const [styleInput, setStyleInput] = useState("")
+  const [styleInput, setStyleInput] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setData(prev => ({ ...prev, [name]: value }))
-  }
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     try {
       // Process style from input string
-      const styles = styleInput.split(',').map(s => s.trim()).filter(s => s !== "")
+      const styles = styleInput
+        .split(",")
+        .map((s) => s.trim())
+        .filter((s) => s !== "");
 
       const fighterData = {
         ...data,
         style: styles,
-      }
+      };
 
-      await createFighter(fighterData as any)
-      setSuccess(true)
+      await createFighter(fighterData as any);
+      setSuccess(true);
       setTimeout(() => {
-        router.push('/admin/fighters')
-      }, 2000)
+        router.push("/admin/fighters");
+      }, 2000);
     } catch (err: any) {
-      console.error("error submitting form", err)
-      setError(err.response?.data?.message || err.message || "Failed to create fighter")
+      console.error("error submitting form", err);
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Failed to create fighter",
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
@@ -62,8 +71,11 @@ const FighterCreate = () => {
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <Link href="/admin/fighters" className="text-[#FE0002] text-sm font-bold uppercase tracking-widest hover:underline flex items-center gap-2 mb-2">
-              <i className="fa-solid fa-arrow-left text-xs"></i> Back to Roster
+            <Link
+              href="/admin/fighters"
+              className="text-[#FE0002] text-sm font-bold uppercase tracking-widest hover:underline flex items-center gap-2 mb-2"
+            >
+              <i className="fa-solid fa-arrow-left text-xs"></i> Back to Fighters
             </Link>
             <h1 className="text-4xl font-display font-black uppercase italic tracking-tighter">
               Create <span className="text-[#FE0002]">Fighter</span>
@@ -83,15 +95,21 @@ const FighterCreate = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="bg-white border border-black/5 shadow-xl rounded-sm overflow-hidden">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white border border-black/5 shadow-xl rounded-sm overflow-hidden"
+        >
           <div className="p-8 space-y-8">
-
             {/* Basic Info Section */}
             <div>
-              <h3 className="text-xs font-display font-bold uppercase tracking-[0.3em] text-gray-400 mb-6 border-b border-black/5 pb-2">Basic Information</h3>
+              <h3 className="text-xs font-display font-bold uppercase tracking-[0.3em] text-gray-400 mb-6 border-b border-black/5 pb-2">
+                Basic Information
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col">
-                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">Full Name</label>
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Full Name
+                  </label>
                   <input
                     type="text"
                     name="name"
@@ -104,7 +122,9 @@ const FighterCreate = () => {
                 </div>
 
                 <div className="flex flex-col">
-                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">Weight Class</label>
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Weight Class
+                  </label>
                   <input
                     type="text"
                     name="weight_class"
@@ -117,7 +137,9 @@ const FighterCreate = () => {
                 </div>
 
                 <div className="flex flex-col">
-                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">Record (W-L-D)</label>
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Record (W-L-D)
+                  </label>
                   <input
                     type="text"
                     name="record"
@@ -130,7 +152,9 @@ const FighterCreate = () => {
                 </div>
 
                 <div className="flex flex-col">
-                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">Nationality</label>
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Nationality
+                  </label>
                   <input
                     type="text"
                     name="nationality"
@@ -142,7 +166,9 @@ const FighterCreate = () => {
                 </div>
 
                 <div className="flex flex-col">
-                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">Origin / Club</label>
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Origin / Club
+                  </label>
                   <input
                     type="text"
                     name="club"
@@ -154,7 +180,9 @@ const FighterCreate = () => {
                 </div>
 
                 <div className="flex flex-col">
-                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">Date of Birth</label>
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Date of Birth
+                  </label>
                   <input
                     type="date"
                     name="date_of_birth"
@@ -168,9 +196,13 @@ const FighterCreate = () => {
 
             {/* Combat Details Section */}
             <div>
-              <h3 className="text-xs font-display font-bold uppercase tracking-[0.3em] text-gray-400 mb-6 border-b border-black/5 pb-2">Combat Profile</h3>
+              <h3 className="text-xs font-display font-bold uppercase tracking-[0.3em] text-gray-400 mb-6 border-b border-black/5 pb-2">
+                Combat Profile
+              </h3>
               <div className="flex flex-col">
-                <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">Fighting Styles (Comma separated)</label>
+                <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                  Fighting Styles (Comma separated)
+                </label>
                 <input
                   type="text"
                   value={styleInput}
@@ -183,9 +215,13 @@ const FighterCreate = () => {
 
             {/* Biography Section */}
             <div>
-              <h3 className="text-xs font-display font-bold uppercase tracking-[0.3em] text-gray-400 mb-6 border-b border-black/5 pb-2">Biography</h3>
+              <h3 className="text-xs font-display font-bold uppercase tracking-[0.3em] text-gray-400 mb-6 border-b border-black/5 pb-2">
+                Biography
+              </h3>
               <div className="flex flex-col">
-                <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">Fighter Bio</label>
+                <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                  Fighter Bio
+                </label>
                 <textarea
                   name="bio"
                   rows={4}
@@ -199,10 +235,14 @@ const FighterCreate = () => {
 
             {/* Visuals Section */}
             <div>
-              <h3 className="text-xs font-display font-bold uppercase tracking-[0.3em] text-gray-400 mb-6 border-b border-black/5 pb-2">Fighter Image</h3>
+              <h3 className="text-xs font-display font-bold uppercase tracking-[0.3em] text-gray-400 mb-6 border-b border-black/5 pb-2">
+                Fighter Image
+              </h3>
               <div className="space-y-4">
                 <div className="flex flex-col">
-                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">Image URL</label>
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Image URL
+                  </label>
                   <input
                     type="text"
                     name="image_url"
@@ -215,12 +255,15 @@ const FighterCreate = () => {
 
                 <div className="p-6 border-2 border-dashed border-black/10 rounded-sm bg-gray-50/50 flex flex-col items-center justify-center">
                   <i className="fa-solid fa-cloud-arrow-up text-3xl text-gray-300 mb-3"></i>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Media Upload Currently Offline</p>
-                  <p className="text-[9px] text-gray-400 mt-1 italic">Please use Image URL for now</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                    Media Upload Currently Offline
+                  </p>
+                  <p className="text-[9px] text-gray-400 mt-1 italic">
+                    Please use Image URL for now
+                  </p>
                 </div>
               </div>
             </div>
-
           </div>
 
           {/* Submit */}
@@ -230,16 +273,18 @@ const FighterCreate = () => {
               disabled={loading}
               className={`
                 group relative bg-black text-white px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all 
-                ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#FE0002] active:scale-95'}
+                ${loading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#FE0002] active:scale-95"}
               `}
             >
               {loading ? (
                 <span className="flex items-center gap-2">
-                  <i className="fa-solid fa-circle-notch animate-spin"></i> Processing...
+                  <i className="fa-solid fa-circle-notch animate-spin"></i>{" "}
+                  Processing...
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
-                  <i className="fa-solid fa-plus group-hover:rotate-90 transition-transform"></i> Enroll Fighter
+                  <i className="fa-solid fa-plus group-hover:rotate-90 transition-transform"></i>{" "}
+                  Create Fighter
                 </span>
               )}
             </button>
@@ -247,7 +292,7 @@ const FighterCreate = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FighterCreate
+export default FighterCreate;

@@ -1,20 +1,38 @@
+"use client";
+import { getAllEvents } from "@/lib/api";
+import { FightEvent } from "@/types";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function AdminEventsPage() {
+    const router = useRouter();
+    const [events, setEvents] = useState<FightEvent[]>([]);
+    useEffect(
+        () => {
+            const fetchEvents = async () => {
+                try {
+                    const response = await getAllEvents();
+                    setEvents(response);
+                } catch (error) {
+                    console.error("Error fetching events:", error);
+                }
+            };
+            fetchEvents();
+        }, []
+    )
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h2 className="font-display text-2xl font-black uppercase tracking-tight">Events Management</h2>
-                <button className="bg-[#FE0002] text-white px-6 py-2 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-colors rounded-sm shadow-sm active:scale-95">
+                <button className="bg-[#FE0002] text-white px-6 py-2 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-colors rounded-sm shadow-sm active:scale-95"
+                    onClick={() => router.push("/admin/events/create")}
+                >
                     <i className="fa-solid fa-plus"></i> Create Event
                 </button>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                {[
-                    { id: 'CFC-300', name: 'PEREIRA VS HILL', date: 'APR 13, 2024', location: 'T-Mobile Arena, Las Vegas, NV', status: 'Upcoming', img: '/api/placeholder/400/200' },
-                    { id: 'CFC-299', name: 'O\'MALLEY VS VERA 2', date: 'MAR 09, 2024', location: 'Kaseya Center, Miami, FL', status: 'Completed', img: '/api/placeholder/400/200' },
-                    { id: 'CFC-298', name: 'VOLKANOVSKI VS TOPURIA', date: 'FEB 17, 2024', location: 'Honda Center, Anaheim, CA', status: 'Completed', img: '/api/placeholder/400/200' }
-                ].map((event, i) => (
+                {events.map((event, i) => (
                     <div key={i} className="bg-white border border-black/5 rounded-sm overflow-hidden shadow-sm group">
                         <div className="h-40 bg-gray-200 relative">
                             {/* In a real app, use next/image here */}
@@ -29,7 +47,7 @@ export default function AdminEventsPage() {
                         </div>
                         <div className="p-6">
                             <div className="flex items-center justify-between mb-4">
-                                <div className="text-[10px] text-[#FE0002] font-bold uppercase tracking-widest">{event.id}</div>
+                                <div className="text-[10px] text-[#FE0002] font-bold uppercase tracking-widest">{event._id}</div>
                                 <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest flex items-center gap-1">
                                     <i className="fa-solid fa-calendar-days text-gray-400"></i> {event.date}
                                 </div>

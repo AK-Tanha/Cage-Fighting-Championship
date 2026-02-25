@@ -71,11 +71,13 @@ export interface Fight {
 
 export interface FightEvent {
     _id: string;
+    id?: string;
     name: string;
     date: string;
     location: string;
     image?: string;
     isLive?: boolean;
+    status?: string;
     fights?: IndividualFight[];
 }
 
