@@ -17,3 +17,27 @@ export async function GET() {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
+
+export async function POST(request: Request) {
+    try {
+        const body = await request.json();
+        const response = await fetch(`${BACKEND_URL}/fighters/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            return NextResponse.json({ error: errorText || 'Backend Error' }, { status: response.status });
+        }
+
+        const data = await response.json();
+        return NextResponse.json(data);
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+}
