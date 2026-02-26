@@ -68,7 +68,7 @@ const FighterDetailsPage = () => {
         <div className="flex gap-4">
           <button
             className="bg-black text-white px-6 py-2 text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-[#FE0002] transition-colors rounded-sm shadow-sm active:scale-95"
-            onClick={() => router.push(`/admin/fighters/${fighter._id}/edit`)}
+            onClick={() => router.push(`/admin/fighters/edit/${fighter._id}`)}
           >
             <i className="fa-solid fa-pen"></i> Edit
           </button>

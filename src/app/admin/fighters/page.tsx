@@ -103,7 +103,7 @@ export default function AdminFightersPage() {
                       </Link>
                     </button>
                     <button className="w-8 h-8 rounded border border-black/10 text-gray-600 hover:text-black hover:bg-black/5 hover:border-black transition-all">
-                      <Link href={`/admin/fighters/${fighter._id}/edit`}>
+                      <Link href={`/admin/fighters/edit/${fighter._id}`}>
                         <i className="fa-solid fa-pen text-xs"></i>
                       </Link>
                     </button>
