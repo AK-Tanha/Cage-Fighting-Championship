@@ -1,8 +1,25 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Fighter } from "@/types";
+import { getAllFighters } from "@/lib/api";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function AdminFightersPage() {
   const router = useRouter();
+  const [fighters, setFighters] = useState<Fighter[]>([]);
+  useEffect(() => {
+    const fetchFighters = async () => {
+      try {
+        const response = await getAllFighters();
+        setFighters(response);
+      } catch (error) {
+        console.error("Error fetching fighters:", error);
+      }
+    };
+    fetchFighters();
+  }, []);
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -46,52 +63,25 @@ export default function AdminFightersPage() {
               </tr>
             </thead>
             <tbody className="text-sm font-medium">
-              {[
-                {
-                  name: "Alex Pereira",
-                  nickname: "Poatan",
-                  record: "11-2-0",
-                  weight: "Light Heavyweight",
-                  status: "Active",
-                },
-                {
-                  name: "Islam Makhachev",
-                  nickname: "",
-                  record: "26-1-0",
-                  weight: "Lightweight",
-                  status: "Active",
-                },
-                {
-                  name: "Jon Jones",
-                  nickname: "Bones",
-                  record: "27-1-0",
-                  weight: "Heavyweight",
-                  status: "Active",
-                },
-                {
-                  name: "Ilia Topuria",
-                  nickname: "El Matador",
-                  record: "15-0-0",
-                  weight: "Featherweight",
-                  status: "Active",
-                },
-              ].map((fighter, i) => (
+              {fighters.map((fighter, i) => (
                 <tr
                   key={i}
                   className="border-b border-black/5 hover:bg-gray-50 transition-colors"
                 >
                   <td className="p-6">
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-gray-200 rounded-sm"></div>
+                      <div className="w-10 h-10 bg-black rounded-sm">
+                        <Image src={fighter.image_url} alt="fighter image" className="w-full h-full object-cover" width={100} height={100} />
+                      </div>
                       <div>
                         <div className="font-display font-black uppercase text-base tracking-tighter">
                           {fighter.name}
                         </div>
-                        {fighter.nickname && (
+                        {/* {fighter.nickname && (
                           <div className="text-[10px] text-[#FE0002] font-bold uppercase tracking-widest">
                             "{fighter.nickname}"
                           </div>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </td>
@@ -99,16 +89,23 @@ export default function AdminFightersPage() {
                     {fighter.record}
                   </td>
                   <td className="p-6 uppercase text-gray-500 text-[10px] tracking-widest font-bold">
-                    {fighter.weight}
+                    {fighter.weight_class}
                   </td>
                   <td className="p-6 text-center">
                     <span className="bg-green-100 text-green-700 px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
-                      {fighter.status}
+                      {fighter.style}
                     </span>
                   </td>
                   <td className="p-6 text-right space-x-2 whitespace-nowrap">
                     <button className="w-8 h-8 rounded border border-black/10 text-gray-600 hover:text-black hover:bg-black/5 hover:border-black transition-all">
-                      <i className="fa-solid fa-pen text-xs"></i>
+                      <Link href={`/admin/fighters/${fighter._id}`}>
+                        <i className="fa-solid fa-eye text-xs"></i>
+                      </Link>
+                    </button>
+                    <button className="w-8 h-8 rounded border border-black/10 text-gray-600 hover:text-black hover:bg-black/5 hover:border-black transition-all">
+                      <Link href={`/admin/fighters/${fighter._id}/edit`}>
+                        <i className="fa-solid fa-pen text-xs"></i>
+                      </Link>
                     </button>
                     <button className="w-8 h-8 rounded border border-black/10 text-red-500 hover:text-white hover:bg-red-500 hover:border-red-500 transition-all">
                       <i className="fa-solid fa-trash text-xs"></i>
