@@ -55,7 +55,7 @@ const AdminLoginForm: React.FC = () => {
                 <div className="space-y-2">
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-700">Email Address</label>
                     <input
-                        type="text"
+                        type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full border border-black/10 rounded-sm p-3 text-sm focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-black"

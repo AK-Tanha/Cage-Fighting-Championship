@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'https://cfc-backend-ten.vercel.app';
+const BACKEND_URL = (process.env.BACKEND_URL || 'https://cfc-backend-ten.vercel.app').replace(/\/$/, '');
 
 export async function POST(request: Request) {
     try {
@@ -11,9 +11,10 @@ export async function POST(request: Request) {
         // Login with backend
         const searchParams = new URLSearchParams();
         searchParams.append('username', email);
+        searchParams.append('email', email); // Add email field as well
         searchParams.append('password', password);
 
-        const response = await fetch(`${BACKEND_URL}/auth/login`, {
+        const response = await fetch(`${BACKEND_URL}/auth/login/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -48,8 +49,21 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: true });
         } else {
             const errorData = await response.json().catch(() => ({}));
+
+            // Extract error message from FastAPI validation structure if needed
+            let errorMessage = 'Invalid credentials';
+            if (errorData.detail) {
+                if (typeof errorData.detail === 'string') {
+                    errorMessage = errorData.detail;
+                } else if (Array.isArray(errorData.detail) && errorData.detail.length > 0) {
+                    errorMessage = errorData.detail[0].msg || JSON.stringify(errorData.detail);
+                } else {
+                    errorMessage = JSON.stringify(errorData.detail);
+                }
+            }
+
             return NextResponse.json(
-                { success: false, message: errorData.detail || 'Invalid credentials' },
+                { success: false, message: errorMessage },
                 { status: response.status === 401 || response.status === 422 ? response.status : 401 }
             );
         }
