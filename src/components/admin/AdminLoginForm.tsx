@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 
 const AdminLoginForm: React.FC = () => {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ const AdminLoginForm: React.FC = () => {
             const res = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ username, password })
             });
 
             const data = await res.json();
@@ -56,8 +56,8 @@ const AdminLoginForm: React.FC = () => {
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-700">Email Address</label>
                     <input
                         type="text"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                         className="w-full border border-black/10 rounded-sm p-3 text-sm focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-black"
                         placeholder="admin@cfc.com"
                         required
