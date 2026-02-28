@@ -7,12 +7,13 @@ export interface Fighter {
         losses?: number;
         draws?: number;
     };
-    nationality: any
-    club: any
-    date_of_birth: any
-    style: any
-    bio: string
-    image_url: string
+    nationality?: any
+    club?: any
+    date_of_birth?: any
+    style?: any
+    bio?: string
+    image_url?: string
+    image?: string;
     nickname?: string;
     rank?: number;
     fightingStyle?: string;
@@ -35,6 +36,7 @@ export interface FighterCreate {
     style: string[]
     bio: string
     image_url: string
+    image?: string;
 }
 
 export interface FighterUpdate {
@@ -48,6 +50,7 @@ export interface FighterUpdate {
     style: string[]
     bio: string
     image_url: string
+    image?: string;
 }
 
 export interface IndividualFight {

@@ -100,7 +100,7 @@ const FighterProfile: React.FC = () => {
                         <section className="relative group">
                             <div className="absolute inset-0 border-2 border-black/5 transform translate-x-2 translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-300" />
                             <Image
-                                src={fighter.image_url || `https://picsum.photos/seed/${fighter.name}/350/350`}
+                                src={fighter.image_url || fighter.image || `https://picsum.photos/seed/${fighter.name}/350/350`}
                                 alt={fighter.name}
                                 className="w-full h-full object-cover object-top relative z-10 shadow-lg"
                                 width={350}

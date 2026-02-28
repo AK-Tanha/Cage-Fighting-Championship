@@ -84,7 +84,7 @@ const FighterDetailsPage = () => {
       <div className="bg-white border border-black/5 rounded-sm overflow-hidden shadow-sm grid grid-cols-1 md:grid-cols-12">
         <div className="md:col-span-4 bg-black aspect-square md:aspect-auto relative min-h-[400px]">
           <Image
-            src={fighter.image_url || "https://picsum.photos/400/600"}
+            src={fighter.image_url || fighter.image || "/og-fighter-default.jpg"}
             alt={fighter.name}
             className="w-full h-full object-cover"
             fill

@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
                 type: 'profile',
                 images: [
                     {
-                        url: fighter.image_url || `/og-fighter-default.jpg`,
+                        url: fighter.image_url || fighter.image || `/og-fighter-default.jpg`,
                         width: 1200,
                         height: 630,
                         alt: `${fighter.name} - CFC Fighter`,
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
                 card: "summary_large_image",
                 title,
                 description,
-                images: [fighter.image_url || `/og-fighter-default.jpg`],
+                images: [fighter.image_url || fighter.image || `/og-fighter-default.jpg`],
             },
         };
     } catch (error) {
