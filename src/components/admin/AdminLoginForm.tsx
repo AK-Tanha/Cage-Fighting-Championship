@@ -59,7 +59,7 @@ const AdminLoginForm: React.FC = () => {
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         className="w-full border border-black/10 rounded-sm p-3 text-sm focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-black"
-                        placeholder="admin@cfc.com"
+                        placeholder="Username"
                         required
                     />
                 </div>
