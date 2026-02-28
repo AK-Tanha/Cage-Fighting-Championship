@@ -1,10 +1,10 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Fighter } from "@/types";
 import { getAllFighters } from "@/lib/api";
+import { Fighter } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function AdminFightersPage() {
   const router = useRouter();
@@ -86,7 +86,9 @@ export default function AdminFightersPage() {
                     </div>
                   </td>
                   <td className="p-6 text-center font-bold text-gray-700">
-                    {fighter.record}
+                    {typeof fighter.record === 'string'
+                      ? fighter.record
+                      : `${fighter.record?.wins ?? 0}-${fighter.record?.losses ?? 0}`}
                   </td>
                   <td className="p-6 uppercase text-gray-500 text-[10px] tracking-widest font-bold">
                     {fighter.weight_class}

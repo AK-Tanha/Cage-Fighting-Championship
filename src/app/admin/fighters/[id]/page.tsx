@@ -115,7 +115,9 @@ const FighterDetailsPage = () => {
                   Record
                 </span>
                 <span className="text-sm font-bold uppercase tracking-tight">
-                  {fighter.record}
+                  {typeof fighter.record === 'string'
+                    ? fighter.record
+                    : `${fighter.record?.wins ?? 0}-${fighter.record?.losses ?? 0}-${fighter.record?.draws ?? 0}`}
                 </span>
               </div>
               <div className="px-4 py-2 bg-gray-50 border border-black/5 rounded-sm">

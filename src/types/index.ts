@@ -2,13 +2,26 @@ export interface Fighter {
     _id: string
     name: string
     weight_class: string
-    record: string
+    record: string | {
+        wins?: number;
+        losses?: number;
+        draws?: number;
+    };
     nationality: any
     club: any
     date_of_birth: any
     style: any
     bio: string
     image_url: string
+    nickname?: string;
+    rank?: number;
+    fightingStyle?: string;
+    stats?: {
+        striking?: number;
+        grappling?: number;
+        stamina?: number;
+        power?: number;
+    };
 }
 
 export interface FighterCreate {

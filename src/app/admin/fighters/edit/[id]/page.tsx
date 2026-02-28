@@ -36,7 +36,9 @@ const FighterEditPage = () => {
         setData({
           name: fighter.name || "",
           weight_class: fighter.weight_class || "",
-          record: fighter.record || "",
+          record: typeof fighter.record === 'string'
+            ? fighter.record
+            : `${fighter.record?.wins ?? 0}-${fighter.record?.losses ?? 0}-${fighter.record?.draws ?? 0}`,
           nationality: fighter.nationality || "",
           club: fighter.club || "",
           date_of_birth: fighter.date_of_birth
@@ -92,8 +94,8 @@ const FighterEditPage = () => {
       console.error("error submitting form", err);
       setError(
         err.response?.data?.message ||
-          err.message ||
-          "Failed to update fighter",
+        err.message ||
+        "Failed to update fighter",
       );
     } finally {
       setSubmitting(false);

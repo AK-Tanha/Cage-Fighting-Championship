@@ -30,12 +30,12 @@ const FightRow: React.FC<{
                             {f1?.name || "Unknown Fighter"}
                         </Link>
                         <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">
-                            {f1?.record ? (typeof f1.record === 'string' ? f1.record : `${f1.record.wins}-${f1.record.losses}`) : "0-0"}
+                            {f1?.record ? (typeof f1.record === 'string' ? f1.record : `${f1.record.wins ?? 0}-${f1.record.losses ?? 0}`) : "0-0"}
                         </p>
                     </h4>
                 </div>
                 <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-black/10 group-hover:border-[#FE0002]/50 transition-all">
-                    <Image src={f1?.image || `https://picsum.photos/seed/${f1?._id}/800/500`} alt={f1?.name} className="w-full h-full object-cover" width={800} height={500} loading="lazy" />
+                    <Image src={f1?.image_url || `https://picsum.photos/seed/${f1?._id}/800/500`} alt={f1?.name} className="w-full h-full object-cover" width={800} height={500} loading="lazy" />
                 </div>
             </div>
 
@@ -52,7 +52,7 @@ const FightRow: React.FC<{
             {/* Fighter 2 */}
             <div className="flex-1 flex flex-row-reverse items-center gap-6 w-full md:w-auto">
                 <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-black/10 group-hover:border-[#FE0002]/50 transition-all">
-                    <Image src={f2?.image || `https://picsum.photos/seed/${f2?._id}/800/500`} alt={f2?.name} className="w-full h-full object-cover" width={800} height={500} loading="lazy" />
+                    <Image src={f2?.image_url || `https://picsum.photos/seed/${f2?._id}/800/500`} alt={f2?.name} className="w-full h-full object-cover" width={800} height={500} loading="lazy" />
                 </div>
                 <div className="flex-1 text-left">
                     <p className="text-xs text-blue-500 font-bold uppercase tracking-widest mb-1 italic">Blue Corner</p>
@@ -61,7 +61,7 @@ const FightRow: React.FC<{
                             {f2?.name || "Unknown Fighter"}
                         </Link>
                         <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">
-                            {f2?.record ? (typeof f2.record === 'string' ? f2.record : `${f2.record.wins}-${f2.record.losses}`) : "0-0"}
+                            {f2?.record ? (typeof f2.record === 'string' ? f2.record : `${f2.record.wins ?? 0}-${f2.record.losses ?? 0}`) : "0-0"}
                         </p>
                     </h4>
                 </div>
