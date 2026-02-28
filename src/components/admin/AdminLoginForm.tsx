@@ -53,7 +53,7 @@ const AdminLoginForm: React.FC = () => {
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-700">Email Address</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-700">Username</label>
                     <input
                         type="text"
                         value={username}
