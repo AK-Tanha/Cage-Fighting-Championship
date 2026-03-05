@@ -6,12 +6,13 @@ const BACKEND_URL = (process.env.BACKEND_URL || 'https://cfc-backend-ten.vercel.
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { email, password } = body;
+        const { email, username, password } = body;
+        const loginIdentifier = email || username;
 
         // Login with backend
         const searchParams = new URLSearchParams();
-        searchParams.append('username', email);
-        searchParams.append('email', email); // Add email field as well
+        searchParams.append('username', loginIdentifier || '');
+        searchParams.append('email', loginIdentifier || ''); // Add email field as well
         searchParams.append('password', password);
 
         const response = await fetch(`${BACKEND_URL}/auth/login/`, {
