@@ -156,7 +156,7 @@ const FighterDetailsPage = () => {
                   Primary Style
                 </span>
                 <span className="text-sm font-medium">
-                  {fighter.style || "Mixed Martial Arts"}
+                  {fighter.style.join(", ") || "Mixed Martial Arts"}
                 </span>
               </div>
             </div>

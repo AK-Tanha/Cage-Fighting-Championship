@@ -1,5 +1,5 @@
 "use client";
-import { getAllFighters } from "@/lib/api";
+import { deleteFighter, getAllFighters } from "@/lib/api";
 import { Fighter } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,6 +20,16 @@ export default function AdminFightersPage() {
     };
     fetchFighters();
   }, []);
+  const handleDelete = async (id: string) => {
+    try {
+      if (!confirm("Are you sure you want to delete this fighter?")) return;
+      await deleteFighter(id);
+      alert("Fighter deleted successfully!");
+      setFighters(fighters.filter((fighter) => fighter._id !== id));
+    } catch (error) {
+      console.error("Error deleting fighter:", error);
+    }
+  };
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -109,7 +119,7 @@ export default function AdminFightersPage() {
                         <i className="fa-solid fa-pen text-xs"></i>
                       </Link>
                     </button>
-                    <button className="w-8 h-8 rounded border border-black/10 text-red-500 hover:text-white hover:bg-red-500 hover:border-red-500 transition-all">
+                    <button className="w-8 h-8 rounded border border-black/10 text-red-500 hover:text-white hover:bg-red-500 hover:border-red-500 transition-all" onClick={() => handleDelete(fighter._id)}>
                       <i className="fa-solid fa-trash text-xs"></i>
                     </button>
                   </td>

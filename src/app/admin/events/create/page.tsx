@@ -1,11 +1,452 @@
-import React from 'react'
+"use client";
+
+import { createEvent, getAllFighters, uploadImage } from "@/lib/api";
+import { Fighter } from "@/types";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const EventCreate = () => {
-  return (
-    <div className="flex items-center justify-center h-screen">
-      <h1 className="text-2xl font-bold">Event Create Page</h1>
-    </div>
-  )
-}
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [fighters, setFighters] = useState<Fighter[]>([]);
 
-export default EventCreate
+  useEffect(() => {
+    const fetchFighters = async () => {
+      try {
+        const data = await getAllFighters();
+        setFighters(data);
+      } catch (err) {
+        console.error("Failed to load fighters for selection", err);
+      }
+    };
+    fetchFighters();
+  }, []);
+
+  const [data, setData] = useState({
+    name: "",
+    date: "",
+    location: "",
+    image_url: "",
+    fights: [
+      {
+        fighter1: "",
+        fighter2: "",
+        weight_class: "",
+        title_fight: false,
+        result: "",
+      },
+    ],
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFightChange = (index: number, field: string, value: any) => {
+    const newFights = [...data.fights];
+    newFights[index] = { ...newFights[index], [field]: value };
+    setData((prev) => ({ ...prev, fights: newFights }));
+  };
+
+  const addFight = () => {
+    setData((prev) => ({
+      ...prev,
+      fights: [
+        ...prev.fights,
+        {
+          fighter1: "",
+          fighter2: "",
+          weight_class: "",
+          title_fight: false,
+          result: "",
+        },
+      ],
+    }));
+  };
+
+  const removeFight = (index: number) => {
+    const newFights = [...data.fights];
+    newFights.splice(index, 1);
+    setData((prev) => ({ ...prev, fights: newFights }));
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    setError(null);
+    try {
+      const url = await uploadImage(file);
+      setData((prev) => ({ ...prev, image_url: url }));
+    } catch (err: any) {
+      console.error("Image upload error", err);
+      setError(err.message || "Failed to upload image");
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Basic validation
+      if (!data.name || !data.date || !data.location) {
+        throw new Error("Name, Date, and Location are required.");
+      }
+
+      await createEvent(data as any);
+      setSuccess(true);
+      setTimeout(() => {
+        router.push("/admin/events");
+      }, 2000);
+    } catch (err: any) {
+      console.error("error submitting form", err);
+      setError(
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to create event"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <Link
+              href="/admin/events"
+              className="text-[#FE0002] text-sm font-bold uppercase tracking-widest hover:underline flex items-center gap-2 mb-2"
+            >
+              <i className="fa-solid fa-arrow-left text-xs"></i> Back to Events
+            </Link>
+            <h1 className="text-4xl font-display font-black uppercase italic tracking-tighter">
+              Create <span className="text-[#FE0002]">Event</span>
+            </h1>
+          </div>
+        </div>
+
+        {/* Status Messages */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border-l-4 border-[#FE0002] text-[#FE0002] font-bold text-sm uppercase tracking-widest">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 font-bold text-sm uppercase tracking-widest">
+            Event created successfully! Redirecting...
+          </div>
+        )}
+
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white border border-black/5 shadow-xl rounded-sm overflow-hidden"
+        >
+          <div className="p-8 space-y-8">
+            {/* Basic Info Section */}
+            <div>
+              <h3 className="text-xs font-display font-bold uppercase tracking-[0.3em] text-gray-400 mb-6 border-b border-black/5 pb-2">
+                Basic Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex flex-col">
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Event Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    value={data.name}
+                    onChange={handleChange}
+                    placeholder="e.g. CFC 1: Genesis"
+                    className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Date
+                  </label>
+                  <input
+                    type="date"
+                    name="date"
+                    required
+                    value={data.date}
+                    onChange={handleChange}
+                    className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Location
+                  </label>
+                  <input
+                    type="text"
+                    name="location"
+                    required
+                    value={data.location}
+                    onChange={handleChange}
+                    placeholder="e.g. MGM Grand, Las Vegas"
+                    className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Visuals Section */}
+            <div>
+              <h3 className="text-xs font-display font-bold uppercase tracking-[0.3em] text-gray-400 mb-6 border-b border-black/5 pb-2">
+                Event Poster
+              </h3>
+              <div className="space-y-4">
+                <div className="flex flex-col">
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Image URL
+                  </label>
+                  <input
+                    type="text"
+                    name="image_url"
+                    value={data.image_url}
+                    onChange={handleChange}
+                    placeholder="https://example.com/event-poster.jpg"
+                    className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
+                  />
+                </div>
+
+                <div className="relative border-2 border-dashed border-black/10 rounded-sm bg-gray-50/50 hover:bg-gray-100 transition-colors group cursor-pointer overflow-hidden">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploadingImage}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  />
+
+                  {data.image_url ? (
+                    <div className="relative aspect-video w-full">
+                      <Image
+                        src={data.image_url}
+                        alt="Event preview"
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                        <span className="text-white font-bold uppercase tracking-widest text-xs">
+                          {uploadingImage ? "Uploading..." : "Change Image"}
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-6 flex flex-col items-center justify-center min-h-[160px]">
+                      {uploadingImage ? (
+                        <i className="fa-solid fa-circle-notch animate-spin text-3xl text-[#FE0002] mb-3"></i>
+                      ) : (
+                        <i className="fa-solid fa-cloud-arrow-up text-3xl text-gray-300 mb-3 group-hover:text-[#FE0002] transition-colors"></i>
+                      )}
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                        {uploadingImage
+                          ? "Uploading Image..."
+                          : "Click or Drag to Upload Poster"}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Fights Section */}
+            <div>
+              <div className="flex items-center justify-between mb-6 border-b border-black/5 pb-2">
+                <h3 className="text-xs font-display font-bold uppercase tracking-[0.3em] text-gray-400">
+                  Fight Card
+                </h3>
+                <button
+                  type="button"
+                  onClick={addFight}
+                  className="text-xs font-bold uppercase tracking-widest flex items-center gap-2 text-[#FE0002] hover:text-black transition-colors"
+                >
+                  <i className="fa-solid fa-plus"></i> Add Fight
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {data.fights.map((fight, index) => (
+                  <div
+                    key={index}
+                    className="p-6 bg-gray-50 border border-black/5 rounded-sm relative"
+                  >
+                    <div className="absolute top-4 right-4 flex gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 bg-white px-2 py-1 rounded-sm border border-black/5">
+                        Fight {index + 1}
+                      </span>
+                      {data.fights.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeFight(index)}
+                          className="text-red-500 hover:text-red-700 p-1"
+                        >
+                          <i className="fa-solid fa-trash text-sm"></i>
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                      <div className="flex flex-col">
+                        <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                          Red Corner (Fighter 1)
+                        </label>
+                        <select
+                          required
+                          value={fight.fighter1}
+                          onChange={(e) =>
+                            handleFightChange(index, "fighter1", e.target.value)
+                          }
+                          className="bg-white border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors text-sm font-medium"
+                        >
+                          <option value="" disabled>
+                            Select Fighter
+                          </option>
+                          {fighters.map((f) => (
+                            <option key={f._id} value={f._id}>
+                              {f.name} ({f.weight_class})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                          Blue Corner (Fighter 2)
+                        </label>
+                        <select
+                          required
+                          value={fight.fighter2}
+                          onChange={(e) =>
+                            handleFightChange(index, "fighter2", e.target.value)
+                          }
+                          className="bg-white border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors text-sm font-medium"
+                        >
+                          <option value="" disabled>
+                            Select Fighter
+                          </option>
+                          {fighters.map((f) => (
+                            <option key={f._id} value={f._id}>
+                              {f.name} ({f.weight_class})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                          Weight Class
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={fight.weight_class}
+                          onChange={(e) =>
+                            handleFightChange(
+                              index,
+                              "weight_class",
+                              e.target.value
+                            )
+                          }
+                          placeholder="e.g. Lightweight"
+                          className="bg-white border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors text-sm font-medium"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                          Result
+                        </label>
+                        <input
+                          type="text"
+                          value={fight.result}
+                          onChange={(e) =>
+                            handleFightChange(index, "result", e.target.value)
+                          }
+                          placeholder="e.g. Scheduled / Fighter 1 by KO"
+                          className="bg-white border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors text-sm font-medium"
+                        />
+                      </div>
+
+                      <div className="flex items-center gap-3 mt-2 md:col-span-2">
+                        <input
+                          type="checkbox"
+                          id={`title-fight-${index}`}
+                          checked={fight.title_fight}
+                          onChange={(e) =>
+                            handleFightChange(
+                              index,
+                              "title_fight",
+                              e.target.checked
+                            )
+                          }
+                          className="w-4 h-4 text-[#FE0002] focus:ring-[#FE0002] border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor={`title-fight-${index}`}
+                          className="text-xs font-bold uppercase tracking-widest text-gray-700"
+                        >
+                          Title Fight
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Submit */}
+          <div className="p-8 bg-gray-50 border-t border-black/5 flex justify-end">
+            <button
+              type="submit"
+              disabled={loading}
+              className={`
+                group relative bg-black text-white px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all 
+                ${loading
+                  ? "opacity-70 cursor-not-allowed"
+                  : "hover:bg-[#FE0002] active:scale-95"
+                }
+              `}
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <i className="fa-solid fa-circle-notch animate-spin"></i>{" "}
+                  Processing...
+                </span>
+              ) : (
+                <span className="flex items-center gap-2">
+                  <i className="fa-solid fa-plus group-hover:rotate-90 transition-transform"></i>{" "}
+                  Create Event
+                </span>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default EventCreate;

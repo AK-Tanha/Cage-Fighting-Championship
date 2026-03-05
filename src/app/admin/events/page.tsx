@@ -58,10 +58,16 @@ export default function AdminEventsPage() {
                             </div>
 
                             <div className="flex gap-2 pt-4 border-t border-black/5">
-                                <button className="flex-1 py-2 text-center border border-black/10 hover:border-black text-[10px] font-bold uppercase tracking-widest transition-colors rounded-sm text-black">
+                                <button
+                                    onClick={() => router.push(`/admin/events/edit/${event._id}`)}
+                                    className="flex-1 py-2 text-center border border-black/10 hover:border-black text-[10px] font-bold uppercase tracking-widest transition-colors rounded-sm text-black"
+                                >
                                     Edit Event
                                 </button>
-                                <button className="flex-1 py-2 text-center bg-gray-100 hover:bg-gray-200 text-[10px] font-bold uppercase tracking-widest transition-colors rounded-sm text-black">
+                                <button
+                                    onClick={() => router.push(`/admin/events/${event._id}`)}
+                                    className="flex-1 py-2 text-center bg-gray-100 hover:bg-gray-200 text-[10px] font-bold uppercase tracking-widest transition-colors rounded-sm text-black"
+                                >
                                     Fight Card
                                 </button>
                             </div>

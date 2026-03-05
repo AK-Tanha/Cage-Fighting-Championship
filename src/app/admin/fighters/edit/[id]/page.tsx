@@ -1,6 +1,7 @@
 "use client";
 
-import { getFighterById, updateFighter } from "@/lib/api";
+import { getFighterById, updateFighter, uploadImage } from "@/lib/api";
+import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,6 +13,7 @@ const FighterEditPage = () => {
 
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
@@ -71,6 +73,23 @@ const FighterEditPage = () => {
   ) => {
     const { name, value } = e.target;
     setData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    setError(null);
+    try {
+      const url = await uploadImage(file);
+      setData((prev) => ({ ...prev, image_url: url }));
+    } catch (err: any) {
+      console.error("Image upload error", err);
+      setError(err.message || "Failed to upload image");
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -304,14 +323,41 @@ const FighterEditPage = () => {
                   />
                 </div>
 
-                <div className="p-6 border-2 border-dashed border-black/10 rounded-sm bg-gray-50/50 flex flex-col items-center justify-center">
-                  <i className="fa-solid fa-cloud-arrow-up text-3xl text-gray-300 mb-3"></i>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                    Media Upload Currently Offline
-                  </p>
-                  <p className="text-[9px] text-gray-400 mt-1 italic">
-                    Please use Image URL for now
-                  </p>
+                <div className="relative border-2 border-dashed border-black/10 rounded-sm bg-gray-50/50 hover:bg-gray-100 transition-colors group cursor-pointer overflow-hidden">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploadingImage}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  />
+
+                  {data.image_url ? (
+                    <div className="relative aspect-video w-full">
+                      <Image
+                        src={data.image_url}
+                        alt="Fighter preview"
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                        <span className="text-white font-bold uppercase tracking-widest text-xs">
+                          {uploadingImage ? 'Uploading...' : 'Change Image'}
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-6 flex flex-col items-center justify-center min-h-[160px]">
+                      {uploadingImage ? (
+                        <i className="fa-solid fa-circle-notch animate-spin text-3xl text-[#FE0002] mb-3"></i>
+                      ) : (
+                        <i className="fa-solid fa-cloud-arrow-up text-3xl text-gray-300 mb-3 group-hover:text-[#FE0002] transition-colors"></i>
+                      )}
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                        {uploadingImage ? 'Uploading Image...' : 'Click or Drag to Upload Image'}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
