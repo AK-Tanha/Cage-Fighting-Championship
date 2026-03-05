@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 const BACKEND_URL = (process.env.BACKEND_URL || 'https://cfc-backend-ten.vercel.app').replace(/\/$/, '');
@@ -34,11 +35,16 @@ export async function PUT(
     try {
         const { id } = await params;
         const body = await request.json();
+
+        const cookieStore = await cookies();
+        const token = cookieStore.get('cfc_access_token')?.value;
+
         const response = await fetch(`${BACKEND_URL}/fighters/${id}/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
             },
             body: JSON.stringify(body)
         });
@@ -61,9 +67,16 @@ export async function DELETE(
 ) {
     try {
         const { id } = await params;
+
+        const cookieStore = await cookies();
+        const token = cookieStore.get('cfc_access_token')?.value;
+
         const response = await fetch(`${BACKEND_URL}/fighters/${id}/`, {
             method: 'DELETE',
-            headers: { 'Accept': 'application/json' }
+            headers: {
+                'Accept': 'application/json',
+                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+            }
         });
 
         if (!response.ok) {

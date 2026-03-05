@@ -79,10 +79,15 @@ const FighterEditPage = () => {
     setError(null);
 
     try {
+      const styles = styleInput
+        .split(",")
+        .map((s) => s.trim())
+        .filter((s) => s !== "");
+
       const fighterData = {
         ...data,
         _id: fighterId,
-        style: styleInput,
+        style: styles,
       };
 
       await updateFighter(fighterData as any);

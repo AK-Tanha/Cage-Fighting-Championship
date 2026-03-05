@@ -58,7 +58,7 @@ export default function AdminFightersPage() {
                 <th className="p-6">Fighter</th>
                 <th className="p-6 text-center">Record</th>
                 <th className="p-6">Weight Class</th>
-                <th className="p-6 text-center">Status</th>
+                <th className="p-6 text-center">Style</th>
                 <th className="p-6 text-right">Actions</th>
               </tr>
             </thead>
@@ -95,7 +95,7 @@ export default function AdminFightersPage() {
                   </td>
                   <td className="p-6 text-center">
                     <span className="bg-green-100 text-green-700 px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
-                      {fighter.style}
+                      {fighter.style?.join(", ")}
                     </span>
                   </td>
                   <td className="p-6 text-right space-x-2 whitespace-nowrap">
