@@ -1,81 +1,104 @@
 "use client";
 import { getAllEvents } from "@/lib/api";
 import { FightEvent } from "@/types";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function AdminEventsPage() {
     const router = useRouter();
     const [events, setEvents] = useState<FightEvent[]>([]);
-    useEffect(
-        () => {
-            const fetchEvents = async () => {
-                try {
-                    const response = await getAllEvents();
-                    setEvents(response);
-                } catch (error) {
-                    console.error("Error fetching events:", error);
-                }
-            };
-            fetchEvents();
-        }, []
-    )
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const response = await getAllEvents();
+                setEvents(response);
+            } catch (error) {
+                console.error("Error fetching events:", error);
+            }
+        };
+        fetchEvents();
+    }, []);
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="font-display text-2xl font-black uppercase tracking-tight">Events Management</h2>
-                <button className="bg-[#FE0002] text-white px-6 py-2 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-colors rounded-sm shadow-sm active:scale-95"
+                <h2 className="font-display text-2xl font-black uppercase tracking-tight">
+                    Events Management
+                </h2>
+                <button
+                    className="bg-[#FE0002] text-white px-6 py-2 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-colors rounded-sm shadow-sm active:scale-95"
                     onClick={() => router.push("/admin/events/create")}
                 >
                     <i className="fa-solid fa-plus"></i> Create Event
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {events.map((event, i) => (
-                    <div key={i} className="bg-white border border-black/5 rounded-sm overflow-hidden shadow-sm group">
-                        <div className="h-40 bg-gray-200 relative">
-                            {/* In a real app, use next/image here */}
-                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center p-6 group-hover:bg-black/20 transition-colors">
-                                <h3 className="font-display font-black text-2xl text-white uppercase tracking-tighter text-center">{event.name}</h3>
-                            </div>
-                            <div className="absolute top-4 right-4">
-                                <span className={`px-2 py-1 text-[8px] font-bold uppercase tracking-widest rounded-sm ${event.status === 'Upcoming' ? 'bg-[#FE0002] text-white' : 'bg-white text-black'}`}>
+                    <div
+                        key={i}
+                        className="flex flex-col h-full bg-white border border-black/5 rounded-sm overflow-hidden shadow-sm group hover:shadow-md transition-shadow"
+                    >
+                        {/* Image Container */}
+                        <div className="aspect-[16/9] bg-gray-200 relative overflow-hidden">
+                            <Image
+                                src={event.image_url || "/og-event-default.jpg"}
+                                alt={event.name}
+                                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                priority={i < 3}
+                            />
+                            <div className="absolute top-4 right-4 z-10">
+                                <span
+                                    className={`px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded-sm shadow-sm ${event.status === "Upcoming"
+                                            ? "bg-[#FE0002] text-white"
+                                            : "bg-white text-black border border-black/10"
+                                        }`}
+                                >
                                     {event.status}
                                 </span>
                             </div>
                         </div>
-                        <div className="p-6">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="text-[10px] text-[#FE0002] font-bold uppercase tracking-widest">{event._id}</div>
-                                <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest flex items-center gap-1">
-                                    <i className="fa-solid fa-calendar-days text-gray-400"></i> {event.date}
+
+                        {/* Content Container */}
+                        <div className="p-6 flex flex-col flex-1">
+                            <div className="mb-auto">
+                                <div className="flex flex-col gap-2 mb-4">
+                                    <h3 className="font-display font-black text-base text-black uppercase tracking-tighter leading-tight">
+                                        {event.name}
+                                    </h3>
+                                    <div className="flex items-center gap-2 text-[10px] text-gray-500 font-bold uppercase tracking-widest">
+                                        <i className="fa-solid fa-calendar-days text-[#FE0002]"></i>
+                                        {event.date}
+                                    </div>
+                                </div>
+
+                                <div className="text-[11px] text-gray-600 font-medium flex items-center gap-2 mb-6">
+                                    <i className="fa-solid fa-location-dot text-gray-400"></i>
+                                    {event.location}
                                 </div>
                             </div>
-                            <div className="text-xs text-gray-600 font-medium mb-6 flex items-center gap-2">
-                                <i className="fa-solid fa-location-dot text-gray-400"></i>
-                                {event.location}
-                            </div>
 
-                            <div className="flex gap-2 pt-4 border-t border-black/5">
+                            {/* Action Buttons */}
+                            <div className="flex gap-3 pt-6 border-t border-black/5">
                                 <button
                                     onClick={() => router.push(`/admin/events/edit/${event._id}`)}
-                                    className="flex-1 py-2 text-center border border-black/10 hover:border-black text-[10px] font-bold uppercase tracking-widest transition-colors rounded-sm text-black"
+                                    className="flex-1 py-2.5 text-center border border-black/10 hover:bg-black hover:text-white text-[10px] font-bold uppercase tracking-widest transition-all rounded-sm text-black"
                                 >
                                     Edit Event
                                 </button>
                                 <button
                                     onClick={() => router.push(`/admin/events/${event._id}`)}
-                                    className="flex-1 py-2 text-center bg-gray-100 hover:bg-gray-200 text-[10px] font-bold uppercase tracking-widest transition-colors rounded-sm text-black"
+                                    className="flex-1 py-2.5 text-center bg-gray-50 hover:bg-gray-100 text-[10px] font-bold uppercase tracking-widest transition-colors rounded-sm text-black"
                                 >
-                                    Fight Card
+                                    View Details
                                 </button>
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
-
         </div>
     );
 }

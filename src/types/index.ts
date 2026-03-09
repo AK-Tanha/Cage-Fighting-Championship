@@ -86,6 +86,7 @@ export interface FightEvent {
     date: string;
     location: string;
     image?: string;
+    image_url?: string;
     isLive?: boolean;
     status?: string;
     fights?: IndividualFight[];
