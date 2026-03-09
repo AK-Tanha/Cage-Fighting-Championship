@@ -61,7 +61,7 @@ const Events: React.FC = () => {
                             <div className="lg:w-2/5 h-64 lg:h-auto relative overflow-hidden">
                                 <Image
                                     //src={event.image || '/images/event-placeholder.jpg'}
-                                    src={`https://picsum.photos/seed/${event._id}/800/500`}
+                                    src={event.image_url || `/api/proxy/events/${event._id}/image/`}
                                     alt={event.name}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
                                     width={500}

@@ -129,7 +129,7 @@ const EventDetails: React.FC = () => {
             {/* Header Banner Image */}
             <div className="w-full pt-20">
                 <Image
-                    src={`https://picsum.photos/seed/${event._id}/1920/1080`}
+                    src={event.image_url || `/api/proxy/events/${event._id}/image/`}
                     className="w-full h-auto max-h-[80vh] object-cover object-center bg-white border-b border-black/5"
                     alt={event.name}
                     width={1920}
