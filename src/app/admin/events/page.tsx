@@ -21,12 +21,12 @@ export default function AdminEventsPage() {
     }, []);
     return (
         <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h2 className="font-display text-2xl font-black uppercase tracking-tight">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                <h2 className="font-display text-xl sm:text-2xl font-black uppercase tracking-tight">
                     Events Management
                 </h2>
                 <button
-                    className="bg-[#FE0002] text-white px-6 py-2 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-colors rounded-sm shadow-sm active:scale-95"
+                    className="bg-[#FE0002] text-white px-6 py-2 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-colors rounded-sm shadow-sm active:scale-95 w-full sm:w-auto justify-center"
                     onClick={() => router.push("/admin/events/create")}
                 >
                     <i className="fa-solid fa-plus"></i> Create Event
@@ -52,8 +52,8 @@ export default function AdminEventsPage() {
                             <div className="absolute top-4 right-4 z-10">
                                 <span
                                     className={`px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded-sm shadow-sm ${event.status === "Upcoming"
-                                            ? "bg-[#FE0002] text-white"
-                                            : "bg-white text-black border border-black/10"
+                                        ? "bg-[#FE0002] text-white"
+                                        : "bg-white text-black border border-black/10"
                                         }`}
                                 >
                                     {event.status}

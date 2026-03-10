@@ -32,12 +32,12 @@ export default function AdminFightersPage() {
   };
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="font-display text-2xl font-black uppercase tracking-tight">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+        <h2 className="font-display text-xl sm:text-2xl font-black uppercase tracking-tight">
           Fighters Management
         </h2>
         <button
-          className="bg-[#FE0002] text-white px-6 py-2 text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-colors rounded-sm shadow-sm active:scale-95"
+          className="bg-[#FE0002] text-white px-6 py-2 text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-colors rounded-sm shadow-sm active:scale-95 w-full sm:w-auto justify-center"
           onClick={() => router.push("/admin/fighters/create")}
         >
           <i className="fa-solid fa-plus"></i> Add Fighter
@@ -45,16 +45,16 @@ export default function AdminFightersPage() {
       </div>
 
       <div className="bg-white border border-black/5 rounded-sm overflow-hidden shadow-sm">
-        <div className="p-4 border-b border-black/5 flex items-center justify-between bg-gray-50">
-          <div className="relative">
+        <div className="p-4 border-b border-black/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-gray-50">
+          <div className="relative w-full sm:w-auto">
             <i className="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
             <input
               type="text"
               placeholder="SEARCH FIGHTERS..."
-              className="bg-white border border-black/10 text-sm pl-10 pr-4 py-2 w-64 focus:outline-none focus:border-[#FE0002] rounded-sm font-display tracking-wider placeholder:text-gray-400 uppercase text-[10px] font-bold"
+              className="bg-white border border-black/10 text-sm pl-10 pr-4 py-2 w-full sm:w-64 focus:outline-none focus:border-[#FE0002] rounded-sm font-display tracking-wider placeholder:text-gray-400 uppercase text-[10px] font-bold"
             />
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 self-end sm:self-auto">
             <button className="px-4 py-2 border border-black/10 text-[10px] font-bold uppercase tracking-widest hover:border-black rounded-sm flex items-center gap-2 bg-white">
               <i className="fa-solid fa-filter"></i> Filter
             </button>
