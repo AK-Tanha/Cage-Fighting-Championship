@@ -14,6 +14,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
 
     const navItems = [
         { name: 'Dashboard', path: '/admin', icon: 'fa-solid fa-chart-line' },
+        { name: 'Hero Section', path: '/admin/hero', icon: 'fa-solid fa-images' },
         { name: 'Fighters', path: '/admin/fighters', icon: 'fa-solid fa-user-ninja' },
         { name: 'Events', path: '/admin/events', icon: 'fa-solid fa-calendar-days' },
         { name: 'Settings', path: '/admin/settings', icon: 'fa-solid fa-gear' },

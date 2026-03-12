@@ -98,3 +98,13 @@ export interface ChatMessage {
     role: 'user' | 'model';
     text: string;
 }
+
+export interface HeroSlide {
+    _id: string,
+    image_url: string,
+    title: string,
+    subtitle: string,
+    link: string,
+    is_active: boolean,
+    order: number
+}
