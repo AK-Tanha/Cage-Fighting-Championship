@@ -5,10 +5,10 @@ const BACKEND_URL = (process.env.BACKEND_URL || 'https://cfc-backend-ten.vercel.
 
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const id = params.id;
+        const { id } = await params;
         const response = await fetch(`${BACKEND_URL}/hero-slides/${id}/`, {
             headers: { 'Accept': 'application/json' },
             cache: 'no-store'
@@ -25,10 +25,10 @@ export async function GET(
 
 export async function PUT(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const id = params.id;
+        const { id } = await params;
         const body = await request.json();
 
         const cookieStore = await cookies();
@@ -58,10 +58,10 @@ export async function PUT(
 
 export async function DELETE(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const id = params.id;
+        const { id } = await params;
 
         const cookieStore = await cookies();
         const token = cookieStore.get('cfc_access_token')?.value;
