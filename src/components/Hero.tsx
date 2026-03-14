@@ -40,6 +40,33 @@ const Hero: React.FC = () => {
         return () => clearInterval(interval);
     }, [slides.length]);
 
+    const currentSlide = useMemo(() => slides[currentSlideIndex], [slides, currentSlideIndex]);
+
+    const backgroundImages = useMemo(() => slides.map((slide, index) => (
+        <Image
+            key={slide._id}
+            src={slide.image_url || "/og-fighter-default.jpg"}
+            alt={slide.title}
+            aria-hidden
+            className={`
+                absolute inset-0 w-full h-full object-cover
+                transition-all duration-1000 ease-in-out
+                ${index === currentSlideIndex ? "opacity-100 scale-105" : "opacity-0 scale-100"}
+            `}
+            width={1920}
+            height={1080}
+            priority={index === 0 || index === currentSlideIndex}
+        />
+    )), [slides, currentSlideIndex]);
+
+    const slideIndicators = useMemo(() => slides.map((_, index) => (
+        <button
+            key={index}
+            onClick={() => setCurrentSlideIndex(index)}
+            className={`w-12 h-1 transition-all duration-300 ${index === currentSlideIndex ? 'bg-[#FE0002] w-16' : 'bg-black/20 hover:bg-black/40'}`}
+        />
+    )), [slides.length, currentSlideIndex]);
+
     if (loading) {
         return (
             <section className="relative min-h-screen flex items-center justify-center bg-gray-50">
@@ -74,32 +101,7 @@ const Hero: React.FC = () => {
         );
     }
 
-    const currentSlide = useMemo(() => slides[currentSlideIndex], [slides, currentSlideIndex]);
-    
-    const backgroundImages = useMemo(() => slides.map((slide, index) => (
-        <Image
-            key={slide._id}
-            src={slide.image_url || "/og-fighter-default.jpg"}
-            alt={slide.title}
-            aria-hidden
-            className={`
-                absolute inset-0 w-full h-full object-cover
-                transition-all duration-1000 ease-in-out
-                ${index === currentSlideIndex ? "opacity-100 scale-105" : "opacity-0 scale-100"}
-            `}
-            width={1920}
-            height={1080}
-            priority={index === 0 || index === currentSlideIndex}
-        />
-    )), [slides, currentSlideIndex]);
 
-    const slideIndicators = useMemo(() => slides.map((_, index) => (
-        <button
-            key={index}
-            onClick={() => setCurrentSlideIndex(index)}
-            className={`w-12 h-1 transition-all duration-300 ${index === currentSlideIndex ? 'bg-[#FE0002] w-16' : 'bg-black/20 hover:bg-black/40'}`}
-        />
-    )), [slides.length, currentSlideIndex]);
 
     return (
         <section className="relative min-h-screen max-h-[900px] 2xl:max-h-[1000px] overflow-hidden flex items-center">
