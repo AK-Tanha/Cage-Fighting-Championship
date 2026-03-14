@@ -4,7 +4,7 @@ import { getAllHeroSlides } from "@/lib/api";
 import { HeroSlide } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 const Hero: React.FC = () => {
     const [slides, setSlides] = useState<HeroSlide[]>([]);
@@ -74,28 +74,38 @@ const Hero: React.FC = () => {
         );
     }
 
-    const currentSlide = slides[currentSlideIndex];
+    const currentSlide = useMemo(() => slides[currentSlideIndex], [slides, currentSlideIndex]);
+    
+    const backgroundImages = useMemo(() => slides.map((slide, index) => (
+        <Image
+            key={slide._id}
+            src={slide.image_url || "/og-fighter-default.jpg"}
+            alt={slide.title}
+            aria-hidden
+            className={`
+                absolute inset-0 w-full h-full object-cover
+                transition-all duration-1000 ease-in-out
+                ${index === currentSlideIndex ? "opacity-100 scale-105" : "opacity-0 scale-100"}
+            `}
+            width={1920}
+            height={1080}
+            priority={index === 0 || index === currentSlideIndex}
+        />
+    )), [slides, currentSlideIndex]);
+
+    const slideIndicators = useMemo(() => slides.map((_, index) => (
+        <button
+            key={index}
+            onClick={() => setCurrentSlideIndex(index)}
+            className={`w-12 h-1 transition-all duration-300 ${index === currentSlideIndex ? 'bg-[#FE0002] w-16' : 'bg-black/20 hover:bg-black/40'}`}
+        />
+    )), [slides.length, currentSlideIndex]);
 
     return (
         <section className="relative min-h-screen max-h-[900px] 2xl:max-h-[1000px] overflow-hidden flex items-center">
             {/* Background Images */}
             <div className="absolute inset-0 z-0 pointer-events-none">
-                {slides.map((slide, index) => (
-                    <Image
-                        key={slide._id}
-                        src={slide.image_url || "/og-fighter-default.jpg"}
-                        alt={slide.title}
-                        aria-hidden
-                        className={`
-                            absolute inset-0 w-full h-full object-cover
-                            transition-all duration-1000 ease-in-out
-                            ${index === currentSlideIndex ? "opacity-100 scale-105" : "opacity-0 scale-100"}
-                        `}
-                        width={1920}
-                        height={1080}
-                        priority={index === 0}
-                    />
-                ))}
+                {backgroundImages}
 
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/50 to-transparent"></div>
@@ -147,13 +157,7 @@ const Hero: React.FC = () => {
 
             {/* Slide Navigation Indicators */}
             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-3">
-                {slides.map((_, index) => (
-                    <button
-                        key={index}
-                        onClick={() => setCurrentSlideIndex(index)}
-                        className={`w-12 h-1 transition-all duration-300 ${index === currentSlideIndex ? 'bg-[#FE0002] w-16' : 'bg-black/20 hover:bg-black/40'}`}
-                    />
-                ))}
+                {slideIndicators}
             </div>
 
             {/* Decorative lines */}

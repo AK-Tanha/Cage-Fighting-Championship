@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getAllFighters } from '../lib/api';
 import { Fighter } from '../types';
 import CircularLoader from './CircularLoader';
@@ -101,13 +101,18 @@ const Fighters: React.FC = () => {
         return () => { isMounted = false; };
     }, []);
 
-    const filteredFighters = activeFilter === 'ALL'
-        ? fighters
-        : fighters.filter(f => f.weight_class?.toUpperCase() === activeFilter);
-    const weightClasses = [
+    const weightClasses = useMemo(() => [
         "ALL",
         ...Array.from(new Set(fighters.map(f => f.weight_class?.toUpperCase()).filter(Boolean)))
-    ];
+    ], [fighters]);
+
+    const filteredFighters = useMemo(() => activeFilter === 'ALL'
+        ? fighters
+        : fighters.filter(f => f.weight_class?.toUpperCase() === activeFilter), [fighters, activeFilter]);
+
+    const fighterCards = useMemo(() => filteredFighters.map((fighter) => (
+        <FighterCard key={fighter._id} fighter={fighter} />
+    )), [filteredFighters]);
 
     if (loading) return (
         <div className="pt-40 pb-20 flex flex-col justify-center items-center min-h-[80vh] bg-white">
@@ -166,9 +171,7 @@ const Fighters: React.FC = () => {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
-                        {filteredFighters.map((fighter) => (
-                            <FighterCard key={fighter._id} fighter={fighter} />
-                        ))}
+                        {fighterCards}
                     </div>
                 )}
 
