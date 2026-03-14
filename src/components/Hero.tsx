@@ -19,7 +19,7 @@ const Hero: React.FC = () => {
                 const activeSlides = data
                     .filter((slide: HeroSlide) => slide.is_active)
                     .sort((a: HeroSlide, b: HeroSlide) => (a.order || 0) - (b.order || 0));
-                
+
                 setSlides(activeSlides);
             } catch (error) {
                 console.error("Error fetching hero slides:", error);
@@ -81,7 +81,7 @@ const Hero: React.FC = () => {
     // Default content if no slides are found
     if (slides.length === 0) {
         return (
-            <section className="relative min-h-screen overflow-hidden flex items-center bg-black">
+            <section className="relative min-h-screen overflow-hidden flex items-center bg-black mt-24">
                 <div className="absolute inset-0 opacity-40">
                     <Image
                         src="/og-fighter-default.jpg"
@@ -93,7 +93,7 @@ const Hero: React.FC = () => {
                 </div>
                 <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-24 text-white">
                     <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black leading-[0.9] mb-8 uppercase tracking-[-0.04em] italic">
-                        CAGE <span className="text-[#FE0002]">FIGHTING</span> 
+                        CAGE <span className="text-[#FE0002]">FIGHTING</span>
                         <br /> CHAMPIONSHIP
                     </h1>
                 </div>
@@ -104,7 +104,7 @@ const Hero: React.FC = () => {
 
 
     return (
-        <section className="relative min-h-screen max-h-[900px] 2xl:max-h-[1000px] overflow-hidden flex items-center">
+        <section className="relative min-h-screen max-h-[900px] 2xl:max-h-[1000px] overflow-hidden flex items-center mt-20">
             {/* Background Images */}
             <div className="absolute inset-0 z-0 pointer-events-none">
                 {backgroundImages}
@@ -114,7 +114,7 @@ const Hero: React.FC = () => {
             </div>
 
             {/* Content */}
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-24">
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-32">
                 <div className="max-w-2xl">
                     <div className="flex items-center gap-3 mb-6 animate-fade-in">
                         <span className="bg-[#FE0002] text-white text-[10px] font-black px-3 py-1 uppercase tracking-[0.2em] rounded-sm">
