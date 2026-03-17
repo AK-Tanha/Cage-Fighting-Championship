@@ -56,6 +56,7 @@ const Hero: React.FC = () => {
             width={1920}
             height={1080}
             priority={index === 0 || index === currentSlideIndex}
+            unoptimized
         />
     )), [slides, currentSlideIndex]);
 
