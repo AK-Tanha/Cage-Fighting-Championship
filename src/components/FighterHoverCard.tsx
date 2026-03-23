@@ -47,7 +47,7 @@ const FighterHoverCard = forwardRef<HTMLDivElement, FighterHoverCardProps>(
                         <p className="text-[#FE0002] text-[9px] font-bold uppercase tracking-widest italic mb-1">
                             {fighter.weight_class}
                         </p>
-                        <h4 className="font-display font-black uppercase text-lg leading-tight tracking-tighter mb-3 truncate">
+                        <h4 className="font-display font-black uppercase text-lg leading-tight tracking-tighter mb-3">
                             {fighter.name}
                         </h4>
 

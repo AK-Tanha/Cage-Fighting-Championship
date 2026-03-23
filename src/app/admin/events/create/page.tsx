@@ -1,7 +1,7 @@
 "use client";
 
-import { createEvent, getAllFighters, uploadImage } from "@/lib/api";
-import { Fighter } from "@/types";
+import { createEvent, getAllFighters, getAllReferees, uploadImage } from "@/lib/api";
+import { Fighter, Referee } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,16 +15,22 @@ const EventCreate = () => {
   const [success, setSuccess] = useState(false);
   const [fighters, setFighters] = useState<Fighter[]>([]);
 
+  const [referees, setReferees] = useState<Referee[]>([]);
+
   useEffect(() => {
-    const fetchFighters = async () => {
+    const fetchFightersAndReferees = async () => {
       try {
-        const data = await getAllFighters();
-        setFighters(data);
+        const [fightersData, refereesData] = await Promise.all([
+          getAllFighters(),
+          getAllReferees()
+        ]);
+        setFighters(fightersData);
+        setReferees(refereesData);
       } catch (err) {
-        console.error("Failed to load fighters for selection", err);
+        console.error("Failed to load fighters or referees for selection", err);
       }
     };
-    fetchFighters();
+    fetchFightersAndReferees();
   }, []);
 
   const [data, setData] = useState({
@@ -39,6 +45,7 @@ const EventCreate = () => {
         weight_class: "",
         title_fight: false,
         result: "",
+        referee: "",
       },
     ],
   });
@@ -67,6 +74,7 @@ const EventCreate = () => {
           weight_class: "",
           title_fight: false,
           result: "",
+          referee: "",
         },
       ],
     }));

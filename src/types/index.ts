@@ -69,6 +69,7 @@ export interface IndividualFight {
     weight_class: string;
     title_fight?: boolean;
     result?: string;
+    referee?: string; // ID
 }
 
 export interface EventCreate {
@@ -86,6 +87,7 @@ export interface Fight {
     weight_class: string
     title_fight: boolean
     result: string
+    referee: string
 }
 
 
