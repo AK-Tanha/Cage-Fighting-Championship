@@ -25,6 +25,16 @@ export interface Fighter {
     };
 }
 
+export interface Referee {
+    _id: string;
+    name: string;
+    record: string;
+    nationality: string;
+    date_of_birth: string;
+    bio: string;
+    image_url: string;
+}
+
 export interface FighterCreate {
     _id: string
     name: string

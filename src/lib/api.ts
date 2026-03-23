@@ -1,4 +1,4 @@
-import { Fighter, FightEvent, HeroSlide } from '@/types';
+import { Fighter, FightEvent, HeroSlide, Referee } from '@/types';
 import axios from 'axios';
 
 // The proxy prefix handles CORS issues by bridging to the real backend server-side
@@ -59,7 +59,56 @@ export const getFighterById = async (id: string) => {
     }
 };
 
+//referees
+export const createReferee = async (referee: Referee) => {
+    try {
+        const response = await api.post('/referees', referee);
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+}
 
+export const getAllReferees = async () => {
+    try {
+        const response = await api.get('/referees');
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const getRefereeById = async (id: string) => {
+    try {
+        const response = await api.get(`/referees/${id}`);
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const updateReferee = async (referee: Referee) => {
+    try {
+        const response = await api.put(`/referees/${referee._id}`, referee);
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+}
+
+export const deleteReferee = async (id: string) => {
+    try {
+        const response = await api.delete(`/referees/${id}`);
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+}
 
 //events
 

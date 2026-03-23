@@ -3,39 +3,47 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { getAllFighters, getEventById } from '../lib/api';
 import { FightEvent, Fighter } from '../types';
 import CircularLoader from './CircularLoader';
+import FighterHoverCard from './FighterHoverCard';
 
 const FightRow: React.FC<{
     fight: any;
     fighters: Record<string, Fighter>;
     index: number;
-}> = ({ fight, fighters, index }) => {
+    setFighterHoverCard?: (f: Fighter | null) => void;
+    setHoverPos?: (pos: { x: number, y: number }) => void;
+}> = ({ fight, fighters, index, setFighterHoverCard, setHoverPos }) => {
     const f1 = fighters[fight.fighter1];
     const f2 = fighters[fight.fighter2];
 
     return (
         <div className="group relative bg-white border border-black/5 hover:border-[#FE0002]/30 transition-all rounded-lg p-6 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm hover:shadow-md">
             {/* Fighter 1 */}
-            <div className="flex-1 flex items-center gap-6 w-full md:w-auto">
-                <div className="text-4xl font-display font-black text-black/10 group-hover:text-[#FE0002]/20 transition-colors">
+            <div 
+                className="flex-1 flex items-center gap-4 md:gap-6 w-full md:w-auto min-w-0"
+                onMouseEnter={() => setFighterHoverCard && f1 && setFighterHoverCard(f1)}
+                onMouseMove={(e) => setHoverPos && setHoverPos({ x: e.clientX, y: e.clientY })}
+                onMouseLeave={() => setFighterHoverCard && setFighterHoverCard(null)}
+            >
+                <div className="text-3xl md:text-4xl font-display font-black text-black/10 group-hover:text-[#FE0002]/20 transition-colors shrink-0">
                     {String(index + 1).padStart(2, '0')}
                 </div>
-                <div className="flex-1 text-right">
+                <div className="flex-1 text-right min-w-0">
                     <p className="text-xs text-[#FE0002] font-bold uppercase tracking-widest mb-1 italic">Red Corner</p>
-                    <h4 className="text-xl md:text-2xl font-display font-black uppercase italic whitespace-nowrap overflow-hidden text-ellipsis">
-                        <Link href={`/fighters/${f1?._id}`}>
+                    <h4 className="text-xl md:text-2xl font-display font-black uppercase italic truncate">
+                        <Link href={`/fighters/${f1?._id}`} className="hover:text-[#FE0002] transition-colors">
                             {f1?.name || "Unknown Fighter"}
                         </Link>
-                        <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">
+                        <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter mt-1">
                             {f1?.record ? (typeof f1.record === 'string' ? f1.record : `${f1.record.wins ?? 0}-${f1.record.losses ?? 0}`) : "0-0"}
                         </p>
                     </h4>
                 </div>
-                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-black/10 group-hover:border-[#FE0002]/50 transition-all">
-                    <Image src={f1?.image_url || `https://picsum.photos/seed/${f1?._id}/800/500`} alt={f1?.name} className="w-full h-full object-cover" width={800} height={500} loading="lazy" />
+                <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden border-2 border-black/10 group-hover:border-[#FE0002]/50 transition-all bg-gray-100">
+                    <Image src={f1?.image_url || `https://picsum.photos/seed/${f1?._id}/800/500`} alt={f1?.name || "Fighter Image"} className="w-full h-full object-cover" width={800} height={500} loading="lazy" />
                 </div>
             </div>
 
@@ -50,22 +58,27 @@ const FightRow: React.FC<{
             </div>
 
             {/* Fighter 2 */}
-            <div className="flex-1 flex flex-row-reverse items-center gap-6 w-full md:w-auto">
-                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-black/10 group-hover:border-[#FE0002]/50 transition-all">
-                    <Image src={f2?.image_url || `https://picsum.photos/seed/${f2?._id}/800/500`} alt={f2?.name} className="w-full h-full object-cover" width={800} height={500} loading="lazy" />
+            <div 
+                className="flex-1 flex flex-row-reverse items-center gap-4 md:gap-6 w-full md:w-auto min-w-0"
+                onMouseEnter={() => setFighterHoverCard && f2 && setFighterHoverCard(f2)}
+                onMouseMove={(e) => setHoverPos && setHoverPos({ x: e.clientX, y: e.clientY })}
+                onMouseLeave={() => setFighterHoverCard && setFighterHoverCard(null)}
+            >
+                <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden border-2 border-black/10 group-hover:border-[#FE0002]/50 transition-all bg-gray-100">
+                    <Image src={f2?.image_url || `https://picsum.photos/seed/${f2?._id}/800/500`} alt={f2?.name || "Fighter Image"} className="w-full h-full object-cover" width={800} height={500} loading="lazy" />
                 </div>
-                <div className="flex-1 text-left">
+                <div className="flex-1 text-left min-w-0">
                     <p className="text-xs text-blue-500 font-bold uppercase tracking-widest mb-1 italic">Blue Corner</p>
-                    <h4 className="text-xl md:text-2xl font-display font-black uppercase italic whitespace-nowrap overflow-hidden text-ellipsis">
-                        <Link href={`/fighters/${f2?._id}`}>
+                    <h4 className="text-xl md:text-2xl font-display font-black uppercase italic truncate">
+                        <Link href={`/fighters/${f2?._id}`} className="hover:text-blue-500 transition-colors">
                             {f2?.name || "Unknown Fighter"}
                         </Link>
-                        <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">
+                        <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter mt-1">
                             {f2?.record ? (typeof f2.record === 'string' ? f2.record : `${f2.record.wins ?? 0}-${f2.record.losses ?? 0}`) : "0-0"}
                         </p>
                     </h4>
                 </div>
-                <div className="w-8" /> {/* Spacer to balance the index number on the left */}
+                <div className="w-8 shrink-0 hidden md:block" /> {/* Spacer to balance the index number on the left */}
             </div>
         </div>
     );
@@ -78,6 +91,9 @@ const EventDetails: React.FC = () => {
     const [fighters, setFighters] = useState<Record<string, Fighter>>({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [fighterHoverCard, setFighterHoverCard] = useState<Fighter | null>(null);
+    const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
+    const hoverCardRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const loadPageData = async () => {
@@ -126,6 +142,9 @@ const EventDetails: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 text-black pb-24">
+            {/* Fighter Hover Card */}
+            {fighterHoverCard && <FighterHoverCard ref={hoverCardRef} fighter={fighterHoverCard} hoverPos={hoverPos} />}
+            
             {/* Header Banner Image */}
             <div className="w-full pt-20">
                 <Image
@@ -162,29 +181,63 @@ const EventDetails: React.FC = () => {
             </div>
 
             {/* Fights Section */}
-            <div className="max-w-5xl mx-auto px-8 py-12">
-                <div className="flex items-center justify-between mb-12 border-b-2 border-black/5 pb-6">
-                    <h2 className="text-3xl font-display font-black uppercase italic tracking-tighter">
-                        OFFICIAL <span className="text-[#FE0002]">FIGHT CARD</span>
-                    </h2>
-                    <p className="text-gray-500 font-bold text-sm uppercase tracking-widest">
-                        {event.fights?.length || 0} Matchups
-                    </p>
+            <div className="max-w-5xl mx-auto px-4 md:px-8 py-12 md:py-20 relative">
+                {/* Decorative background element */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-full bg-gradient-to-b from-transparent via-gray-100/50 to-transparent -z-10 pointer-events-none blur-3xl" />
+                
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 border-b-2 border-black/10 pb-8 relative">
+                    <div className="flex items-center gap-4">
+                        <div className="w-2 h-12 bg-[#FE0002] skew-x-[-15deg]"></div>
+                        <div>
+                            <h2 className="text-4xl md:text-5xl font-display font-black uppercase italic tracking-tighter text-black drop-shadow-sm">
+                                OFFICIAL <span className="text-[#FE0002]">FIGHT CARD</span>
+                            </h2>
+                            <p className="text-gray-500 font-bold text-xs md:text-sm uppercase tracking-[0.2em] mt-2">
+                                Main Card & Prelims
+                            </p>
+                        </div>
+                    </div>
+                    <div className="bg-black text-white px-6 py-3 rounded-full shadow-lg shadow-black/20 flex items-center gap-3 transform hover:scale-105 transition-transform cursor-default">
+                        <span className="relative flex h-3 w-3">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FE0002] opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-3 w-3 bg-[#FE0002]"></span>
+                        </span>
+                        <p className="font-bold text-sm uppercase tracking-widest">
+                            {event.fights?.length || 0} MATCHUPS
+                        </p>
+                    </div>
                 </div>
 
                 {!event.fights || event.fights.length === 0 ? (
-                    <div className="text-center py-20 bg-black/5 rounded-xl border border-dashed border-black/10">
-                        <p className="text-gray-500 font-display uppercase italic font-bold">Fight card pending final commission approval.</p>
+                    <div className="relative overflow-hidden group text-center py-32 bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl border border-black/5 shadow-inner">
+                        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5 mix-blend-overlay"></div>
+                        <div className="relative z-10 flex flex-col items-center gap-4">
+                            <i className="fa-solid fa-lock text-5xl text-gray-300 group-hover:text-[#FE0002] transition-colors duration-500"></i>
+                            <h3 className="text-2xl font-display uppercase italic font-black text-gray-400">Card Locked</h3>
+                            <p className="text-gray-500 font-bold uppercase tracking-widest text-sm max-w-sm mx-auto">Fight card pending final commission approval. Check back soon.</p>
+                        </div>
                     </div>
                 ) : (
-                    <div className="space-y-8">
+                    <div className="space-y-6 md:space-y-10 relative">
+                        {/* Connecting line for aesthetic */}
+                        <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-black/20 via-black/5 to-transparent -z-10 hidden md:block"></div>
+                        
                         {event.fights.map((fight, idx) => (
-                            <FightRow
-                                key={idx}
-                                fight={fight}
-                                fighters={fighters}
-                                index={idx}
-                            />
+                            <div key={idx} className="relative group/row transform hover:-translate-y-1 transition-all duration-300">
+                                {/* Optional decorative index indicator */}
+                                <div className="absolute -left-4 md:-left-12 top-1/2 -translate-y-1/2 opacity-0 md:group-hover/row:opacity-100 transition-opacity duration-300 font-display font-black text-[#FE0002] text-xl italic flex items-center justify-center">
+                                    <span className="bg-white border-2 border-black/5 rounded-full w-10 h-10 flex items-center justify-center shadow-lg transform -skew-x-12">
+                                        #{idx + 1}
+                                    </span>
+                                </div>
+                                <FightRow
+                                    fight={fight}
+                                    fighters={fighters}
+                                    index={idx}
+                                    setFighterHoverCard={setFighterHoverCard}
+                                    setHoverPos={setHoverPos}
+                                />
+                            </div>
                         ))}
                     </div>
                 )}
