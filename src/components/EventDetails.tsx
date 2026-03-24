@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState, useRef } from 'react';
-import { getAllFighters, getEventById } from '../lib/api';
+import { getAllFighters, getAllReferees, getEventById } from '../lib/api';
 import { FightEvent, Fighter } from '../types';
 import CircularLoader from './CircularLoader';
 import FighterHoverCard from './FighterHoverCard';
@@ -12,10 +12,11 @@ import FighterHoverCard from './FighterHoverCard';
 const FightRow: React.FC<{
     fight: any;
     fighters: Record<string, Fighter>;
+    referees: Record<string, any>;
     index: number;
     setFighterHoverCard?: (f: Fighter | null) => void;
     setHoverPos?: (pos: { x: number, y: number }) => void;
-}> = ({ fight, fighters, index, setFighterHoverCard, setHoverPos }) => {
+}> = ({ fight, fighters, referees, index, setFighterHoverCard, setHoverPos }) => {
     const f1 = fighters[fight.fighter1];
     const f2 = fighters[fight.fighter2];
 
@@ -48,10 +49,18 @@ const FightRow: React.FC<{
             </div>
 
             {/* VS */}
-            <div className="relative flex flex-col items-center justify-center shrink-0">
+            <div className="relative flex flex-col items-center justify-center shrink-0 min-w-[120px]">
                 <div className="text-4xl font-display font-black italic text-[#FE0002] relative z-10 bg-white px-4">VS</div>
                 <div className="absolute h-full w-px bg-black/10 top-0 left-1/2 -translate-x-1/2 hidden md:block" />
                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mt-2">{fight.weight_class}</p>
+                
+                <div className="mt-2 text-center bg-white z-10 px-2 py-1 border border-black/5 rounded">
+                    <p className="text-[8px] font-black uppercase tracking-widest text-gray-400 mb-0.5">Referee</p>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-black">
+                        {fight.referee && referees[fight.referee] ? referees[fight.referee].name : "N/A"}
+                    </p>
+                </div>
+
                 {fight.title_fight && (
                     <span className="bg-[#FE0002] text-white text-[9px] font-black px-2 py-0.5 rounded mt-2 animate-pulse">TITLE FIGHT</span>
                 )}
@@ -89,6 +98,7 @@ const EventDetails: React.FC = () => {
     const router = useRouter();
     const [event, setEvent] = useState<FightEvent | null>(null);
     const [fighters, setFighters] = useState<Record<string, Fighter>>({});
+    const [referees, setReferees] = useState<Record<string, any>>({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [fighterHoverCard, setFighterHoverCard] = useState<Fighter | null>(null);
@@ -100,9 +110,10 @@ const EventDetails: React.FC = () => {
             if (!params?.id) return;
             try {
                 // Fetch event and all fighters in parallel for matching
-                const [eventData, fightersData] = await Promise.all([
+                const [eventData, fightersData, refereesData] = await Promise.all([
                     getEventById(params.id as string),
-                    getAllFighters()
+                    getAllFighters(),
+                    getAllReferees()
                 ]);
 
                 setEvent(eventData);
@@ -113,6 +124,13 @@ const EventDetails: React.FC = () => {
                     fighterMap[f._id] = f;
                 });
                 setFighters(fighterMap);
+
+                // Index referees by ID
+                const refereeMap: Record<string, any> = {};
+                refereesData.forEach((r: any) => {
+                    refereeMap[r._id] = r;
+                });
+                setReferees(refereeMap);
 
             } catch (err: any) {
                 setError(err.message || 'Failed to retrieve event data');
@@ -233,6 +251,7 @@ const EventDetails: React.FC = () => {
                                 <FightRow
                                     fight={fight}
                                     fighters={fighters}
+                                    referees={referees}
                                     index={idx}
                                     setFighterHoverCard={setFighterHoverCard}
                                     setHoverPos={setHoverPos}

@@ -397,7 +397,30 @@ const EventCreate = () => {
                         />
                       </div>
 
-                      <div className="flex items-center gap-3 mt-2 md:col-span-2">
+                      <div className="flex flex-col">
+                        <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                          Referee
+                        </label>
+                        <select
+                          required
+                          value={fight.referee}
+                          onChange={(e) =>
+                            handleFightChange(index, "referee", e.target.value)
+                          }
+                          className="bg-white border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors text-sm font-medium"
+                        >
+                          <option value="" disabled>
+                            Select referee
+                          </option>
+                          {referees.map((r) => (
+                            <option key={r._id} value={r._id}>
+                              {r.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="flex items-center gap-3 mt-6">
                         <input
                           type="checkbox"
                           id={`title-fight-${index}`}

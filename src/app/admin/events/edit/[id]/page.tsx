@@ -1,7 +1,7 @@
 "use client";
 
-import { getAllFighters, getEventById, updateEvent, uploadImage } from "@/lib/api";
-import { Fighter } from "@/types";
+import { getAllFighters, getAllReferees, getEventById, updateEvent, uploadImage } from "@/lib/api";
+import { Fighter, Referee } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -18,6 +18,7 @@ const EventEditPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [fighters, setFighters] = useState<Fighter[]>([]);
+  const [referees, setReferees] = useState<Referee[]>([]);
 
   const [data, setData] = useState({
     name: "",
@@ -31,6 +32,7 @@ const EventEditPage = () => {
         weight_class: "",
         title_fight: false,
         result: "",
+        referee: "",
       },
     ],
   });
@@ -39,12 +41,14 @@ const EventEditPage = () => {
     const fetchData = async () => {
       if (!eventId) return;
       try {
-        const [fightersData, eventData] = await Promise.all([
+        const [fightersData, eventData, refereesData] = await Promise.all([
           getAllFighters(),
           getEventById(eventId),
+          getAllReferees(),
         ]);
 
         setFighters(fightersData);
+        setReferees(refereesData);
 
         setData({
           name: eventData.name || "",
@@ -57,6 +61,7 @@ const EventEditPage = () => {
             weight_class: f.weight_class || "",
             title_fight: !!f.title_fight,
             result: f.result || "",
+            referee: f.referee || "",
           })) : [
             {
               fighter1: "",
@@ -64,6 +69,7 @@ const EventEditPage = () => {
               weight_class: "",
               title_fight: false,
               result: "",
+              referee: "",
             }
           ],
         });
@@ -102,6 +108,7 @@ const EventEditPage = () => {
           weight_class: "",
           title_fight: false,
           result: "",
+          referee: "",
         },
       ],
     }));
@@ -435,7 +442,30 @@ const EventEditPage = () => {
                         />
                       </div>
 
-                      <div className="flex items-center gap-3 mt-2 md:col-span-2">
+                      <div className="flex flex-col">
+                        <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                          Referee
+                        </label>
+                        <select
+                          required
+                          value={fight.referee}
+                          onChange={(e) =>
+                            handleFightChange(index, "referee", e.target.value)
+                          }
+                          className="bg-white border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors text-sm font-medium"
+                        >
+                          <option value="" disabled>
+                            Select referee
+                          </option>
+                          {referees.map((r) => (
+                            <option key={r._id} value={r._id}>
+                              {r.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="flex items-center gap-3 mt-6">
                         <input
                           type="checkbox"
                           id={`title-fight-${index}`}
