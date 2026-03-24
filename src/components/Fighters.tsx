@@ -5,7 +5,7 @@ import Link from 'next/link';
 import React, { useEffect, useMemo, useState } from 'react';
 import { getAllFighters } from '../lib/api';
 import { Fighter } from '../types';
-import CircularLoader from './CircularLoader';
+import { FighterCardSkeleton } from './Skeleton';
 
 const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
     const record = typeof fighter.record === 'string'
@@ -22,9 +22,10 @@ const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
                 <Image
                     src={fighter.image_url || `https://picsum.photos/seed/${fighter.name}/350/254`}
                     alt={fighter.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
-                    width={350}
-                    height={254}
+                    className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500 ease-out"
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                    quality={90}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-80 transition-opacity" />
 
@@ -115,10 +116,18 @@ const Fighters: React.FC = () => {
     )), [filteredFighters]);
 
     if (loading) return (
-        <div className="pt-40 pb-20 flex flex-col justify-center items-center min-h-[80vh] bg-white">
-            <CircularLoader isLoader={true} size="w-32 h-32" />
-            <div className="mt-12 text-sm text-gray-500 font-display font-black uppercase tracking-[0.5em] animate-pulse">
-                Establishing Neural Connection to Roster
+        <div className="min-h-screen bg-white">
+            <div className="relative pt-24 pb-4 border-b border-black/5">
+                <div className="max-w-7xl mx-auto px-4 pt-12 pb-2">
+                    <div className="h-12 w-64 bg-gray-200 animate-pulse rounded-sm" />
+                </div>
+            </div>
+            <div className="max-w-7xl mx-auto px-6 py-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
+                    {[...Array(8)].map((_, i) => (
+                        <FighterCardSkeleton key={i} />
+                    ))}
+                </div>
             </div>
         </div>
     );

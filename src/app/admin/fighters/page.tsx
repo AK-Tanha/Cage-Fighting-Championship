@@ -80,8 +80,14 @@ export default function AdminFightersPage() {
                 >
                   <td className="p-6">
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-black rounded-sm">
-                        <Image src={fighter.image_url || fighter.image || "/og-fighter-default.jpg"} alt="fighter image" className="w-full h-full object-cover" width={100} height={100} />
+                      <div className="w-10 h-10 bg-black rounded-sm overflow-hidden relative">
+                        <Image 
+                            src={fighter.image_url || fighter.image || "/og-fighter-default.jpg"} 
+                            alt="fighter image" 
+                            className="w-full h-full object-cover object-top" 
+                            fill 
+                            sizes="40px"
+                        />
                       </div>
                       <div>
                         <div className="font-display font-black uppercase text-base tracking-tighter">

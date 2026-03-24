@@ -5,7 +5,7 @@ import Link from 'next/link';
 import React, { useEffect, useMemo, useState } from 'react';
 import { getAllEvents } from '../lib/api';
 import { FightEvent } from '../types';
-import CircularLoader from './CircularLoader';
+import { HorizontalEventSkeleton } from './Skeleton';
 
 const Events: React.FC = () => {
     const [events, setEvents] = useState<FightEvent[]>([]);
@@ -34,9 +34,9 @@ const Events: React.FC = () => {
                     src={event.image_url || `/api/proxy/events/${event._id}/image/`}
                     alt={event.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
-                    width={500}
-                    height={500}
-                    loading="lazy"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 40vw"
+                    quality={90}
                 />
                 {event.isLive && (
                     <div className="absolute top-4 left-4 bg-[#FE0002] text-white px-3 py-1 text-xs font-bold uppercase animate-pulse rounded-full flex items-center gap-2">
@@ -73,11 +73,15 @@ const Events: React.FC = () => {
     )), [events]);
 
     if (loading) return (
-        <div className="pt-32 pb-20 flex flex-col justify-center items-center min-h-[60vh]">
-            <CircularLoader isLoader={true} size="w-24 h-24" />
-            <p className="mt-8 text-2xl font-display font-bold uppercase tracking-widest text-gray-500 animate-pulse">
-                Accessing Battle Schedule...
-            </p>
+        <div className="pt-32 pb-20 max-w-7xl mx-auto px-4">
+            <div className="mb-16">
+                <div className="h-14 w-80 bg-gray-200 animate-pulse rounded-sm" />
+            </div>
+            <div className="space-y-12">
+                {[...Array(3)].map((_, i) => (
+                    <HorizontalEventSkeleton key={i} />
+                ))}
+            </div>
         </div>
     );
 

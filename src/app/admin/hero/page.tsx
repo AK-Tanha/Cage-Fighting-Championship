@@ -94,13 +94,13 @@ export default function AdminHeroPage() {
                     className="border-b border-black/5 hover:bg-gray-50 transition-colors"
                   >
                     <td className="p-6">
-                      <div className="w-20 h-10 bg-black rounded-sm overflow-hidden">
+                      <div className="w-20 h-10 bg-black rounded-sm overflow-hidden relative">
                         <Image 
                           src={slide.image_url || "/og-fighter-default.jpg"} 
                           alt={slide.title} 
-                          className="w-full h-full object-cover" 
-                          width={100} 
-                          height={50} 
+                          className="w-full h-full object-cover object-top" 
+                          fill
+                          sizes="80px"
                         />
                       </div>
                     </td>

@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { getFighterById } from '../lib/api';
 import { Fighter } from '../types';
+import { FighterProfileSkeleton } from './Skeleton';
 import CircularLoader from './CircularLoader';
 
 const DetailItem: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
@@ -36,12 +37,7 @@ const FighterProfile: React.FC = () => {
         loadFighter();
     }, [params?.id]);
 
-    if (loading) return (
-        <div className="min-h-screen bg-white flex flex-col justify-center items-center">
-            <CircularLoader isLoader={true} size="w-32 h-32" />
-            <p className="mt-8 text-gray-400 font-display font-black uppercase tracking-[0.3em] animate-pulse">Syncing Fight-Data Interface...</p>
-        </div>
-    );
+    if (loading) return <FighterProfileSkeleton />;
 
     if (error || !fighter) return (
         <div className="min-h-screen bg-white flex flex-col justify-center items-center p-4">
@@ -103,9 +99,10 @@ const FighterProfile: React.FC = () => {
                                 src={fighter.image_url || fighter.image || `https://picsum.photos/seed/${fighter.name}/350/350`}
                                 alt={fighter.name}
                                 className="w-full h-full object-cover object-top relative z-10 shadow-lg"
-                                width={350}
-                                height={350}
-                                loading="lazy"
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 33vw"
+                                priority
+                                quality={100}
                             />
                         </section>
                         <section>

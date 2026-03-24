@@ -199,7 +199,7 @@ const EventDetailsPage = () => {
                             }
                             onMouseLeave={() => setFighterHoverCard(null)}
                           >
-                            <div className="relative w-10 h-10 overflow-hidden shrink-0 bg-gray-100">
+                            <div className="relative w-10 h-10 overflow-hidden shrink-0 bg-gray-100 rounded-sm">
                               <Image
                                 src={
                                   f1?.image_url ||
@@ -208,7 +208,8 @@ const EventDetailsPage = () => {
                                 }
                                 alt={f1?.name || "Fighter"}
                                 fill
-                                className="object-cover"
+                                className="object-cover object-top"
+                                sizes="40px"
                               />
                             </div>
                             <span className="font-semibold text-xs whitespace-nowrap pr-2">
@@ -234,7 +235,7 @@ const EventDetailsPage = () => {
                             }
                             onMouseLeave={() => setFighterHoverCard(null)}
                           >
-                            <div className="relative w-10 h-10 overflow-hidden shrink-0 bg-gray-100">
+                            <div className="relative w-10 h-10 overflow-hidden shrink-0 bg-gray-100 rounded-sm">
                               <Image
                                 src={
                                   f2?.image_url ||
@@ -243,7 +244,8 @@ const EventDetailsPage = () => {
                                 }
                                 alt={f2?.name || "Fighter"}
                                 fill
-                                className="object-cover"
+                                className="object-cover object-top"
+                                sizes="40px"
                               />
                             </div>
                             <span className="font-semibold text-xs whitespace-nowrap pr-2">

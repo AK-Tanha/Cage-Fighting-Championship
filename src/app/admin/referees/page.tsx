@@ -78,8 +78,14 @@ export default function AdminRefereesPage() {
                 >
                   <td className="p-6">
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-black rounded-sm overflow-hidden">
-                        <Image src={(referee.image_url && referee.image_url.includes('://')) ? referee.image_url : "/og-fighter-default.jpg"} alt={referee.name || "Referee"} className="w-full h-full object-cover" width={100} height={100} />
+                      <div className="w-10 h-10 bg-black rounded-sm overflow-hidden relative">
+                        <Image 
+                            src={(referee.image_url && referee.image_url.includes('://')) ? referee.image_url : "/og-fighter-default.jpg"} 
+                            alt={referee.name || "Referee"} 
+                            className="w-full h-full object-cover object-top" 
+                            fill 
+                            sizes="40px"
+                        />
                       </div>
                       <div>
                         <div className="font-display font-black uppercase text-base tracking-tighter">

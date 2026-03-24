@@ -38,6 +38,7 @@ const FighterHoverCard = forwardRef<HTMLDivElement, FighterHoverCardProps>(
                         alt={fighter.name || 'Fighter'}
                         fill
                         className="object-cover object-top"
+                        sizes="112px"
                     />
                 </div>
 

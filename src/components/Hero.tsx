@@ -5,6 +5,7 @@ import { HeroSlide } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
+import { HeroSkeleton } from "./Skeleton";
 
 const Hero: React.FC = () => {
     const [slides, setSlides] = useState<HeroSlide[]>([]);
@@ -69,14 +70,7 @@ const Hero: React.FC = () => {
     )), [slides.length, currentSlideIndex]);
 
     if (loading) {
-        return (
-            <section className="relative min-h-screen flex items-center justify-center bg-gray-50">
-                <div className="animate-pulse flex flex-col items-center">
-                    <div className="w-12 h-12 border-4 border-[#FE0002] border-t-transparent rounded-full animate-spin"></div>
-                    <p className="mt-4 font-display font-black uppercase tracking-widest text-xs text-gray-400">Loading Cage Fight...</p>
-                </div>
-            </section>
-        );
+        return <HeroSkeleton />;
     }
 
     // Default content if no slides are found
