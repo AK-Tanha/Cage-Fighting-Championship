@@ -49,14 +49,14 @@ const Hero: React.FC = () => {
             alt={slide.title}
             aria-hidden
             className={`
-                absolute inset-0 w-full h-full object-cover
+                absolute inset-0 w-full h-full object-cover object-top origin-top
                 transition-all duration-1000 ease-in-out
                 ${index === currentSlideIndex ? "opacity-100 scale-105" : "opacity-0 scale-100"}
             `}
-            width={1920}
-            height={1080}
-            priority={index === 0 || index === currentSlideIndex}
-            unoptimized
+            fill
+            sizes="100vw"
+            priority={index === 0}
+            quality={90}
         />
     )), [slides, currentSlideIndex]);
 
@@ -87,9 +87,11 @@ const Hero: React.FC = () => {
                     <Image
                         src="/og-fighter-default.jpg"
                         alt="Background"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-top"
                         fill
                         priority
+                        sizes="100vw"
+                        quality={90}
                     />
                 </div>
                 <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-24 text-white">
@@ -115,15 +117,19 @@ const Hero: React.FC = () => {
             </div>
 
             {/* Content */}
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-32">
-                <div className="max-w-2xl">
-                    <div className="flex items-center gap-3 mb-6 animate-fade-in">
-                        <span className="bg-[#FE0002] text-white text-[10px] font-black px-3 py-1 uppercase tracking-[0.2em] rounded-sm">
-                            FEATURED
+            <div 
+                key={currentSlideIndex}
+                className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-20 -mt-20"
+            >
+                <div className="max-w-3xl">
+                    <div className="flex items-center gap-3 mb-8 animate-[fade-in_0.5s_ease-out_both,slide-in-left_0.5s_ease-out_both]">
+                        <span className="bg-[#FE0002] text-white text-[11px] font-black px-4 py-1.5 uppercase tracking-[0.25em] skew-x-[-12deg] shadow-lg shadow-[#FE0002]/20">
+                            <span className="inline-block skew-x-[12deg]">FEATURED</span>
                         </span>
+                        <div className="h-[2px] w-12 bg-black/10"></div>
                     </div>
 
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-black leading-[0.9] mb-8 uppercase tracking-[-0.04em] italic text-black transition-all duration-700">
+                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black leading-[0.85] mb-8 uppercase tracking-[-0.05em] italic text-black drop-shadow-sm animate-[fade-in_0.6s_ease-out_0.1s_both,slide-in-left_0.6s_ease-out_0.1s_both]">
                         {currentSlide.title.split(' ').map((word, i) => (
                             <React.Fragment key={i}>
                                 {i === 1 ? <span className="text-[#FE0002]">{word} </span> : word + ' '}
@@ -131,28 +137,31 @@ const Hero: React.FC = () => {
                         ))}
                     </h1>
 
-                    <p className="text-base md:text-lg text-gray-700 mb-10 max-w-lg leading-relaxed font-medium">
-                        {currentSlide.subtitle}
-                    </p>
+                    <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-10 mb-12 animate-[fade-in_0.6s_ease-out_0.2s_both,slide-in-left_0.6s_ease-out_0.2s_both]">
+                        <p className="text-lg md:text-xl text-gray-800 max-w-lg leading-relaxed font-semibold border-l-4 border-[#FE0002] pl-6 py-1">
+                            {currentSlide.subtitle}
+                        </p>
+                    </div>
 
-                    <div className="flex flex-wrap gap-6 mt-12">
+                    <div className="flex flex-wrap gap-5 mt-12 animate-[slide-in-bottom_0.6s_ease-out_0.3s_both]">
                         {currentSlide.link && (
                             <Link
                                 href={currentSlide.link}
-                                className="bg-[#FE0002] text-white px-10 py-5 font-display font-black uppercase tracking-[0.2em]
-                                    hover:bg-black hover:text-white transition-all border-2 border-[#FE0002]
-                                    hover:border-black transform hover:-translate-y-1"
+                                className="group relative bg-[#FE0002] text-white px-12 py-5 font-display font-black uppercase tracking-[0.2em]
+                                    transition-all duration-300 overflow-hidden"
                             >
-                                Learn More
+                                <span className="relative z-10">Learn More</span>
+                                <div className="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                             </Link>
                         )}
 
                         <Link
                             href="/events"
-                            className="border-2 border-black/30 text-black px-10 py-5 font-display font-bold uppercase tracking-[0.2em]
-                                hover:border-black transition-all transform hover:-translate-y-1"
+                            className="group relative border-2 border-black text-black px-12 py-5 font-display font-black uppercase tracking-[0.2em]
+                                transition-all duration-300 overflow-hidden hover:text-white"
                         >
-                            Get Tickets
+                            <span className="relative z-10">Get Tickets</span>
+                            <div className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
                         </Link>
                     </div>
                 </div>
