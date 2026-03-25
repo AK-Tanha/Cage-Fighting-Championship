@@ -1,9 +1,19 @@
 import { Fighter, FightEvent, HeroSlide, Referee } from '@/types';
 import axios from 'axios';
 
-// The proxy prefix handles CORS issues by bridging to the real backend server-side
+const BACKEND_URL = 'https://cfc-backend-ten.vercel.app';
+
+const getBaseURL = () => {
+    if (typeof window === 'undefined') {
+        // Server-side: call backend directly
+        return BACKEND_URL;
+    }
+    // Client-side: use local proxy
+    return '/api/proxy';
+};
+
 const api = axios.create({
-    baseURL: '/api/proxy',
+    baseURL: getBaseURL(),
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -13,7 +23,7 @@ const api = axios.create({
 //fighters
 export const createFighter = async (fighter: Fighter) => {
     try {
-        const response = await api.post('/fighters', fighter);
+        const response = await api.post('/fighters/', fighter);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -22,7 +32,7 @@ export const createFighter = async (fighter: Fighter) => {
 }
 export const updateFighter = async (fighter: Fighter) => {
     try {
-        const response = await api.put(`/fighters/${fighter._id}`, fighter);
+        const response = await api.put(`/fighters/${fighter._id}/`, fighter);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -31,7 +41,7 @@ export const updateFighter = async (fighter: Fighter) => {
 }
 export const deleteFighter = async (id: string) => {
     try {
-        const response = await api.delete(`/fighters/${id}`);
+        const response = await api.delete(`/fighters/${id}/`);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -41,7 +51,7 @@ export const deleteFighter = async (id: string) => {
 
 export const getAllFighters = async () => {
     try {
-        const response = await api.get('/fighters');
+        const response = await api.get('/fighters/');
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -51,7 +61,7 @@ export const getAllFighters = async () => {
 
 export const getFighterById = async (id: string) => {
     try {
-        const response = await api.get(`/fighters/${id}`);
+        const response = await api.get(`/fighters/${id}/`);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -62,7 +72,7 @@ export const getFighterById = async (id: string) => {
 //referees
 export const createReferee = async (referee: Referee) => {
     try {
-        const response = await api.post('/referees', referee);
+        const response = await api.post('/referees/', referee);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -72,7 +82,7 @@ export const createReferee = async (referee: Referee) => {
 
 export const getAllReferees = async () => {
     try {
-        const response = await api.get('/referees');
+        const response = await api.get('/referees/');
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -82,7 +92,7 @@ export const getAllReferees = async () => {
 
 export const getRefereeById = async (id: string) => {
     try {
-        const response = await api.get(`/referees/${id}`);
+        const response = await api.get(`/referees/${id}/`);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -92,7 +102,7 @@ export const getRefereeById = async (id: string) => {
 
 export const updateReferee = async (referee: Referee) => {
     try {
-        const response = await api.put(`/referees/${referee._id}`, referee);
+        const response = await api.put(`/referees/${referee._id}/`, referee);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -102,7 +112,7 @@ export const updateReferee = async (referee: Referee) => {
 
 export const deleteReferee = async (id: string) => {
     try {
-        const response = await api.delete(`/referees/${id}`);
+        const response = await api.delete(`/referees/${id}/`);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -114,7 +124,7 @@ export const deleteReferee = async (id: string) => {
 
 export const createEvent = async (event: FightEvent) => {
     try {
-        const response = await api.post('/events', event);
+        const response = await api.post('/events/', event);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -123,7 +133,7 @@ export const createEvent = async (event: FightEvent) => {
 }
 export const updateEvent = async (event: FightEvent) => {
     try {
-        const response = await api.put(`/events/${event._id}`, event);
+        const response = await api.put(`/events/${event._id}/`, event);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -132,7 +142,7 @@ export const updateEvent = async (event: FightEvent) => {
 }
 export const deleteEvent = async (id: string) => {
     try {
-        const response = await api.delete(`/events/${id}`);
+        const response = await api.delete(`/events/${id}/`);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -142,7 +152,7 @@ export const deleteEvent = async (id: string) => {
 
 export const getAllEvents = async () => {
     try {
-        const response = await api.get('/events');
+        const response = await api.get('/events/');
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -152,7 +162,7 @@ export const getAllEvents = async () => {
 
 export const getEventById = async (id: string) => {
     try {
-        const response = await api.get(`/events/${id}`);
+        const response = await api.get(`/events/${id}/`);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -185,7 +195,7 @@ export const uploadImage = async (file: File) => {
 //Hero-Slides
 export const createHeroSlide = async (heroSlide: HeroSlide) => {
     try {
-        const response = await api.post('/hero-slides', heroSlide);
+        const response = await api.post('/hero-slides/', heroSlide);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -194,7 +204,7 @@ export const createHeroSlide = async (heroSlide: HeroSlide) => {
 }
 export const updateHeroSlide = async (heroSlide: HeroSlide) => {
     try {
-        const response = await api.put(`/hero-slides/${heroSlide._id}`, heroSlide);
+        const response = await api.put(`/hero-slides/${heroSlide._id}/`, heroSlide);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -203,7 +213,7 @@ export const updateHeroSlide = async (heroSlide: HeroSlide) => {
 }
 export const deleteHeroSlide = async (id: string) => {
     try {
-        const response = await api.delete(`/hero-slides/${id}`);
+        const response = await api.delete(`/hero-slides/${id}/`);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -213,7 +223,7 @@ export const deleteHeroSlide = async (id: string) => {
 
 export const getAllHeroSlides = async () => {
     try {
-        const response = await api.get('/hero-slides');
+        const response = await api.get('/hero-slides/');
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -223,7 +233,7 @@ export const getAllHeroSlides = async () => {
 
 export const getHeroSlideById = async (id: string) => {
     try {
-        const response = await api.get(`/hero-slides/${id}`);
+        const response = await api.get(`/hero-slides/${id}/`);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);

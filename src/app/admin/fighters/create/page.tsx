@@ -15,6 +15,7 @@ const FighterCreate = () => {
 
   const [data, setData] = useState({
     name: "",
+    nick_name: "",
     weight_class: "",
     record: "",
     nationality: "",
@@ -136,6 +137,20 @@ const FighterCreate = () => {
                     value={data.name}
                     onChange={handleChange}
                     placeholder="Enter fighter full name"
+                    className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Nickname
+                  </label>
+                  <input
+                    type="text"
+                    name="nick_name"
+                    value={data.nick_name}
+                    onChange={handleChange}
+                    placeholder="Enter fighter nickname"
                     className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
                   />
                 </div>

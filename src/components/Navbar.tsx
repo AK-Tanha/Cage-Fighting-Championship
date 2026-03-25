@@ -58,8 +58,8 @@ const Navbar: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <button className="px-6 py-2 font-display font-black text-[10px] uppercase tracking-[0.2em] transition-all shadow-lg active:scale-95 bg-black text-white hover:bg-[#FE0002] hover:text-white">
-                        Buy Tickets
+                    <button className="px-6 py-2 font-display font-black text-[10px] uppercase tracking-[0.2em] transition-all shadow-lg inline-block skew-x-[-15deg] active:scale-95 bg-black text-white hover:bg-[#FE0002] hover:text-white">
+                        <span className="inline-block skew-x-[15deg]">Buy Tickets</span>
                     </button>
                 </div>
             </div>

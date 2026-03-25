@@ -1,6 +1,13 @@
+export interface SocialMediaLink {
+    name: string;
+    url: string;
+    icon: string;
+}
+
 export interface Fighter {
     _id: string
     name: string
+    nick_name?: string
     weight_class: string
     record: string | {
         wins?: number;
@@ -23,6 +30,7 @@ export interface Fighter {
         stamina?: number;
         power?: number;
     };
+    social_media_links?: SocialMediaLink[];
 }
 
 export interface Referee {

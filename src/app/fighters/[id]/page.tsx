@@ -2,9 +2,10 @@ import FighterProfile from "@/components/FighterProfile";
 import { getFighterById } from "@/lib/api";
 import type { Metadata } from "next";
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     try {
-        const fighter = await getFighterById(params.id);
+        const { id } = await params;
+        const fighter = await getFighterById(id);
 
         const record = typeof fighter.record === 'string'
             ? fighter.record
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
             openGraph: {
                 title,
                 description,
-                url: `/fighters/${params.id}`,
+                url: `/fighters/${id}`,
                 type: 'profile',
                 images: [
                     {
@@ -45,6 +46,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     }
 }
 
-export default function FighterProfilePage() {
+export default async function FighterProfilePage({ params }: { params: Promise<{ id: string }> }) {
+    await params;
     return <FighterProfile />;
 }
