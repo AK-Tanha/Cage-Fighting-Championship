@@ -15,6 +15,7 @@ import {
   Globe,
   MessageCircle,
 } from "lucide-react";
+import PageHeader from "./PageHeader";
 
 const DetailItem: React.FC<{ label: string; value: string | number }> = ({
   label,
@@ -80,9 +81,8 @@ const FighterProfile: React.FC = () => {
   return (
     <div className="min-h-screen bg-white text-black selection:bg-[#FE0002] selection:text-white pt-20 md:pt-28">
       {/* Header Content */}
-      <div className="max-w-7xl mx-auto px-4 md:px-16 mb-6">
-        <div className="flex flex-col gap-4 border-b-4 border-black/5 pb-6 md:pb-8">
-          {/* Weightclass & Rank */}
+      <PageHeader
+        topSection={
           <div className="flex items-center gap-2">
             <span className="bg-[#FE0002] text-white px-3 py-1 text-[10px] font-black uppercase italic tracking-widest skew-x-[-15deg]">
               <span className="inline-block skew-x-[15deg]">
@@ -97,94 +97,79 @@ const FighterProfile: React.FC = () => {
               </span>
             )}
           </div>
-
-          {/* Name & Nickname */}
-          <div className="flex flex-col">
-            <h1 className="text-5xl sm:text-6xl md:text-8xl font-display font-black uppercase italic tracking-tighter leading-[0.85] text-black">
-              {fighter.name}
-            </h1>
-            {fighter.nick_name && (
-              <div className="mt-4">
-                <span className="bg-[#FE0002] text-white px-4 py-1 text-sm md:text-lg font-display font-black italic uppercase tracking-wider skew-x-[-15deg] inline-block">
-                  <span className="inline-block skew-x-[15deg]">
-                    "{fighter.nick_name}"
-                  </span>
-                </span>
-              </div>
-            )}
+        }
+        title={fighter.name}
+        subtitle={
+          fighter.nick_name && (
+            <span className="bg-[#FE0002] text-white px-4 py-1 text-sm md:text-lg font-display font-black italic uppercase tracking-wider skew-x-[-15deg] inline-block">
+              <span className="inline-block skew-x-[15deg]">
+                "{fighter.nick_name}"
+              </span>
+            </span>
+          )
+        }
+        bottomLeftSection={
+          <div className="flex flex-col border-l-8 border-black pl-6 py-1">
+            <p className="text-[#FE0002] uppercase font-black tracking-[0.4em] text-[10px] md:text-[12px] mb-2 leading-none">
+              Professional Record
+            </p>
+            <p className="text-4xl md:text-6xl font-display font-black text-black tracking-tight leading-none">
+              {record}
+            </p>
           </div>
+        }
+        bottomRightSection={
+          <div className="flex items-center gap-3">
+            {(fighter.social_media_links &&
+            fighter.social_media_links.length > 0
+              ? fighter.social_media_links
+              : [
+                  { name: "Instagram", url: "#", icon: "" },
+                  { name: "Twitter", url: "#", icon: "" },
+                  { name: "Facebook", url: "#", icon: "" },
+                ]
+            ).map((link, index) => {
+              const iconClass =
+                "w-7 h-7 text-black hover:text-[#FE0002] transition-all cursor-pointer";
+              const renderIcon = () => {
+                switch (link.name.toLowerCase()) {
+                  case "instagram":
+                    return (
+                      <Instagram className={iconClass} strokeWidth={2.5} />
+                    );
+                  case "twitter":
+                    return (
+                      <Twitter className={iconClass} strokeWidth={2.5} />
+                    );
+                  case "facebook":
+                    return <Facebook className={iconClass} strokeWidth={2.5} />;
+                  case "youtube":
+                    return <Youtube className={iconClass} strokeWidth={2.5} />;
+                  case "threads":
+                    return (
+                      <MessageCircle className={iconClass} strokeWidth={2.5} />
+                    );
+                  default:
+                    return <Globe className={iconClass} strokeWidth={2.5} />;
+                }
+              };
 
-          <div className="flex justify-between items-end mt-4">
-            {/* Record */}
-            <div className="flex flex-col border-l-8 border-black pl-6 py-1">
-              <p className="text-[#FE0002] uppercase font-black tracking-[0.4em] text-[10px] md:text-[12px] mb-2 leading-none">
-                Professional Record
-              </p>
-              <p className="text-4xl md:text-6xl font-display font-black text-black tracking-tight leading-none">
-                {record}
-              </p>
-            </div>
-
-            {/* social media links */}
-            <div className="flex items-center gap-3">
-              {(fighter.social_media_links &&
-              fighter.social_media_links.length > 0
-                ? fighter.social_media_links
-                : [
-                    { name: "Instagram", url: "#", icon: "" },
-                    { name: "Twitter", url: "#", icon: "" },
-                    { name: "Facebook", url: "#", icon: "" },
-                  ]
-              ).map((link, index) => {
-                const iconClass =
-                  "w-7 h-7 text-black hover:text-[#FE0002] transition-all cursor-pointer";
-                const renderIcon = () => {
-                  switch (link.name.toLowerCase()) {
-                    case "instagram":
-                      return (
-                        <Instagram className={iconClass} strokeWidth={2.5} />
-                      );
-                    case "twitter":
-                      return (
-                        <Twitter className={iconClass} strokeWidth={2.5} />
-                      );
-                    case "facebook":
-                      return (
-                        <Facebook className={iconClass} strokeWidth={2.5} />
-                      );
-                    case "youtube":
-                      return (
-                        <Youtube className={iconClass} strokeWidth={2.5} />
-                      );
-                    case "threads":
-                      return (
-                        <MessageCircle
-                          className={iconClass}
-                          strokeWidth={2.5}
-                        />
-                      );
-                    default:
-                      return <Globe className={iconClass} strokeWidth={2.5} />;
-                  }
-                };
-
-                return (
-                  <a
-                    key={index}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title={link.name}
-                    className="flex items-center justify-center border-2 border-black/5 p-2 rounded-full hover:border-[#FE0002]/20 transition-colors"
-                  >
-                    {renderIcon()}
-                  </a>
-                );
-              })}
-            </div>
+              return (
+                <a
+                  key={index}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={link.name}
+                  className="flex items-center justify-center border-2 border-black/5 p-2 rounded-full hover:border-[#FE0002]/20 transition-colors"
+                >
+                  {renderIcon()}
+                </a>
+              );
+            })}
           </div>
-        </div>
-      </div>
+        }
+      />
 
       {/* Content Section */}
       <div className="max-w-7xl mx-auto px-4 md:px-16">

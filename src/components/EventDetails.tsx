@@ -8,6 +8,7 @@ import { getAllFighters, getAllReferees, getEventById } from '../lib/api';
 import { FightEvent, Fighter } from '../types';
 import { EventDetailsSkeleton } from './Skeleton';
 import FighterHoverCard from './FighterHoverCard';
+import PageHeader from './PageHeader';
 
 const FightRow: React.FC<{
     fight: any;
@@ -182,55 +183,51 @@ const EventDetails: React.FC = () => {
             </div>
 
             {/* Event Header - Redesigned High Impact */}
-            <div className="max-w-7xl mx-auto w-full px-6 pt-4 pb-12">
-                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 border-b-4 border-black pb-10">
-                    <div className="flex-1 space-y-4">
-                        <div className="flex items-center gap-4">
-                            <span className="bg-[#FE0002] text-white px-5 py-1.5 text-xs font-black italic uppercase skew-x-[-12deg] shadow-lg shadow-[#FE0002]/20">
-                                <span className="inline-block skew-x-[12deg]">OFFICIAL EVENT</span>
-                            </span>
-                            <div className="h-px w-12 bg-black/10" />
-                            <span className="text-black font-display font-black uppercase tracking-[0.2em] text-sm">
-                                {new Date(event.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
-                            </span>
+            <PageHeader
+                className="pt-4 pb-12"
+                topSection={
+                    <div className="flex items-center gap-4">
+                        <span className="bg-[#FE0002] text-white px-5 py-1.5 text-xs font-black italic uppercase skew-x-[-12deg] shadow-lg shadow-[#FE0002]/20">
+                            <span className="inline-block skew-x-[12deg]">OFFICIAL EVENT</span>
+                        </span>
+                        <div className="h-px w-12 bg-black/10" />
+                        <span className="text-black font-display font-black uppercase tracking-[0.2em] text-sm">
+                            {new Date(event.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
+                        </span>
+                    </div>
+                }
+                title={event.name}
+                bottomLeftSection={
+                    <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+                        <div className="flex items-center gap-3 text-black">
+                            <div className="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center">
+                                <i className="fa-solid fa-location-dot text-[#FE0002]"></i>
+                            </div>
+                            <span className="font-display font-black uppercase tracking-widest text-sm md:text-base italic">{event.location}</span>
                         </div>
-                        
-                        <h1 className="text-6xl md:text-8xl lg:text-9xl font-display font-black uppercase italic tracking-tighter leading-[0.8] text-black drop-shadow-sm">
-                            {event.name}
-                        </h1>
-
-                        <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
-                            <div className="flex items-center gap-3 text-black">
-                                <div className="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center">
-                                    <i className="fa-solid fa-location-dot text-[#FE0002]"></i>
-                                </div>
-                                <span className="font-display font-black uppercase tracking-widest text-sm md:text-base italic">{event.location}</span>
+                        <div className="w-px h-6 bg-black/10 hidden md:block" />
+                        <div className="flex items-center gap-3 text-black">
+                            <div className="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center">
+                                <i className="fa-solid fa-shield-halved text-[#FE0002]"></i>
                             </div>
-                            <div className="w-px h-6 bg-black/10 hidden md:block" />
-                            <div className="flex items-center gap-3 text-black">
-                                <div className="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center">
-                                    <i className="fa-solid fa-shield-halved text-[#FE0002]"></i>
-                                </div>
-                                <span className="font-display font-black uppercase tracking-widest text-sm md:text-base italic">CFC Championship Card</span>
-                            </div>
+                            <span className="font-display font-black uppercase tracking-widest text-sm md:text-base italic">CFC Championship Card</span>
                         </div>
                     </div>
-
-                    <div className="flex flex-col lg:items-end gap-6 shrink-0">
-                        <div className="bg-black text-white px-8 py-5 flex items-center gap-5 skew-x-[-12deg] shadow-xl shadow-black/30">
-                            <div className="skew-x-[12deg] text-center">
-                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-1">Fight Card</p>
-                                <p className="text-4xl font-display font-black italic leading-none">{event.fights?.length || 0}</p>
-                            </div>
-                            <div className="w-px h-10 bg-white/20 skew-x-[12deg]" />
-                            <div className="skew-x-[12deg]">
-                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-1">Status</p>
-                                <p className="text-xl font-display font-black italic leading-none text-[#FE0002]">BOUTS</p>
-                            </div>
+                }
+                bottomRightSection={
+                    <div className="bg-black text-white px-8 py-5 flex items-center gap-5 skew-x-[-12deg] shadow-xl shadow-black/30">
+                        <div className="skew-x-[12deg] text-center">
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-1">Fight Card</p>
+                            <p className="text-4xl font-display font-black italic leading-none">{event.fights?.length || 0}</p>
+                        </div>
+                        <div className="w-px h-10 bg-white/20 skew-x-[12deg]" />
+                        <div className="skew-x-[12deg]">
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-1">Status</p>
+                            <p className="text-xl font-display font-black italic leading-none text-[#FE0002]">BOUTS</p>
                         </div>
                     </div>
-                </div>
-            </div>
+                }
+            />
 
             {/* Fights Section */}
             <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 md:py-10 relative">
