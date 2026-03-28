@@ -43,10 +43,23 @@ const EventCreate = () => {
       {
         fighter1: "",
         fighter2: "",
-        weight_class: "",
-        title_fight: false,
-        result: "",
         referee: "",
+        weight_class: "",
+        weight_limit_lbs: undefined,
+        title_fight: false,
+        title_name: "",
+        is_main_event: false,
+        is_co_main_event: false,
+        rounds: 3,
+        round_time_minutes: 5,
+        is_championship_rounds: false,
+        result: "",
+        winner_id: "",
+        method: "",
+        round_ended: undefined,
+        time_ended: "",
+        order: 1,
+        fight_type: "Professional",
       },
     ],
   });
@@ -72,10 +85,23 @@ const EventCreate = () => {
         {
           fighter1: "",
           fighter2: "",
-          weight_class: "",
-          title_fight: false,
-          result: "",
           referee: "",
+          weight_class: "",
+          weight_limit_lbs: undefined,
+          title_fight: false,
+          title_name: "",
+          is_main_event: false,
+          is_co_main_event: false,
+          rounds: 3,
+          round_time_minutes: 5,
+          is_championship_rounds: false,
+          result: "",
+          winner_id: "",
+          method: "",
+          round_ended: undefined,
+          time_ended: "",
+          order: prev.fights.length + 1,
+          fight_type: "Professional",
         },
       ],
     }));
@@ -435,26 +461,229 @@ const EventCreate = () => {
                         </select>
                       </div>
 
-                      <div className="flex items-center gap-3 mt-6">
+                      <div className="flex flex-col">
+                        <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                          Weight Limit (lbs)
+                        </label>
                         <input
-                          type="checkbox"
-                          id={`title-fight-${index}`}
-                          checked={fight.title_fight}
+                          type="number"
+                          value={fight.weight_limit_lbs || ""}
                           onChange={(e) =>
                             handleFightChange(
                               index,
-                              "title_fight",
-                              e.target.checked
+                              "weight_limit_lbs",
+                              e.target.value ? parseInt(e.target.value) : undefined
                             )
                           }
-                          className="w-4 h-4 text-[#FE0002] focus:ring-[#FE0002] border-gray-300 rounded"
+                          placeholder="e.g. 155"
+                          className="bg-white border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors text-sm font-medium"
                         />
-                        <label
-                          htmlFor={`title-fight-${index}`}
-                          className="text-xs font-bold uppercase tracking-widest text-gray-700"
-                        >
-                          Title Fight
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                          Fight Type
                         </label>
+                        <select
+                          value={fight.fight_type || "Professional"}
+                          onChange={(e) =>
+                            handleFightChange(index, "fight_type", e.target.value)
+                          }
+                          className="bg-white border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors text-sm font-medium"
+                        >
+                          <option value="Professional">Professional</option>
+                          <option value="Amateur">Amateur</option>
+                          <option value="Exhibition">Exhibition</option>
+                        </select>
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                          Rounds
+                        </label>
+                        <input
+                          type="number"
+                          value={fight.rounds || 3}
+                          onChange={(e) =>
+                            handleFightChange(
+                              index,
+                              "rounds",
+                              parseInt(e.target.value)
+                            )
+                          }
+                          placeholder="e.g. 3"
+                          className="bg-white border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors text-sm font-medium"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                          Round Time (minutes)
+                        </label>
+                        <input
+                          type="number"
+                          value={fight.round_time_minutes || 5}
+                          onChange={(e) =>
+                            handleFightChange(
+                              index,
+                              "round_time_minutes",
+                              parseInt(e.target.value)
+                            )
+                          }
+                          placeholder="e.g. 5"
+                          className="bg-white border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors text-sm font-medium"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                          Method
+                        </label>
+                        <select
+                          value={fight.method || ""}
+                          onChange={(e) =>
+                            handleFightChange(index, "method", e.target.value)
+                          }
+                          className="bg-white border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors text-sm font-medium"
+                        >
+                          <option value="">Not Set</option>
+                          <option value="KO/TKO">KO/TKO</option>
+                          <option value="Submission">Submission</option>
+                          <option value="Decision">Decision</option>
+                          <option value="Disqualification">Disqualification</option>
+                          <option value="No Contest">No Contest</option>
+                          <option value="Draw">Draw</option>
+                        </select>
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                          Order
+                        </label>
+                        <input
+                          type="number"
+                          value={fight.order || index + 1}
+                          onChange={(e) =>
+                            handleFightChange(
+                              index,
+                              "order",
+                              parseInt(e.target.value)
+                            )
+                          }
+                          placeholder="Fight order"
+                          className="bg-white border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors text-sm font-medium"
+                        />
+                      </div>
+
+                      <div className="md:col-span-2 space-y-3 pt-2">
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="checkbox"
+                            id={`title-fight-${index}`}
+                            checked={fight.title_fight || false}
+                            onChange={(e) =>
+                              handleFightChange(
+                                index,
+                                "title_fight",
+                                e.target.checked
+                              )
+                            }
+                            className="w-4 h-4 text-[#FE0002] focus:ring-[#FE0002] border-gray-300 rounded"
+                          />
+                          <label
+                            htmlFor={`title-fight-${index}`}
+                            className="text-xs font-bold uppercase tracking-widest text-gray-700"
+                          >
+                            Title Fight
+                          </label>
+                        </div>
+
+                        {fight.title_fight && (
+                          <div className="flex flex-col pl-7">
+                            <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                              Title Name
+                            </label>
+                            <input
+                              type="text"
+                              value={fight.title_name || ""}
+                              onChange={(e) =>
+                                handleFightChange(
+                                  index,
+                                  "title_name",
+                                  e.target.value
+                                )
+                              }
+                              placeholder="e.g. Lightweight Championship"
+                              className="bg-white border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors text-sm font-medium"
+                            />
+                          </div>
+                        )}
+
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="checkbox"
+                            id={`main-event-${index}`}
+                            checked={fight.is_main_event || false}
+                            onChange={(e) =>
+                              handleFightChange(
+                                index,
+                                "is_main_event",
+                                e.target.checked
+                              )
+                            }
+                            className="w-4 h-4 text-[#FE0002] focus:ring-[#FE0002] border-gray-300 rounded"
+                          />
+                          <label
+                            htmlFor={`main-event-${index}`}
+                            className="text-xs font-bold uppercase tracking-widest text-gray-700"
+                          >
+                            Main Event
+                          </label>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="checkbox"
+                            id={`co-main-event-${index}`}
+                            checked={fight.is_co_main_event || false}
+                            onChange={(e) =>
+                              handleFightChange(
+                                index,
+                                "is_co_main_event",
+                                e.target.checked
+                              )
+                            }
+                            className="w-4 h-4 text-[#FE0002] focus:ring-[#FE0002] border-gray-300 rounded"
+                          />
+                          <label
+                            htmlFor={`co-main-event-${index}`}
+                            className="text-xs font-bold uppercase tracking-widest text-gray-700"
+                          >
+                            Co-Main Event
+                          </label>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="checkbox"
+                            id={`championship-rounds-${index}`}
+                            checked={fight.is_championship_rounds || false}
+                            onChange={(e) =>
+                              handleFightChange(
+                                index,
+                                "is_championship_rounds",
+                                e.target.checked
+                              )
+                            }
+                            className="w-4 h-4 text-[#FE0002] focus:ring-[#FE0002] border-gray-300 rounded"
+                          />
+                          <label
+                            htmlFor={`championship-rounds-${index}`}
+                            className="text-xs font-bold uppercase tracking-widest text-gray-700"
+                          >
+                            Championship Rounds (5 min per round)
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </div>
