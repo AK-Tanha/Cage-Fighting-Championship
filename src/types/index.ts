@@ -1,130 +1,138 @@
-export interface SocialMediaLink {
-    name: string;
-    url: string;
-    icon: string;
-}
-
 export interface Fighter {
     _id: string
     name: string
     nick_name?: string
     weight_class: string
-    record: string | {
-        wins?: number;
-        losses?: number;
-        draws?: number;
-    };
-    nationality?: any
-    club?: any
-    date_of_birth?: any
-    style?: any
+    weight_class_history?: string[]
+    record: string
+    nationality?: string
+    club?: string
+    date_of_birth?: string
+    style?: string[]
     bio?: string
     image_url?: string
-    image?: string;
-    nickname?: string;
-    rank?: number;
-    fightingStyle?: string;
-    stats?: {
-        striking?: number;
-        grappling?: number;
-        stamina?: number;
-        power?: number;
-    };
-    social_media_links?: SocialMediaLink[];
-}
-
-export interface Referee {
-    _id: string;
-    name: string;
-    record: string;
-    nationality: string;
-    date_of_birth: string;
-    bio: string;
-    image_url: string;
 }
 
 export interface FighterCreate {
-    _id: string
     name: string
     weight_class: string
     record: string
-    nationality: string
-    club: string
-    date_of_birth: string
-    style: string[]
-    bio: string
-    image_url: string
-    image?: string;
+    nationality?: string
+    club?: string
+    date_of_birth?: string
+    style?: string[]
+    bio?: string
+    image_url?: string
 }
 
 export interface FighterUpdate {
+    name?: string
+    weight_class?: string
+    weight_class_history?: string[]
+    record?: string
+    nationality?: string
+    club?: string
+    date_of_birth?: string
+    style?: string[]
+    bio?: string
+    image_url?: string
+}
+
+export interface Referee {
     _id: string
     name: string
-    weight_class: string
     record: string
-    nationality: string
-    club: string
-    date_of_birth: string
-    style: string[]
-    bio: string
-    image_url: string
-    image?: string;
+    nationality?: string
+    date_of_birth?: string
+    bio?: string
+    image_url?: string
 }
 
-export interface IndividualFight {
-    fighter1: string; // ID
-    fighter2: string; // ID
-    weight_class: string;
-    title_fight?: boolean;
-    result?: string;
-    referee?: string; // ID
-}
-
-export interface EventCreate {
-    _id: string
+export interface RefereeCreate {
     name: string
-    date: string
-    location: string
-    image_url: string
-    fights: Fight[]
+    record: string
+    nationality?: string
+    date_of_birth?: string
+    bio?: string
+    image_url?: string
+}
+
+export interface RefereeUpdate {
+    name?: string
+    record?: string
+    nationality?: string
+    date_of_birth?: string
+    bio?: string
+    image_url?: string
 }
 
 export interface Fight {
     fighter1: string
     fighter2: string
+    referee?: string
     weight_class: string
-    title_fight: boolean
-    result: string
-    referee: string
+    weight_limit_lbs?: number
+    title_fight?: boolean
+    title_name?: string
+    is_main_event?: boolean
+    is_co_main_event?: boolean
+    rounds?: number
+    round_time_minutes?: number
+    is_championship_rounds?: boolean
+    result?: string
+    winner_id?: string
+    method?: "KO/TKO" | "Submission" | "Decision" | "Disqualification" | "No Contest" | "Draw"
+    round_ended?: number
+    time_ended?: string
+    order?: number
+    fight_type?: "Professional" | "Amateur" | "Exhibition"
 }
-
 
 export interface FightEvent {
-    _id: string;
-    id?: string;
-    name: string;
-    date: string;
-    location: string;
-    image?: string;
-    image_url?: string;
-    isLive?: boolean;
-    status?: string;
-    fights?: IndividualFight[];
+    _id: string
+    name: string
+    subtitle?: string
+    date: string
+    location: string
+    image_url?: string
+    fights?: Fight[]
 }
 
-export type View = 'home' | 'fighters' | 'events';
+export interface FightEventCreate {
+    name: string
+    subtitle?: string
+    date: string
+    location: string
+    image_url?: string
+    fights?: Fight[]
+}
 
-export interface ChatMessage {
-    role: 'user' | 'model';
-    text: string;
+export interface FighterProfile extends Fighter {
+    events?: FightEvent[]
 }
 
 export interface HeroSlide {
-    _id: string,
-    image_url: string,
-    title: string,
-    subtitle: string,
-    link: string,
-    is_active: boolean,
+    _id: string
+    image_url: string
+    title?: string
+    subtitle?: string
+    link?: string
+    is_active: boolean
     order: number
+}
+
+export interface HeroSlideCreate {
+    image_url: string
+    title?: string
+    subtitle?: string
+    link?: string
+    is_active?: boolean
+    order?: number
+}
+
+export type View = 'home' | 'fighters' | 'events'
+
+export interface ChatMessage {
+    role: 'user' | 'model'
+    text: string
 }

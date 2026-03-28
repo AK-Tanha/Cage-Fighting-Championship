@@ -73,10 +73,7 @@ const FighterProfile: React.FC = () => {
       </div>
     );
 
-  const record =
-    typeof fighter.record === "string"
-      ? fighter.record
-      : `${fighter.record?.wins ?? 0}-${fighter.record?.losses ?? 0}-${fighter.record?.draws ?? 0}`;
+  const record = fighter.record || "0-0";
 
   return (
     <div className="min-h-screen bg-white text-black selection:bg-[#FE0002] selection:text-white pt-20 md:pt-28">
@@ -89,13 +86,6 @@ const FighterProfile: React.FC = () => {
                 {fighter.weight_class}
               </span>
             </span>
-            {fighter.rank && (
-              <span className="bg-black text-white px-3 py-1 text-[10px] font-black italic skew-x-[-15deg]">
-                <span className="inline-block skew-x-[15deg]">
-                  RANK #{fighter.rank}
-                </span>
-              </span>
-            )}
           </div>
         }
         title={fighter.name}
@@ -103,7 +93,7 @@ const FighterProfile: React.FC = () => {
           fighter.nick_name && (
             <span className="bg-[#FE0002] text-white px-4 py-1 text-sm md:text-lg font-display font-black italic uppercase tracking-wider skew-x-[-15deg] inline-block">
               <span className="inline-block skew-x-[15deg]">
-                "{fighter.nick_name}"
+                {fighter.nick_name}
               </span>
             </span>
           )
@@ -120,15 +110,11 @@ const FighterProfile: React.FC = () => {
         }
         bottomRightSection={
           <div className="flex items-center gap-3">
-            {(fighter.social_media_links &&
-            fighter.social_media_links.length > 0
-              ? fighter.social_media_links
-              : [
-                  { name: "Instagram", url: "#", icon: "" },
-                  { name: "Twitter", url: "#", icon: "" },
-                  { name: "Facebook", url: "#", icon: "" },
-                ]
-            ).map((link, index) => {
+            {([
+              { name: "Instagram", url: "#", icon: "" },
+              { name: "Twitter", url: "#", icon: "" },
+              { name: "Facebook", url: "#", icon: "" },
+            ]).map((link, index) => {
               const iconClass =
                 "w-7 h-7 text-black hover:text-[#FE0002] transition-all cursor-pointer";
               const renderIcon = () => {
@@ -181,7 +167,6 @@ const FighterProfile: React.FC = () => {
               <Image
                 src={
                   fighter.image_url ||
-                  fighter.image ||
                   `https://picsum.photos/seed/${fighter.name}/600/900`
                 }
                 alt={fighter.name}
@@ -200,13 +185,7 @@ const FighterProfile: React.FC = () => {
                 <DetailItem label="Division" value={fighter.weight_class} />
                 <DetailItem
                   label="Style"
-                  value={
-                    Array.isArray(fighter.style)
-                      ? fighter.style
-                          .map((s: any) => (typeof s === "string" ? s : s.name))
-                          .join(", ")
-                      : fighter.fightingStyle || "All-Rounder"
-                  }
+                  value={fighter.style?.join(", ") || "All-Rounder"}
                 />
                 <DetailItem label="Status" value="Active" />
                 <DetailItem label="Hometown" value="Unknown" />

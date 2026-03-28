@@ -82,12 +82,7 @@ const RefereeEditPage = () => {
     setError(null);
 
     try {
-      const refereeData = {
-        ...data,
-        _id: refereeId,
-      };
-
-      await updateReferee(refereeData as any);
+      await updateReferee(refereeId, data as any);
       setSuccess(true);
       setTimeout(() => {
         router.push(`/admin/referees`);

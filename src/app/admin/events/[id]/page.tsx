@@ -117,7 +117,7 @@ const EventDetailsPage = () => {
       <div className="bg-white border border-black/5 rounded-sm overflow-hidden shadow-sm">
         <div className="w-full bg-black relative h-[300px] md:h-[400px]">
           <Image
-            src={event.image_url || event.image || "/og-event-default.jpg"}
+            src={event.image_url || "/og-event-default.jpg"}
             alt={event.name}
             className="w-full h-full object-cover object-top"
             fill
@@ -161,7 +161,7 @@ const EventDetailsPage = () => {
                   Status
                 </span>
                 <span className="text-sm font-bold uppercase tracking-tight">
-                  {event.status || "Scheduled"}
+                  Upcoming
                 </span>
               </div>
             </div>
@@ -203,7 +203,6 @@ const EventDetailsPage = () => {
                               <Image
                                 src={
                                   f1?.image_url ||
-                                  f1?.image ||
                                   "/og-fighter-default.jpg"
                                 }
                                 alt={f1?.name || "Fighter"}
@@ -239,7 +238,6 @@ const EventDetailsPage = () => {
                               <Image
                                 src={
                                   f2?.image_url ||
-                                  f2?.image ||
                                   "/og-fighter-default.jpg"
                                 }
                                 alt={f2?.name || "Fighter"}

@@ -54,17 +54,13 @@ const FightRow: React.FC<{
             </Link>
           </h4>
           <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
-            {f1?.record
-              ? typeof f1.record === "string"
-                ? f1.record
-                : `${f1.record.wins ?? 0}-${f1.record.losses ?? 0}`
-              : "0-0"}
+            {f1?.record ? f1.record : "0-0"}
           </p>
         </div>
         <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-none overflow-hidden border border-black/5 group-hover:border-[#FE0002]/30 transition-all bg-gray-50 relative">
           <Image
             src={
-              f1?.image_url || `https://picsum.photos/seed/${f1?._id}/300/300`
+              f1?.image_url || '/og-fighter-default.jpg'
             }
             alt={f1?.name || "Fighter Image"}
             className="w-full h-full object-cover object-top filter grayscale group-hover:grayscale-0 transition-all duration-500"
@@ -134,11 +130,7 @@ const FightRow: React.FC<{
             </Link>
           </h4>
           <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
-            {f2?.record
-              ? typeof f2.record === "string"
-                ? f2.record
-                : `${f2.record.wins ?? 0}-${f2.record.losses ?? 0}`
-              : "0-0"}
+            {f2?.record || "0-0"}
           </p>
         </div>
         <div className="w-6 shrink-0 hidden md:block" />

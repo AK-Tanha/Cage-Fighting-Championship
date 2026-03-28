@@ -8,9 +8,7 @@ import { Fighter } from '../types';
 import { FighterCardSkeleton } from './Skeleton';
 
 const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
-    const record = typeof fighter.record === 'string'
-        ? fighter.record
-        : `${fighter.record?.wins ?? 0}-${fighter.record?.losses ?? 0}-${fighter.record?.draws ?? 0}`;
+    const record = fighter.record || "0-0";
 
     return (
         <Link
@@ -36,12 +34,7 @@ const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
             {/* Fighter Info Overlay */}
             <div className="relative z-10 px-5 pb-5 pt-12 flex flex-col justify-end h-full">
 
-                {/* Floating Rank Badge - Top Left */}
-                {fighter.rank !== undefined && (
-                    <div className="absolute top-0 left-0 bg-[#FE0002] text-white px-3 py-1 font-display font-black text-sm italic skew-x-[-15deg] origin-top-left -ml-2 mt-4 shadow-md">
-                        <span className="block skew-x-[15deg]">#{fighter.rank}</span>
-                    </div>
-                )}
+
 
                 <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                     {/* Weightclass */}

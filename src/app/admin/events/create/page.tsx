@@ -35,6 +35,7 @@ const EventCreate = () => {
 
   const [data, setData] = useState({
     name: "",
+    subtitle: "",
     date: "",
     location: "",
     image_url: "",
@@ -212,6 +213,20 @@ const EventCreate = () => {
                     value={data.location}
                     onChange={handleChange}
                     placeholder="e.g. MGM Grand, Las Vegas"
+                    className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Subtitle (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    name="subtitle"
+                    value={data.subtitle}
+                    onChange={handleChange}
+                    placeholder="e.g. The Beginning"
                     className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
                   />
                 </div>

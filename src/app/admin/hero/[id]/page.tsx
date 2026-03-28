@@ -85,8 +85,8 @@ const HeroSlideDetailsPage = () => {
       <div className="bg-white border border-black/5 rounded-sm overflow-hidden shadow-sm grid grid-cols-1 md:grid-cols-12">
         <div className="md:col-span-12 lg:col-span-8 bg-black aspect-video relative">
           <Image
-            src={slide.image_url || "/og-fighter-default.jpg"}
-            alt={slide.title}
+            src={slide!.image_url || "/og-fighter-default.jpg"}
+            alt={slide!.title || "Slide"}
             className="w-full h-full object-cover"
             fill
             sizes="100vw"
@@ -97,15 +97,15 @@ const HeroSlideDetailsPage = () => {
         <div className="md:col-span-12 lg:col-span-4 p-8 md:p-12 bg-white">
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">
-              <span className={`px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full ${slide.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
-                {slide.is_active ? "Active" : "Inactive"}
+              <span className={`px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full ${slide!.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                {slide!.is_active ? "Active" : "Inactive"}
               </span>
               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-                Order: {slide.order}
+                Order: {slide!.order}
               </span>
             </div>
             <h1 className="text-4xl font-black font-display uppercase tracking-tighter mb-4 leading-none">
-              {slide.title}
+              {slide!.title || "Untitled"}
             </h1>
             <p className="text-gray-600 leading-relaxed text-base mb-6">
               {slide.subtitle || "No subtitle provided."}

@@ -51,12 +51,9 @@ export default function AdminEventsPage() {
                             />
                             <div className="absolute top-4 right-4 z-10">
                                 <span
-                                    className={`px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded-sm shadow-sm ${event.status === "Upcoming"
-                                        ? "bg-[#FE0002] text-white"
-                                        : "bg-white text-black border border-black/10"
-                                        }`}
+                                    className="px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded-sm shadow-sm bg-[#FE0002] text-white"
                                 >
-                                    {event.status}
+                                    Upcoming
                                 </span>
                             </div>
                         </div>

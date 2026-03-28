@@ -30,7 +30,6 @@ const Events: React.FC = () => {
         <div key={event._id} className="group relative bg-white rounded-lg overflow-hidden flex flex-col lg:flex-row hover:shadow-[0_0_30px_rgba(0,0,0,0.1)] transition-all border border-black/5">
             <div className="lg:w-2/5 h-64 lg:h-auto relative overflow-hidden">
                 <Image
-                    //src={event.image || '/images/event-placeholder.jpg'}
                     src={event.image_url || `/api/proxy/events/${event._id}/image/`}
                     alt={event.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
@@ -38,12 +37,6 @@ const Events: React.FC = () => {
                     sizes="(max-width: 1024px) 100vw, 40vw"
                     quality={90}
                 />
-                {event.isLive && (
-                    <div className="absolute top-4 left-4 bg-[#FE0002] text-white px-3 py-1 text-xs font-bold uppercase animate-pulse rounded-full flex items-center gap-2">
-                        <span className="w-2 h-2 bg-white rounded-full"></span>
-                        LIVE NOW
-                    </div>
-                )}
             </div>
 
             <div className="p-8 lg:p-12 flex-1 flex flex-col justify-center">

@@ -64,7 +64,15 @@ const FighterCreate = () => {
         .filter((s) => s !== "");
 
       const fighterData = {
-        ...data,
+        name: data.name,
+        nick_name: data.nick_name,
+        weight_class: data.weight_class,
+        record: data.record,
+        nationality: data.nationality,
+        club: data.club,
+        date_of_birth: data.date_of_birth,
+        bio: data.bio,
+        image_url: data.image_url,
         style: styles,
       };
 

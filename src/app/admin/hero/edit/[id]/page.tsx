@@ -81,7 +81,7 @@ const HeroSlideEdit = () => {
     setError(null);
 
     try {
-      await updateHeroSlide({ ...data, _id: slideId } as any);
+      await updateHeroSlide(slideId as string, data);
       setSuccess(true);
       setTimeout(() => {
         router.push("/admin/hero");

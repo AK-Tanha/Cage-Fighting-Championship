@@ -40,9 +40,7 @@ const FighterEditPage = () => {
           name: fighter.name || "",
           nick_name: fighter.nick_name || "",
           weight_class: fighter.weight_class || "",
-          record: typeof fighter.record === 'string'
-            ? fighter.record
-            : `${fighter.record?.wins ?? 0}-${fighter.record?.losses ?? 0}-${fighter.record?.draws ?? 0}`,
+          record: fighter.record || "",
           nationality: fighter.nationality || "",
           club: fighter.club || "",
           date_of_birth: fighter.date_of_birth
@@ -106,12 +104,19 @@ const FighterEditPage = () => {
         .filter((s) => s !== "");
 
       const fighterData = {
-        ...data,
-        _id: fighterId,
+        name: data.name,
+        nick_name: data.nick_name,
+        weight_class: data.weight_class,
+        record: data.record,
+        nationality: data.nationality,
+        club: data.club,
+        date_of_birth: data.date_of_birth,
+        bio: data.bio,
+        image_url: data.image_url,
         style: styles,
       };
 
-      await updateFighter(fighterData as any);
+      await updateFighter(fighterId, fighterData as any);
       setSuccess(true);
       setTimeout(() => {
         router.push(`/admin/fighters`);

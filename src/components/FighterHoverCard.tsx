@@ -34,7 +34,7 @@ const FighterHoverCard = forwardRef<HTMLDivElement, FighterHoverCardProps>(
                 {/* Left: Photo */}
                 <div className="relative w-28 shrink-0 bg-gray-100">
                     <Image
-                        src={fighter.image_url || fighter.image || '/og-fighter-default.jpg'}
+                        src={fighter.image_url || '/og-fighter-default.jpg'}
                         alt={fighter.name || 'Fighter'}
                         fill
                         className="object-cover object-top"
@@ -56,9 +56,7 @@ const FighterHoverCard = forwardRef<HTMLDivElement, FighterHoverCardProps>(
                             <div className="bg-gray-50 px-2 py-1.5 border border-black/5">
                                 <span className="text-[8px] text-gray-400 uppercase font-bold block">Record</span>
                                 <span className="text-xs font-black italic">
-                                    {typeof fighter.record === 'string'
-                                        ? fighter.record
-                                        : `${fighter.record?.wins ?? 0}-${fighter.record?.losses ?? 0}-${fighter.record?.draws ?? 0}`}
+                                    {fighter.record || "N/A"}
                                 </span>
                             </div>
                             <div className="bg-gray-50 px-2 py-1.5 border border-black/5">

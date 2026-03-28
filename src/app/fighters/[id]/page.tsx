@@ -7,11 +7,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         const { id } = await params;
         const fighter = await getFighterById(id);
 
-        const record = typeof fighter.record === 'string'
-            ? fighter.record
-            : `${fighter.record?.wins ?? 0}-${fighter.record?.losses ?? 0}-${fighter.record?.draws ?? 0}`;
+        const record = fighter.record || '0-0';
 
-        const title = `${fighter.name} "${fighter.nickname || 'The Fighter'}" | CFC Fighter Profile`;
+        const title = `${fighter.name} ${fighter.nick_name ? `"${fighter.nick_name}"` : ''} | CFC Fighter Profile`;
         const description = `${fighter.name} - ${fighter.weight_class} division fighter with a ${record} record. ${fighter.bio ? fighter.bio.substring(0, 150) + '...' : 'Elite MMA athlete competing in the Cage Fighting Championship.'}`;
 
         return {
@@ -24,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
                 type: 'profile',
                 images: [
                     {
-                        url: fighter.image_url || fighter.image || `/og-fighter-default.jpg`,
+                        url: fighter.image_url || `/og-fighter-default.jpg`,
                         width: 1200,
                         height: 630,
                         alt: `${fighter.name} - CFC Fighter`,
@@ -35,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
                 card: "summary_large_image",
                 title,
                 description,
-                images: [fighter.image_url || fighter.image || `/og-fighter-default.jpg`],
+                images: [fighter.image_url || `/og-fighter-default.jpg`],
             },
         };
     } catch (error) {

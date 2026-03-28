@@ -1,4 +1,16 @@
-import { Fighter, FightEvent, HeroSlide, Referee } from '@/types';
+import { 
+    Fighter, 
+    FighterCreate, 
+    FighterUpdate, 
+    FightEvent, 
+    FightEventCreate,
+    HeroSlide,
+    HeroSlideCreate,
+    Referee,
+    RefereeCreate,
+    RefereeUpdate,
+    FighterProfile
+} from '@/types';
 import axios from 'axios';
 
 const BACKEND_URL = 'https://cfc-backend-ten.vercel.app';
@@ -20,8 +32,37 @@ const api = axios.create({
     }
 });
 
-//fighters
-export const createFighter = async (fighter: Fighter) => {
+// Auth
+export const loginAdmin = async (username: string, password: string) => {
+    try {
+        const formData = new URLSearchParams();
+        formData.append('username', username);
+        formData.append('password', password);
+        
+        const response = await api.post('/auth/login', formData, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+        return response.data;
+    } catch (error: any) {
+        console.error('Login Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const getCurrentUser = async () => {
+    try {
+        const response = await api.get('/auth/me');
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// Fighters
+export const createFighter = async (fighter: FighterCreate) => {
     try {
         const response = await api.post('/fighters/', fighter);
         return response.data;
@@ -29,16 +70,18 @@ export const createFighter = async (fighter: Fighter) => {
         console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
-}
-export const updateFighter = async (fighter: Fighter) => {
+};
+
+export const updateFighter = async (id: string, fighter: FighterUpdate) => {
     try {
-        const response = await api.put(`/fighters/${fighter._id}/`, fighter);
+        const response = await api.put(`/fighters/${id}/`, fighter);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
-}
+};
+
 export const deleteFighter = async (id: string) => {
     try {
         const response = await api.delete(`/fighters/${id}/`);
@@ -47,11 +90,11 @@ export const deleteFighter = async (id: string) => {
         console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
-}
+};
 
-export const getAllFighters = async () => {
+export const getAllFighters = async (filters?: { name?: string; weight_class?: string; nationality?: string }) => {
     try {
-        const response = await api.get('/fighters/');
+        const response = await api.get('/fighters/', { params: filters });
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
@@ -62,15 +105,15 @@ export const getAllFighters = async () => {
 export const getFighterById = async (id: string) => {
     try {
         const response = await api.get(`/fighters/${id}/`);
-        return response.data;
+        return response.data as FighterProfile;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
 };
 
-//referees
-export const createReferee = async (referee: Referee) => {
+// Referees
+export const createReferee = async (referee: RefereeCreate) => {
     try {
         const response = await api.post('/referees/', referee);
         return response.data;
@@ -78,7 +121,7 @@ export const createReferee = async (referee: Referee) => {
         console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
-}
+};
 
 export const getAllReferees = async () => {
     try {
@@ -100,15 +143,15 @@ export const getRefereeById = async (id: string) => {
     }
 };
 
-export const updateReferee = async (referee: Referee) => {
+export const updateReferee = async (id: string, referee: RefereeUpdate) => {
     try {
-        const response = await api.put(`/referees/${referee._id}/`, referee);
+        const response = await api.put(`/referees/${id}/`, referee);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
-}
+};
 
 export const deleteReferee = async (id: string) => {
     try {
@@ -118,11 +161,10 @@ export const deleteReferee = async (id: string) => {
         console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
-}
+};
 
-//events
-
-export const createEvent = async (event: FightEvent) => {
+// Events
+export const createEvent = async (event: FightEventCreate) => {
     try {
         const response = await api.post('/events/', event);
         return response.data;
@@ -130,16 +172,18 @@ export const createEvent = async (event: FightEvent) => {
         console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
-}
-export const updateEvent = async (event: FightEvent) => {
+};
+
+export const updateEvent = async (id: string, event: Partial<FightEvent>) => {
     try {
-        const response = await api.put(`/events/${event._id}/`, event);
+        const response = await api.put(`/events/${id}/`, event);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
-}
+};
+
 export const deleteEvent = async (id: string) => {
     try {
         const response = await api.delete(`/events/${id}/`);
@@ -148,7 +192,7 @@ export const deleteEvent = async (id: string) => {
         console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
-}
+};
 
 export const getAllEvents = async () => {
     try {
@@ -170,10 +214,12 @@ export const getEventById = async (id: string) => {
     }
 };
 
-export const uploadImage = async (file: File) => {
+// Upload
+export const uploadImage = async (file: File, folder: string = 'media') => {
     try {
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('folder', folder);
 
         const response = await fetch('/api/proxy/upload', {
             method: 'POST',
@@ -187,13 +233,13 @@ export const uploadImage = async (file: File) => {
         const data = await response.json();
         return data.url;
     } catch (error: any) {
-        console.error('API Error:', error.message);
+        console.error('Upload Error:', error.message);
         throw error;
     }
 };
 
-//Hero-Slides
-export const createHeroSlide = async (heroSlide: HeroSlide) => {
+// Hero Slides
+export const createHeroSlide = async (heroSlide: HeroSlideCreate) => {
     try {
         const response = await api.post('/hero-slides/', heroSlide);
         return response.data;
@@ -201,16 +247,18 @@ export const createHeroSlide = async (heroSlide: HeroSlide) => {
         console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
-}
-export const updateHeroSlide = async (heroSlide: HeroSlide) => {
+};
+
+export const updateHeroSlide = async (id: string, heroSlide: Partial<HeroSlide>) => {
     try {
-        const response = await api.put(`/hero-slides/${heroSlide._id}/`, heroSlide);
+        const response = await api.put(`/hero-slides/${id}/`, heroSlide);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
-}
+};
+
 export const deleteHeroSlide = async (id: string) => {
     try {
         const response = await api.delete(`/hero-slides/${id}/`);
@@ -219,7 +267,7 @@ export const deleteHeroSlide = async (id: string) => {
         console.error('API Error:', error.response?.data || error.message);
         throw error;
     }
-}
+};
 
 export const getAllHeroSlides = async () => {
     try {

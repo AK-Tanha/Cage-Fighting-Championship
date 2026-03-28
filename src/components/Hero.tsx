@@ -47,7 +47,7 @@ const Hero: React.FC = () => {
         <Image
             key={slide._id}
             src={slide.image_url || "/og-fighter-default.jpg"}
-            alt={slide.title}
+            alt={slide.title || "Hero Slide"}
             aria-hidden
             className={`
                 absolute inset-0 w-full h-full object-cover object-top origin-top
@@ -124,7 +124,7 @@ const Hero: React.FC = () => {
                     </div>
 
                     <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black leading-[0.85] mb-8 uppercase tracking-[-0.05em] italic text-black drop-shadow-sm animate-[fade-in_0.6s_ease-out_0.1s_both,slide-in-left_0.6s_ease-out_0.1s_both]">
-                        {currentSlide.title.split(' ').map((word, i) => (
+                        {currentSlide?.title?.split(' ').map((word, i) => (
                             <React.Fragment key={i}>
                                 {i === 1 ? <span className="text-[#FE0002]">{word} </span> : word + ' '}
                             </React.Fragment>
@@ -133,7 +133,7 @@ const Hero: React.FC = () => {
 
                     <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-10 mb-12 animate-[fade-in_0.6s_ease-out_0.2s_both,slide-in-left_0.6s_ease-out_0.2s_both]">
                         <p className="text-lg md:text-xl text-gray-800 max-w-lg leading-relaxed font-semibold border-l-4 border-[#FE0002] pl-6 py-1">
-                            {currentSlide.subtitle}
+                            {currentSlide?.subtitle}
                         </p>
                     </div>
 

@@ -82,7 +82,7 @@ export default function AdminFightersPage() {
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 bg-black rounded-sm overflow-hidden relative">
                         <Image 
-                            src={fighter.image_url || fighter.image || "/og-fighter-default.jpg"} 
+                            src={fighter.image_url || "/og-fighter-default.jpg"} 
                             alt="fighter image" 
                             className="w-full h-full object-cover object-top" 
                             fill 
@@ -102,9 +102,7 @@ export default function AdminFightersPage() {
                     </div>
                   </td>
                   <td className="p-6 text-center font-bold text-gray-700">
-                    {typeof fighter.record === 'string'
-                      ? fighter.record
-                      : `${fighter.record?.wins ?? 0}-${fighter.record?.losses ?? 0}`}
+                    {fighter.record}
                   </td>
                   <td className="p-6 uppercase text-gray-500 text-[10px] tracking-widest font-bold">
                     {fighter.weight_class}

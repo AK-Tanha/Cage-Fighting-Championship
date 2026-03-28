@@ -97,7 +97,7 @@ export default function AdminHeroPage() {
                       <div className="w-20 h-10 bg-black rounded-sm overflow-hidden relative">
                         <Image 
                           src={slide.image_url || "/og-fighter-default.jpg"} 
-                          alt={slide.title} 
+                          alt={slide.title || "Slide"} 
                           className="w-full h-full object-cover object-top" 
                           fill
                           sizes="80px"
@@ -106,11 +106,11 @@ export default function AdminHeroPage() {
                     </td>
                     <td className="p-6">
                       <div className="font-display font-black uppercase text-base tracking-tighter">
-                        {slide.title}
+                        {slide.title || "Untitled"}
                       </div>
                     </td>
                     <td className="p-6 text-gray-500 text-[10px] tracking-widest font-bold max-w-xs truncate">
-                      {slide.subtitle}
+                      {slide.subtitle || ""}
                     </td>
                     <td className="p-6 text-center">
                       <span className={`px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full ${slide.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>

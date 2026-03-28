@@ -84,7 +84,7 @@ const FighterDetailsPage = () => {
       <div className="bg-white border border-black/5 rounded-sm overflow-hidden shadow-sm grid grid-cols-1 md:grid-cols-12">
         <div className="md:col-span-4 bg-black aspect-square md:aspect-auto relative min-h-[400px]">
           <Image
-            src={fighter.image_url || fighter.image || "/og-fighter-default.jpg"}
+            src={fighter.image_url || "/og-fighter-default.jpg"}
             alt={fighter.name}
             className="w-full h-full object-cover"
             fill
@@ -96,7 +96,7 @@ const FighterDetailsPage = () => {
         <div className="md:col-span-8 p-8 md:p-12">
           <div className="mb-8">
             <div className="text-[#FE0002] font-bold uppercase tracking-[0.2em] text-[10px] mb-2">
-              {fighter.style || "Fighter"}
+              {fighter.style?.join(', ') || "Fighter"}
             </div>
             <h1 className="text-4xl md:text-5xl font-black font-display uppercase tracking-tighter mb-4 leading-none">
               {fighter.name}
@@ -115,9 +115,7 @@ const FighterDetailsPage = () => {
                   Record
                 </span>
                 <span className="text-sm font-bold uppercase tracking-tight">
-                  {typeof fighter.record === 'string'
-                    ? fighter.record
-                    : `${fighter.record?.wins ?? 0}-${fighter.record?.losses ?? 0}-${fighter.record?.draws ?? 0}`}
+                  {fighter.record || "0-0"}
                 </span>
               </div>
               <div className="px-4 py-2 bg-gray-50 border border-black/5 rounded-sm">
@@ -156,7 +154,7 @@ const FighterDetailsPage = () => {
                   Primary Style
                 </span>
                 <span className="text-sm font-medium">
-                  {fighter.style.join(", ") || "Mixed Martial Arts"}
+                  {fighter.style?.join(", ") || "Mixed Martial Arts"}
                 </span>
               </div>
             </div>
