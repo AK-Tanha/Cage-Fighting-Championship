@@ -1,35 +1,36 @@
 "use client";
 import { deleteFighter, getAllFighters } from "@/lib/api";
 import { Fighter } from "@/types";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function AdminFightersPage() {
   const router = useRouter();
-  const [fighters, setFighters] = useState<Fighter[]>([]);
-  useEffect(() => {
-    const fetchFighters = async () => {
-      try {
-        const response = await getAllFighters();
-        setFighters(response);
-      } catch (error) {
-        console.error("Error fetching fighters:", error);
-      }
-    };
-    fetchFighters();
-  }, []);
-  const handleDelete = async (id: string) => {
-    try {
-      if (!confirm("Are you sure you want to delete this fighter?")) return;
-      await deleteFighter(id);
+  const queryClient = useQueryClient();
+
+  const { data: fighters = [] } = useQuery<Fighter[]>({
+    queryKey: ["fighters"],
+    queryFn: async () => {
+      const response = await getAllFighters();
+      return response;
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteFighter,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["fighters"] });
       alert("Fighter deleted successfully!");
-      setFighters(fighters.filter((fighter) => fighter._id !== id));
-    } catch (error) {
-      console.error("Error deleting fighter:", error);
-    }
+    },
+  });
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this fighter?")) return;
+    deleteMutation.mutate(id);
   };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
@@ -93,11 +94,6 @@ export default function AdminFightersPage() {
                         <div className="font-display font-black uppercase text-base tracking-tighter">
                           {fighter.name}
                         </div>
-                        {/* {fighter.nickname && (
-                          <div className="text-[10px] text-[#FE0002] font-bold uppercase tracking-widest">
-                            "{fighter.nickname}"
-                          </div>
-                        )} */}
                       </div>
                     </div>
                   </td>

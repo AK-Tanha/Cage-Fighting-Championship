@@ -1,3 +1,5 @@
+import FeaturedEvents from "@/components/FeaturedEvents";
+import FeaturedFighters from "@/components/FeaturedFighters";
 import Hero from "@/components/Hero";
 import type { Metadata } from "next";
 
@@ -36,8 +38,8 @@ export default function Home() {
                         "@type": "SportsOrganization",
                         "name": "Cage Fighting Championship",
                         "alternateName": "CFC",
-                        "url": process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-                        "logo": `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/favicon.ico`,
+                        "url": process.env.NEXT_PUBLIC_SITE_URL,
+                        "logo": `${process.env.NEXT_PUBLIC_SITE_URL}/favicon.ico`,
                         "description": "The global leader in elite MMA competition",
                         "sport": "Mixed Martial Arts",
                         "sameAs": [
@@ -50,6 +52,8 @@ export default function Home() {
                 }}
             />
             <Hero />
+            <FeaturedEvents />
+            <FeaturedFighters />
         </>
     );
 }

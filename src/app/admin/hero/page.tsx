@@ -1,39 +1,34 @@
 "use client";
 import { deleteHeroSlide, getAllHeroSlides } from "@/lib/api";
 import { HeroSlide } from "@/types";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function AdminHeroPage() {
   const router = useRouter();
-  const [slides, setSlides] = useState<HeroSlide[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchSlides = async () => {
-      try {
-        const response = await getAllHeroSlides();
-        setSlides(response);
-      } catch (error) {
-        console.error("Error fetching slides:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSlides();
-  }, []);
+  const { data: slides = [], isLoading } = useQuery<HeroSlide[]>({
+    queryKey: ["hero-slides"],
+    queryFn: async () => {
+      const response = await getAllHeroSlides();
+      return response;
+    },
+  });
 
-  const handleDelete = async (id: string) => {
-    try {
-      if (!confirm("Are you sure you want to delete this slide?")) return;
-      await deleteHeroSlide(id);
+  const deleteMutation = useMutation({
+    mutationFn: deleteHeroSlide,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["hero-slides"] });
       alert("Slide deleted successfully!");
-      setSlides(slides.filter((slide) => slide._id !== id));
-    } catch (error) {
-      console.error("Error deleting slide:", error);
-    }
+    },
+  });
+
+  const handleDelete = (id: string) => {
+    if (!confirm("Are you sure you want to delete this slide?")) return;
+    deleteMutation.mutate(id);
   };
 
   return (
@@ -75,7 +70,7 @@ export default function AdminHeroPage() {
               </tr>
             </thead>
             <tbody className="text-sm font-medium">
-              {loading ? (
+              {isLoading ? (
                 <tr>
                   <td colSpan={6} className="p-10 text-center text-gray-500 font-display uppercase tracking-widest text-xs">
                     Loading slides...
@@ -143,4 +138,3 @@ export default function AdminHeroPage() {
     </div>
   );
 }
-

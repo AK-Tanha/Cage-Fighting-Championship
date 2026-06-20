@@ -1,36 +1,34 @@
 "use client";
 import { deleteReferee, getAllReferees } from "@/lib/api";
 import { Referee } from "@/types";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function AdminRefereesPage() {
   const router = useRouter();
-  const [referees, setReferees] = useState<Referee[]>([]);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchReferees = async () => {
-      try {
-        const response = await getAllReferees();
-        setReferees(response);
-      } catch (error) {
-        console.error("Error fetching referees:", error);
-      }
-    };
-    fetchReferees();
-  }, []);
+  const { data: referees = [] } = useQuery<Referee[]>({
+    queryKey: ["referees"],
+    queryFn: async () => {
+      const response = await getAllReferees();
+      return response;
+    },
+  });
 
-  const handleDelete = async (id: string) => {
-    try {
-      if (!confirm("Are you sure you want to delete this referee?")) return;
-      await deleteReferee(id);
+  const deleteMutation = useMutation({
+    mutationFn: deleteReferee,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["referees"] });
       alert("Referee deleted successfully!");
-      setReferees(referees.filter((referee) => referee._id !== id));
-    } catch (error) {
-      console.error("Error deleting referee:", error);
-    }
+    },
+  });
+
+  const handleDelete = (id: string) => {
+    if (!confirm("Are you sure you want to delete this referee?")) return;
+    deleteMutation.mutate(id);
   };
 
   return (

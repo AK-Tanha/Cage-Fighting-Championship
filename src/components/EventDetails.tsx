@@ -3,9 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useRef } from "react";
 import { getAllFighters, getAllReferees, getEventById } from "../lib/api";
 import { FightEvent, Fighter } from "../types";
+import { useQuery } from "@tanstack/react-query";
 import { EventDetailsSkeleton } from "./Skeleton";
 import FighterHoverCard from "./FighterHoverCard";
 import PageHeader from "./PageHeader";
@@ -30,7 +31,6 @@ const FightRow: React.FC<{
 
   return (
     <div className="group relative bg-white border border-black/5 hover:border-[#FE0002]/30 transition-all rounded-sm p-3 md:p-4 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 shadow-sm">
-      {/* Fighter 1 */}
       <div
         className="flex-1 flex items-center gap-3 md:gap-4 w-full md:w-auto min-w-0"
         onMouseEnter={() =>
@@ -70,7 +70,6 @@ const FightRow: React.FC<{
         </div>
       </div>
 
-      {/* VS & Match Info */}
       <div className="flex flex-col items-center justify-center shrink-0 min-w-[100px] border-x border-black/5 px-4 h-full">
         <div className="text-2xl font-display font-black italic text-black/10 group-hover:text-[#FE0002]/20 transition-colors">
           VS
@@ -79,7 +78,6 @@ const FightRow: React.FC<{
           {fight.weight_class}
         </p>
 
-        {/* Referee Badge */}
         <div className="flex flex-col items-center mt-1">
           <p className="text-[7px] font-black uppercase tracking-widest text-[#FE0002] mb-0.5 opacity-60">
             Referee
@@ -98,7 +96,6 @@ const FightRow: React.FC<{
         )}
       </div>
 
-      {/* Fighter 2 */}
       <div
         className="flex-1 flex flex-row-reverse items-center gap-3 md:gap-4 w-full md:w-auto min-w-0"
         onMouseEnter={() =>
@@ -142,62 +139,52 @@ const FightRow: React.FC<{
 const EventDetails: React.FC = () => {
   const params = useParams();
   const router = useRouter();
-  const [event, setEvent] = useState<FightEvent | null>(null);
-  const [fighters, setFighters] = useState<Record<string, Fighter>>({});
-  const [referees, setReferees] = useState<Record<string, any>>({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [fighterHoverCard, setFighterHoverCard] = useState<Fighter | null>(
-    null,
-  );
-  const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
+  const [fighterHoverCard, setFighterHoverCard] = React.useState<Fighter | null>(null);
+  const [hoverPos, setHoverPos] = React.useState({ x: 0, y: 0 });
   const hoverCardRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const loadPageData = async () => {
-      if (!params?.id) return;
-      try {
-        // Fetch event and all fighters in parallel for matching
-        const [eventData, fightersData, refereesData] = await Promise.all([
-          getEventById(params.id as string),
-          getAllFighters(),
-          getAllReferees(),
-        ]);
+  const { data: event, isLoading: eventLoading, error: eventError } = useQuery({
+    queryKey: ["event", params?.id],
+    queryFn: () => getEventById(params!.id as string),
+    enabled: !!params?.id,
+  });
 
-        setEvent(eventData);
+  const { data: fightersMap = {} } = useQuery({
+    queryKey: ["fighters"],
+    queryFn: async () => {
+      const data = await getAllFighters();
+      const fighterMap: Record<string, Fighter> = {};
+      (Array.isArray(data) ? data : []).forEach((f: Fighter) => {
+        fighterMap[f._id] = f;
+      });
+      return fighterMap;
+    },
+    enabled: !!params?.id,
+  });
 
-        // Index fighters by ID for easy lookup
-        const fighterMap: Record<string, Fighter> = {};
-        fightersData.forEach((f: Fighter) => {
-          fighterMap[f._id] = f;
-        });
-        setFighters(fighterMap);
+  const { data: refereesMap = {} } = useQuery({
+    queryKey: ["referees"],
+    queryFn: async () => {
+      const data = await getAllReferees();
+      const refereeMap: Record<string, any> = {};
+      (Array.isArray(data) ? data : []).forEach((r: any) => {
+        refereeMap[r._id] = r;
+      });
+      return refereeMap;
+    },
+    enabled: !!params?.id,
+  });
 
-        // Index referees by ID
-        const refereeMap: Record<string, any> = {};
-        refereesData.forEach((r: any) => {
-          refereeMap[r._id] = r;
-        });
-        setReferees(refereeMap);
-      } catch (err: any) {
-        setError(err.message || "Failed to retrieve event data");
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadPageData();
-  }, [params?.id]);
+  if (eventLoading) return <EventDetailsSkeleton />;
 
-  if (loading) return <EventDetailsSkeleton />;
-
-  if (error || !event)
+  if (eventError || !event)
     return (
-      <div className="min-h-screen pt-32 px-4 flex flex-col items-center">
+      <div className="min-h-screen pt-20 md:pt-28 px-4 flex flex-col items-center">
         <h1 className="text-6xl font-display font-black uppercase text-[#FE0002] italic mb-4">
           Event Nullified
         </h1>
         <p className="text-gray-500 mb-8">
-          {error || "Event data corrupted or missing from the grid."}
+          {eventError instanceof Error ? eventError.message : "Event data corrupted or missing from the grid."}
         </p>
         <button
           onClick={() => router.push("/events")}
@@ -209,8 +196,7 @@ const EventDetails: React.FC = () => {
     );
 
   return (
-    <div className="min-h-screen bg-white text-black pb-24">
-      {/* Fighter Hover Card */}
+    <div className="min-h-screen bg-white text-black pb-24 pt-20">
       {fighterHoverCard && (
         <FighterHoverCard
           ref={hoverCardRef}
@@ -219,7 +205,6 @@ const EventDetails: React.FC = () => {
         />
       )}
 
-      {/* Header Banner Image */}
       <div className="w-full relative h-[250px] md:h-[350px] lg:h-[450px] overflow-hidden group">
         <Image
           src={event.image_url || `/api/proxy/events/${event._id}/image/`}
@@ -233,7 +218,6 @@ const EventDetails: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent pointer-events-none" />
       </div>
 
-      {/* Event Header - Redesigned High Impact */}
       <PageHeader
         className="pt-8 pb-6"
         topSection={
@@ -298,9 +282,7 @@ const EventDetails: React.FC = () => {
         }
       />
 
-      {/* Fights Section */}
       <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 md:py-10 relative">
-        {/* Decorative background element */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-full bg-gradient-to-b from-transparent via-gray-100/50 to-transparent -z-10 pointer-events-none blur-3xl" />
 
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 border-b-2 border-black/10 pb-8 relative">
@@ -341,15 +323,13 @@ const EventDetails: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-6 md:space-y-10 relative">
-            {/* Connecting line for aesthetic */}
             <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-black/20 via-black/5 to-transparent -z-10 hidden md:block"></div>
 
-            {event.fights.map((fight, idx) => (
+            {event.fights.map((fight: any, idx: number) => (
               <div
                 key={idx}
                 className="relative group/row transform hover:-translate-y-1 transition-all duration-300"
               >
-                {/* Optional decorative index indicator */}
                 <div className="absolute -left-4 md:-left-12 top-1/2 -translate-y-1/2 opacity-0 md:group-hover/row:opacity-100 transition-opacity duration-300 font-display font-black text-[#FE0002] text-xl italic flex items-center justify-center">
                   <span className="bg-white border-2 border-black/5 rounded-full w-10 h-10 flex items-center justify-center shadow-lg transform -skew-x-12">
                     #{idx + 1}
@@ -357,8 +337,8 @@ const EventDetails: React.FC = () => {
                 </div>
                 <FightRow
                   fight={fight}
-                  fighters={fighters}
-                  referees={referees}
+                  fighters={fightersMap}
+                  referees={refereesMap}
                   index={idx}
                   setFighterHoverCard={setFighterHoverCard}
                   setHoverPos={setHoverPos}
@@ -394,7 +374,6 @@ const EventDetails: React.FC = () => {
         </div>
       </div>
 
-      {/* Handy Mobile Ticket Bar */}
       <div className="md:hidden fixed bottom-10 left-6 right-6 z-50 animate-slide-in-bottom">
         <button className="w-full bg-[#FE0002] text-white py-4 font-display font-black uppercase italic tracking-widest shadow-2xl shadow-[#FE0002]/40 rounded-sm">
           Live Tickets - CFC {event.name.split(":")?.[0]}

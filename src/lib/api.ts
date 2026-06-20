@@ -13,7 +13,7 @@ import {
 } from '@/types';
 import axios from 'axios';
 
-const BACKEND_URL = 'https://cfc-backend-ten.vercel.app';
+const BACKEND_URL = process.env.BACKEND_URL!;
 
 const getBaseURL = () => {
     if (typeof window === 'undefined') {

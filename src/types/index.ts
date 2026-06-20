@@ -107,7 +107,30 @@ export interface FightEventCreate {
     fights?: Fight[]
 }
 
+export interface FightRecord {
+    event_id: string
+    event_name: string
+    event_date: string
+    event_location?: string
+    opponent_id: string
+    opponent_name: string
+    opponent_image?: string
+    weight_class: string
+    is_title_fight: boolean
+    title_name?: string
+    result?: "win" | "loss"
+    method?: string
+    round_ended?: number
+    time_ended?: string
+    is_main_event: boolean
+    is_co_main_event: boolean
+    fight_type?: string
+    fight_order: number
+}
+
 export interface FighterProfile extends Fighter {
+    latest_fight?: FightRecord
+    upcoming_fight?: FightRecord
     events?: FightEvent[]
 }
 

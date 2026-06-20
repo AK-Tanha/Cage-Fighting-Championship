@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-const BACKEND_URL = (process.env.BACKEND_URL || 'https://cfc-backend-ten.vercel.app').replace(/\/$/, '');
+const BACKEND_URL = process.env.BACKEND_URL!.replace(/\/$/, '');
 
 export async function GET(
     request: Request,

@@ -1,5 +1,6 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import QueryProvider from "@/components/QueryProvider";
 import type { Metadata } from "next";
 import { Montserrat, Rubik } from "next/font/google";
 import "./globals.css";
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
         icon: '/favicon.ico',
         apple: '/favicon.ico',
     },
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
     openGraph: {
         type: 'website',
         locale: 'en_US',
@@ -97,9 +98,11 @@ export default function RootLayout({
                 />
             </head>
             <body className="font-sans antialiased min-h-screen flex flex-col bg-white text-black selection:bg-[#FE0002] selection:text-white">
-                <Navbar />
-                <main className="flex-1">{children}</main>
-                <Footer />
+                <QueryProvider>
+                    <Navbar />
+                    <main className="flex-1">{children}</main>
+                    <Footer />
+                </QueryProvider>
             </body>
         </html>
     );

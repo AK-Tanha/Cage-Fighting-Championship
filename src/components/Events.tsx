@@ -2,31 +2,22 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { getAllEvents } from '../lib/api';
 import { FightEvent } from '../types';
+import { useQuery } from '@tanstack/react-query';
 import { HorizontalEventSkeleton } from './Skeleton';
 
 const Events: React.FC = () => {
-    const [events, setEvents] = useState<FightEvent[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { data: events = [], isLoading, error } = useQuery({
+        queryKey: ["events"],
+        queryFn: async () => {
+            const data = await getAllEvents();
+            return Array.isArray(data) ? data : [];
+        },
+    });
 
-    useEffect(() => {
-        const loadEvents = async () => {
-            try {
-                const data = await getAllEvents();
-                setEvents(data);
-            } catch (err: any) {
-                setError(err.message || 'Failed to load fight schedule');
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadEvents();
-    }, []);
-
-    const eventItems = useMemo(() => events.map((event) => (
+    const eventItems = useMemo(() => events.map((event: FightEvent) => (
         <div key={event._id} className="group relative bg-white rounded-lg overflow-hidden flex flex-col lg:flex-row hover:shadow-[0_0_30px_rgba(0,0,0,0.1)] transition-all border border-black/5">
             <div className="lg:w-2/5 h-64 lg:h-auto relative overflow-hidden">
                 <Image
@@ -65,8 +56,8 @@ const Events: React.FC = () => {
         </div>
     )), [events]);
 
-    if (loading) return (
-        <div className="pt-32 pb-20 max-w-7xl mx-auto px-4">
+    if (isLoading) return (
+        <div className="pt-20 md:pt-28 pb-20 max-w-7xl mx-auto px-4">
             <div className="mb-16">
                 <div className="h-14 w-80 bg-gray-200 animate-pulse rounded-sm" />
             </div>
@@ -79,14 +70,14 @@ const Events: React.FC = () => {
     );
 
     if (error) return (
-        <div className="pt-32 pb-20 text-center min-h-[60vh]">
+        <div className="pt-20 md:pt-28 pb-20 text-center min-h-[60vh]">
             <h2 className="text-4xl text-[#FE0002] font-display font-black italic mb-4 uppercase">System Error</h2>
-            <p className="text-gray-400">{error}</p>
+            <p className="text-gray-400">{error instanceof Error ? error.message : 'Failed to load events'}</p>
         </div>
     );
 
     return (
-        <div className="pt-32 pb-20 max-w-7xl mx-auto px-4">
+        <div className="pt-20 md:pt-28 pb-20 max-w-7xl mx-auto px-4">
             <div className="mb-16">
                 <h2 className="text-4xl md:text-5xl font-display font-black italic uppercase tracking-tighter border-b-4 border-[#FE0002] pb-4 inline-block">
                     SCHEDULED <span className="text-[#FE0002]">WARS</span>

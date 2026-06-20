@@ -117,8 +117,8 @@ export const HorizontalEventSkeleton = () => (
 );
 
 export const EventDetailsSkeleton = () => (
-    <div className="min-h-screen bg-gray-50 pb-24">
-        <div className="w-full h-[400px] md:h-[500px] lg:h-[600px] bg-gray-200 animate-pulse pt-20" />
+    <div className="min-h-screen bg-gray-50 pb-24 pt-20">
+        <div className="w-full h-[400px] md:h-[500px] lg:h-[600px] bg-gray-200 animate-pulse" />
         <div className="max-w-7xl mx-auto px-6 pt-4 pb-12">
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 border-b-4 border-gray-100 pb-10">
                 <div className="flex-1 space-y-6">

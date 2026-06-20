@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { getFighterById } from "../lib/api";
-import { Fighter } from "../types";
+import { Fighter, FightRecord } from "../types";
+import { useQuery } from "@tanstack/react-query";
 import { FighterProfileSkeleton } from "./Skeleton";
-import CircularLoader from "./CircularLoader";
 import {
   Instagram,
   Twitter,
@@ -31,29 +31,76 @@ const DetailItem: React.FC<{ label: string; value: string | number }> = ({
   </div>
 );
 
+const FightCard: React.FC<{ fight: FightRecord; showResult: boolean }> = ({
+  fight,
+  showResult,
+}) => (
+  <div className="flex items-center gap-8">
+    <div className="w-20 h-20 bg-white/10 flex items-center justify-center font-display font-black text-3xl italic overflow-hidden rounded-full shrink-0">
+      {fight.opponent_image ? (
+        <Image
+          src={fight.opponent_image}
+          alt={fight.opponent_name}
+          className="w-full h-full object-cover"
+          width={80}
+          height={80}
+        />
+      ) : (
+        <span className="text-[#FE0002]">
+          {fight.opponent_name.charAt(0)}
+        </span>
+      )}
+    </div>
+    <div className="flex-1 min-w-0">
+      {showResult && fight.result && (
+        <p className="text-gray-400 text-xs uppercase font-black tracking-[0.2em] mb-1">
+          {fight.result === "win" ? (
+            <span className="text-green-400">WIN</span>
+          ) : (
+            <span className="text-red-400">LOSS</span>
+          )}
+          {fight.method && <span> &mdash; {fight.method}</span>}
+          {fight.round_ended && <span> &mdash; R{fight.round_ended}</span>}
+          {fight.time_ended && <span> &mdash; {fight.time_ended}</span>}
+        </p>
+      )}
+      {!showResult && (
+        <p className="text-gray-400 text-xs uppercase font-black tracking-[0.2em] mb-1">
+          Next Fight
+        </p>
+      )}
+      <p className="text-2xl font-display font-black uppercase italic leading-none mb-1 truncate">
+        vs {fight.opponent_name}
+      </p>
+      <p className="text-sm text-gray-400 font-bold tracking-wide">
+        {fight.event_name}
+        {fight.is_title_fight && fight.title_name && (
+          <span className="ml-2 text-[#FE0002]">({fight.title_name})</span>
+        )}
+        <span className="mx-2">&middot;</span>
+        {fight.event_date}
+        {fight.event_location && (
+          <>
+            <span className="mx-2">&middot;</span>
+            {fight.event_location}
+          </>
+        )}
+      </p>
+    </div>
+  </div>
+);
+
 const FighterProfile: React.FC = () => {
   const params = useParams();
   const router = useRouter();
-  const [fighter, setFighter] = useState<Fighter | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const loadFighter = async () => {
-      if (!params?.id) return;
-      try {
-        const data = await getFighterById(params.id as string);
-        setFighter(data);
-      } catch (err: any) {
-        setError(err.message || "Failed to load fighter profile");
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadFighter();
-  }, [params?.id]);
+  const { data: fighter, isLoading, error } = useQuery({
+    queryKey: ["fighter", params?.id],
+    queryFn: () => getFighterById(params!.id as string),
+    enabled: !!params?.id,
+  });
 
-  if (loading) return <FighterProfileSkeleton />;
+  if (isLoading) return <FighterProfileSkeleton />;
 
   if (error || !fighter)
     return (
@@ -62,7 +109,7 @@ const FighterProfile: React.FC = () => {
           Profile Offline
         </h1>
         <p className="text-gray-400 mb-8 font-bold tracking-wide uppercase text-sm">
-          {error || "The fighter ID provided does not exist in our database."}
+          {error instanceof Error ? error.message : "The fighter ID provided does not exist in our database."}
         </p>
         <button
           onClick={() => router.push("/fighters")}
@@ -77,7 +124,6 @@ const FighterProfile: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white text-black selection:bg-[#FE0002] selection:text-white pt-20 md:pt-28">
-      {/* Header Content */}
       <PageHeader
         topSection={
           <div className="flex items-center gap-2">
@@ -157,10 +203,8 @@ const FighterProfile: React.FC = () => {
         }
       />
 
-      {/* Content Section */}
       <div className="max-w-7xl mx-auto px-4 md:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
-          {/* Left Column: Stats & Info */}
           <div className="lg:col-span-1 space-y-12">
             <section className="relative group aspect-[3/4.5] md:aspect-[3/4] overflow-hidden">
               <div className="absolute inset-0 border-2 border-black/5 transform translate-x-3 translate-y-3 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-300" />
@@ -193,7 +237,6 @@ const FighterProfile: React.FC = () => {
             </section>
           </div>
 
-          {/* Right Column: Bio & More */}
           <div className="lg:col-span-2 space-y-12">
             <section>
               <h2 className="text-3xl font-display font-black uppercase italic mb-8 border-l-8 border-[#FE0002] pl-4 text-black">
@@ -207,25 +250,31 @@ const FighterProfile: React.FC = () => {
               </div>
             </section>
 
+            {fighter.upcoming_fight && (
+              <section className="bg-black text-white p-10 rounded-none relative overflow-hidden group shadow-2xl skew-y-1">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-[#FE0002] rounded-full blur-[80px] opacity-20 -mr-20 -mt-20 group-hover:opacity-40 transition-opacity" />
+                <div className="-skew-y-1">
+                  <h2 className="text-2xl font-display font-black uppercase italic mb-6 tracking-tight">
+                    Upcoming Bout
+                  </h2>
+                  <FightCard fight={fighter.upcoming_fight} showResult={false} />
+                </div>
+              </section>
+            )}
+
             <section className="bg-black text-white p-10 rounded-none relative overflow-hidden group shadow-2xl skew-y-1">
               <div className="absolute top-0 right-0 w-64 h-64 bg-[#FE0002] rounded-full blur-[80px] opacity-20 -mr-20 -mt-20 group-hover:opacity-40 transition-opacity" />
               <div className="-skew-y-1">
                 <h2 className="text-2xl font-display font-black uppercase italic mb-6 tracking-tight">
-                  Upcoming Bout
+                  {fighter.latest_fight ? "Latest Bout" : "Fight History"}
                 </h2>
-                <div className="flex items-center gap-8">
-                  <div className="w-20 h-20 bg-white/10 flex items-center justify-center font-display font-black text-4xl italic text-[#FE0002]">
-                    ?
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-xs uppercase font-black tracking-[0.2em] mb-1">
-                      Next Event
-                    </p>
-                    <p className="text-3xl font-display font-black uppercase italic leading-none">
-                      CFC Championship Night
-                    </p>
-                  </div>
-                </div>
+                {fighter.latest_fight ? (
+                  <FightCard fight={fighter.latest_fight} showResult={true} />
+                ) : (
+                  <p className="text-gray-400 text-lg font-bold tracking-wide">
+                    No fight history yet
+                  </p>
+                )}
               </div>
             </section>
 
@@ -242,7 +291,6 @@ const FighterProfile: React.FC = () => {
         </div>
       </div>
 
-      {/* Footer Background Pattern */}
       <div className="h-24 bg-gradient-to-t from-gray-100 to-transparent mt-12" />
     </div>
   );

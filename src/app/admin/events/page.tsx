@@ -1,24 +1,34 @@
 "use client";
-import { getAllEvents } from "@/lib/api";
+import { deleteEvent, getAllEvents } from "@/lib/api";
 import { FightEvent } from "@/types";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function AdminEventsPage() {
     const router = useRouter();
-    const [events, setEvents] = useState<FightEvent[]>([]);
-    useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                const response = await getAllEvents();
-                setEvents(response);
-            } catch (error) {
-                console.error("Error fetching events:", error);
-            }
-        };
-        fetchEvents();
-    }, []);
+    const queryClient = useQueryClient();
+
+    const { data: events = [] } = useQuery<FightEvent[]>({
+        queryKey: ["events"],
+        queryFn: async () => {
+            const response = await getAllEvents();
+            return response;
+        },
+    });
+
+    const deleteMutation = useMutation({
+        mutationFn: deleteEvent,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["events"] });
+        },
+    });
+
+    const handleDelete = (id: string) => {
+        if (!confirm("Are you sure you want to delete this event?")) return;
+        deleteMutation.mutate(id);
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
@@ -39,7 +49,6 @@ export default function AdminEventsPage() {
                         key={i}
                         className="flex flex-col h-full bg-white border border-black/5 rounded-sm overflow-hidden shadow-sm group hover:shadow-md transition-shadow"
                     >
-                        {/* Image Container */}
                         <div className="aspect-[16/9] bg-gray-200 relative overflow-hidden">
                             <Image
                                 src={event.image_url || "/og-event-default.jpg"}
@@ -58,7 +67,6 @@ export default function AdminEventsPage() {
                             </div>
                         </div>
 
-                        {/* Content Container */}
                         <div className="p-6 flex flex-col flex-1">
                             <div className="mb-auto">
                                 <div className="flex flex-col gap-2 mb-4">
@@ -77,7 +85,6 @@ export default function AdminEventsPage() {
                                 </div>
                             </div>
 
-                            {/* Action Buttons */}
                             <div className="flex gap-3 pt-6 border-t border-black/5">
                                 <button
                                     onClick={() => router.push(`/admin/events/edit/${event._id}`)}
@@ -86,10 +93,10 @@ export default function AdminEventsPage() {
                                     Edit Event
                                 </button>
                                 <button
-                                    onClick={() => router.push(`/admin/events/${event._id}`)}
-                                    className="flex-1 py-2.5 text-center bg-gray-50 hover:bg-gray-100 text-[10px] font-bold uppercase tracking-widest transition-colors rounded-sm text-black"
+                                    onClick={() => handleDelete(event._id)}
+                                    className="flex-1 py-2.5 text-center bg-red-50 hover:bg-red-100 text-[10px] font-bold uppercase tracking-widest transition-all rounded-sm text-red-600"
                                 >
-                                    View Details
+                                    Delete
                                 </button>
                             </div>
                         </div>
