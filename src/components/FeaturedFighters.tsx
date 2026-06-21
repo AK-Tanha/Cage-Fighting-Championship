@@ -59,7 +59,7 @@ const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
 
 const FeaturedFighters: React.FC = () => {
     const { data: fighters, isLoading } = useQuery({
-        queryKey: ["fighters"],
+        queryKey: ["featured-fighters"],
         queryFn: async () => {
             try {
                 const data = await getAllFighters();
