@@ -1,6 +1,7 @@
 "use client";
 
 import { getFighterById, updateFighter, uploadImage } from "@/lib/api";
+import { parseRecord } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -27,6 +28,7 @@ const FighterEditPage = () => {
     date_of_birth: "",
     bio: "",
     image_url: "",
+    status: "active",
   });
 
   const [styleInput, setStyleInput] = useState("");
@@ -36,25 +38,32 @@ const FighterEditPage = () => {
       if (!fighterId) return;
       try {
         const fighter = await getFighterById(fighterId);
+        const pi = fighter.personal_info || {}
+        const pa = fighter.physical_attributes || {}
+        const career = fighter.career || {}
+        const media = fighter.media || {}
+        const rec = fighter.record
+
         setData({
-          name: fighter.name || "",
-          nick_name: fighter.nick_name || "",
-          weight_class: fighter.weight_class || "",
-          record: fighter.record || "",
-          nationality: fighter.nationality || "",
-          club: fighter.club || "",
-          date_of_birth: fighter.date_of_birth
-            ? fighter.date_of_birth.split("T")[0]
+          name: pi.full_name || "",
+          nick_name: pi.nickname || "",
+          weight_class: pa.weight_class || "",
+          record: rec ? `${rec.wins}-${rec.losses}-${rec.draws}` : "",
+          nationality: pi.nationality || "",
+          club: career.gym || "",
+          date_of_birth: pi.date_of_birth
+            ? pi.date_of_birth.split("T")[0]
             : "",
-          bio: fighter.bio || "",
-          image_url: fighter.image_url || "",
+          bio: career.bio || "",
+          image_url: media.profile_image || "",
+          status: fighter.status || "active",
         });
 
-        if (fighter.style) {
-          if (Array.isArray(fighter.style)) {
-            setStyleInput(fighter.style.join(", "));
+        if (career.styles) {
+          if (Array.isArray(career.styles)) {
+            setStyleInput(career.styles.join(", "));
           } else {
-            setStyleInput(fighter.style);
+            setStyleInput(career.styles as any);
           }
         }
       } catch (err: any) {
@@ -69,7 +78,7 @@ const FighterEditPage = () => {
   }, [fighterId]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setData((prev) => ({ ...prev, [name]: value }));
@@ -103,17 +112,28 @@ const FighterEditPage = () => {
         .map((s) => s.trim())
         .filter((s) => s !== "");
 
+      const stylesList = styles.length > 0 ? styles : undefined;
+
       const fighterData = {
-        name: data.name,
-        nick_name: data.nick_name,
-        weight_class: data.weight_class,
-        record: data.record,
-        nationality: data.nationality,
-        club: data.club,
-        date_of_birth: data.date_of_birth,
-        bio: data.bio,
-        image_url: data.image_url,
-        style: styles,
+        personal_info: {
+          full_name: data.name,
+          nickname: data.nick_name || undefined,
+          date_of_birth: data.date_of_birth || undefined,
+          nationality: data.nationality || undefined,
+        },
+        physical_attributes: {
+          weight_class: data.weight_class,
+        },
+        career: {
+          gym: data.club || undefined,
+          styles: stylesList,
+          bio: data.bio || undefined,
+        },
+        record: parseRecord(data.record || "0-0-0"),
+        media: {
+          profile_image: data.image_url || undefined,
+        },
+        status: data.status,
       };
 
       await updateFighter(fighterId, fighterData as any);
@@ -281,6 +301,22 @@ const FighterEditPage = () => {
                     onChange={handleChange}
                     className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
                   />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Status
+                  </label>
+                  <select
+                    name="status"
+                    value={data.status}
+                    onChange={handleChange}
+                    className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
+                  >
+                    <option value="active">Active</option>
+                    <option value="injured">Injured</option>
+                    <option value="retired">Retired</option>
+                  </select>
                 </div>
               </div>
             </div>

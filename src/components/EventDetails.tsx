@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React, { useRef } from "react";
 import { getAllFighters, getAllReferees, getEventById } from "../lib/api";
-import { FightEvent, Fighter } from "../types";
+import { FightEvent, Fighter, formatRecord } from "../types";
 import { useQuery } from "@tanstack/react-query";
 import { EventDetailsSkeleton } from "./Skeleton";
 import FighterHoverCard from "./FighterHoverCard";
@@ -50,19 +50,19 @@ const FightRow: React.FC<{
               href={`/fighters/${f1?._id}`}
               className="hover:text-[#FE0002] transition-colors"
             >
-              {f1?.name || "Unknown Fighter"}
+              {f1?.personal_info?.full_name || "Unknown Fighter"}
             </Link>
           </h4>
           <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
-            {f1?.record ? f1.record : "0-0"}
+            {formatRecord(f1?.record)}
           </p>
         </div>
         <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-none overflow-hidden border border-black/5 group-hover:border-[#FE0002]/30 transition-all bg-gray-50 relative">
           <Image
             src={
-              f1?.image_url || '/og-fighter-default.jpg'
+              f1?.media?.profile_image || '/og-fighter-default.jpg'
             }
-            alt={f1?.name || "Fighter Image"}
+            alt={f1?.personal_info?.full_name || "Fighter Image"}
             className="w-full h-full object-cover object-top filter grayscale group-hover:grayscale-0 transition-all duration-500"
             fill
             sizes="56px"
@@ -109,9 +109,9 @@ const FightRow: React.FC<{
         <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-none overflow-hidden border border-black/5 group-hover:border-[#FE0002]/30 transition-all bg-gray-50 relative">
           <Image
             src={
-              f2?.image_url || `https://picsum.photos/seed/${f2?._id}/300/300`
+              f2?.media?.profile_image || `https://picsum.photos/seed/${f2?._id}/300/300`
             }
-            alt={f2?.name || "Fighter Image"}
+            alt={f2?.personal_info?.full_name || "Fighter Image"}
             className="w-full h-full object-cover object-top filter grayscale group-hover:grayscale-0 transition-all duration-500"
             fill
             sizes="56px"
@@ -123,11 +123,11 @@ const FightRow: React.FC<{
               href={`/fighters/${f2?._id}`}
               className="hover:text-[#FE0002] transition-colors"
             >
-              {f2?.name || "Unknown Fighter"}
+              {f2?.personal_info?.full_name || "Unknown Fighter"}
             </Link>
           </h4>
           <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
-            {f2?.record || "0-0"}
+            {formatRecord(f2?.record)}
           </p>
         </div>
         <div className="w-6 shrink-0 hidden md:block" />

@@ -374,7 +374,7 @@ const EventCreate = () => {
                           </option>
                           {fighters.map((f) => (
                             <option key={f._id} value={f._id}>
-                              {f.name} ({f.weight_class})
+                              {f.personal_info?.full_name} ({f.physical_attributes?.weight_class})
                             </option>
                           ))}
                         </select>
@@ -397,7 +397,7 @@ const EventCreate = () => {
                           </option>
                           {fighters.map((f) => (
                             <option key={f._id} value={f._id}>
-                              {f.name} ({f.weight_class})
+                              {f.personal_info?.full_name} ({f.physical_attributes?.weight_class})
                             </option>
                           ))}
                         </select>

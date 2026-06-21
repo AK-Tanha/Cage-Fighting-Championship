@@ -1,6 +1,7 @@
 "use client";
 
 import { createFighter, uploadImage } from "@/lib/api";
+import { parseRecord } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -23,12 +24,13 @@ const FighterCreate = () => {
     date_of_birth: "",
     bio: "",
     image_url: "",
+    status: "active",
   });
 
   const [styleInput, setStyleInput] = useState("");
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setData((prev) => ({ ...prev, [name]: value }));
@@ -57,23 +59,33 @@ const FighterCreate = () => {
     setError(null);
 
     try {
-      // Process style from input string
       const styles = styleInput
         .split(",")
         .map((s) => s.trim())
         .filter((s) => s !== "");
 
+      const stylesList = styles.length > 0 ? styles : undefined;
+
       const fighterData = {
-        name: data.name,
-        nick_name: data.nick_name,
-        weight_class: data.weight_class,
-        record: data.record,
-        nationality: data.nationality,
-        club: data.club,
-        date_of_birth: data.date_of_birth,
-        bio: data.bio,
-        image_url: data.image_url,
-        style: styles,
+        personal_info: {
+          full_name: data.name,
+          nickname: data.nick_name || undefined,
+          date_of_birth: data.date_of_birth || undefined,
+          nationality: data.nationality || undefined,
+        },
+        physical_attributes: {
+          weight_class: data.weight_class,
+        },
+        career: {
+          gym: data.club || undefined,
+          styles: stylesList,
+          bio: data.bio || undefined,
+        },
+        record: parseRecord(data.record || "0-0-0"),
+        media: {
+          profile_image: data.image_url || undefined,
+        },
+        status: data.status,
       };
 
       await createFighter(fighterData as any);
@@ -232,6 +244,22 @@ const FighterCreate = () => {
                     onChange={handleChange}
                     className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
                   />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    Status
+                  </label>
+                  <select
+                    name="status"
+                    value={data.status}
+                    onChange={handleChange}
+                    className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
+                  >
+                    <option value="active">Active</option>
+                    <option value="injured">Injured</option>
+                    <option value="retired">Retired</option>
+                  </select>
                 </div>
               </div>
             </div>

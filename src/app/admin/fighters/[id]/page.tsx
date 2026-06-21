@@ -1,6 +1,6 @@
 "use client";
 import { getFighterById } from "@/lib/api";
-import { Fighter } from "@/types";
+import { Fighter, formatRecord } from "@/types";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -51,6 +51,12 @@ const FighterDetailsPage = () => {
     );
   }
 
+  const pi = fighter.personal_info || {}
+  const pa = fighter.physical_attributes || {}
+  const career = fighter.career || {}
+  const media = fighter.media || {}
+  const recordStr = formatRecord(fighter.record)
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -84,8 +90,8 @@ const FighterDetailsPage = () => {
       <div className="bg-white border border-black/5 rounded-sm overflow-hidden shadow-sm grid grid-cols-1 md:grid-cols-12">
         <div className="md:col-span-4 bg-black aspect-square md:aspect-auto relative min-h-[400px]">
           <Image
-            src={fighter.image_url || "/og-fighter-default.jpg"}
-            alt={fighter.name}
+            src={media.profile_image || "/og-fighter-default.jpg"}
+            alt={pi.full_name}
             className="w-full h-full object-cover"
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
@@ -96,10 +102,10 @@ const FighterDetailsPage = () => {
         <div className="md:col-span-8 p-8 md:p-12">
           <div className="mb-8">
             <div className="text-[#FE0002] font-bold uppercase tracking-[0.2em] text-[10px] mb-2">
-              {fighter.style?.join(', ') || "Fighter"}
+              {career.styles?.join(', ') || "Fighter"}
             </div>
             <h1 className="text-4xl md:text-5xl font-black font-display uppercase tracking-tighter mb-4 leading-none">
-              {fighter.name}
+              {pi.full_name}
             </h1>
             <div className="flex flex-wrap gap-4 mt-4">
               <div className="px-4 py-2 bg-gray-50 border border-black/5 rounded-sm">
@@ -107,7 +113,7 @@ const FighterDetailsPage = () => {
                   Weight Class
                 </span>
                 <span className="text-sm font-bold uppercase tracking-tight">
-                  {fighter.weight_class}
+                  {pa.weight_class}
                 </span>
               </div>
               <div className="px-4 py-2 bg-gray-50 border border-black/5 rounded-sm">
@@ -115,7 +121,7 @@ const FighterDetailsPage = () => {
                   Record
                 </span>
                 <span className="text-sm font-bold uppercase tracking-tight">
-                  {fighter.record || "0-0"}
+                  {recordStr}
                 </span>
               </div>
               <div className="px-4 py-2 bg-gray-50 border border-black/5 rounded-sm">
@@ -123,7 +129,15 @@ const FighterDetailsPage = () => {
                   Nationality
                 </span>
                 <span className="text-sm font-bold uppercase tracking-tight">
-                  {fighter.nationality || "N/A"}
+                  {pi.nationality || "N/A"}
+                </span>
+              </div>
+              <div className="px-4 py-2 bg-gray-50 border border-black/5 rounded-sm">
+                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-1">
+                  Status
+                </span>
+                <span className="text-sm font-bold uppercase tracking-tight">
+                  {fighter.status || "active"}
                 </span>
               </div>
             </div>
@@ -136,7 +150,7 @@ const FighterDetailsPage = () => {
                   Date of Birth
                 </span>
                 <span className="text-sm font-medium">
-                  {fighter.date_of_birth || "Not specified"}
+                  {pi.date_of_birth || "Not specified"}
                 </span>
               </div>
               <div>
@@ -144,7 +158,7 @@ const FighterDetailsPage = () => {
                   Club / Gym
                 </span>
                 <span className="text-sm font-medium">
-                  {fighter.club || "Independent"}
+                  {career.gym || "Independent"}
                 </span>
               </div>
             </div>
@@ -154,7 +168,7 @@ const FighterDetailsPage = () => {
                   Primary Style
                 </span>
                 <span className="text-sm font-medium">
-                  {fighter.style?.join(", ") || "Mixed Martial Arts"}
+                  {career.styles?.join(", ") || "Mixed Martial Arts"}
                 </span>
               </div>
             </div>
@@ -165,7 +179,7 @@ const FighterDetailsPage = () => {
               Biography
             </h3>
             <p className="text-gray-600 leading-relaxed text-sm">
-              {fighter.bio || "No biography available for this fighter."}
+              {career.bio || "No biography available for this fighter."}
             </p>
           </div>
         </div>

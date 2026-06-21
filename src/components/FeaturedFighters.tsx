@@ -1,7 +1,7 @@
 "use client";
 
 import { getAllFighters } from "@/lib/api";
-import { Fighter } from "@/types";
+import { Fighter, formatRecord } from "@/types";
 import { FIGHTERS } from "@/constants";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -9,7 +9,10 @@ import Link from "next/link";
 import React from "react";
 
 const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
-    const record = fighter.record || "0-0";
+    const pi = fighter.personal_info || {}
+    const pa = fighter.physical_attributes || {}
+    const media = fighter.media || {}
+    const recordStr = formatRecord(fighter.record)
 
     return (
         <Link
@@ -18,8 +21,8 @@ const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
         >
             <div className="absolute inset-0 z-0">
                 <Image
-                    src={fighter.image_url || `https://picsum.photos/seed/${fighter.name}/350/254`}
-                    alt={fighter.name}
+                    src={media.profile_image || `https://picsum.photos/seed/${pi.full_name}/350/254`}
+                    alt={pi.full_name}
                     className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500 ease-out"
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -33,15 +36,15 @@ const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
                 <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                     <div className="mb-1">
                         <span className="inline-block bg-black text-white font-display font-black text-[10px] md:text-xs uppercase tracking-[0.2em] px-2 py-0.5 skew-x-[-10deg]">
-                            {fighter.weight_class}
+                            {pa.weight_class}
                         </span>
                     </div>
                     <h3 className="text-2xl md:text-3xl font-display font-black uppercase italic leading-[0.85] tracking-tighter text-black mb-2 group-hover:text-[#FE0002] transition-colors duration-200 drop-shadow-sm">
-                        {fighter.name}
+                        {pi.full_name}
                     </h3>
                     <div className="flex items-center gap-3 border-t-2 border-black/10 pt-2 group-hover:border-[#FE0002]/50 transition-colors">
                         <p className="font-display font-black text-xl text-black tracking-tighter leading-none">
-                            {record}
+                            {recordStr}
                         </p>
                         <span className="text-[#FE0002] font-bold text-[9px] uppercase tracking-widest">Pro Record</span>
                     </div>

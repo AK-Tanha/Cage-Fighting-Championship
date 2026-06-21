@@ -1,41 +1,103 @@
+export interface PersonalInfo {
+    full_name: string
+    nickname?: string
+    date_of_birth?: string
+    nationality?: string
+}
+
+export interface PhysicalAttributes {
+    weight_class: string
+    weight_kg?: number
+    height_cm?: number
+    reach_cm?: number
+}
+
+export interface YearsActive {
+    start?: number
+    end?: number
+}
+
+export interface Career {
+    gym?: string
+    styles?: string[]
+    bio?: string
+    years_active?: YearsActive
+}
+
+export interface Record {
+    wins: number
+    losses: number
+    draws: number
+    no_contests?: number
+}
+
+export interface Stats {
+    win_streak: number
+    finish_rate?: number
+}
+
+export interface Ranking {
+    global?: number
+    national?: number
+}
+
+export interface Media {
+    profile_image?: string
+    banner_image?: string
+}
+
 export interface Fighter {
     _id: string
-    name: string
-    nick_name?: string
-    weight_class: string
-    weight_class_history?: string[]
-    record: string
-    nationality?: string
-    club?: string
-    date_of_birth?: string
-    style?: string[]
-    bio?: string
-    image_url?: string
+    personal_info: PersonalInfo
+    physical_attributes: PhysicalAttributes
+    career?: Career
+    record?: Record
+    stats?: Stats
+    status: string
+    ranking?: Ranking
+    media?: Media
+    last_fights: string[]
+    slug?: string
+    created_at?: string
+    updated_at?: string
 }
 
 export interface FighterCreate {
-    name: string
-    weight_class: string
-    record: string
-    nationality?: string
-    club?: string
-    date_of_birth?: string
-    style?: string[]
-    bio?: string
-    image_url?: string
+    personal_info: PersonalInfo
+    physical_attributes: PhysicalAttributes
+    career?: Career
+    record?: Record
+    status?: string
+    ranking?: Ranking
+    media?: Media
+    slug?: string
 }
 
 export interface FighterUpdate {
-    name?: string
-    weight_class?: string
-    weight_class_history?: string[]
-    record?: string
-    nationality?: string
-    club?: string
-    date_of_birth?: string
-    style?: string[]
-    bio?: string
-    image_url?: string
+    personal_info?: PersonalInfo
+    physical_attributes?: PhysicalAttributes
+    career?: Career
+    record?: Record
+    stats?: Stats
+    status?: string
+    ranking?: Ranking
+    media?: Media
+    last_fights?: string[]
+    slug?: string
+}
+
+export function formatRecord(record?: Record): string {
+    if (!record) return "0-0-0"
+    return `${record.wins}-${record.losses}-${record.draws}`
+}
+
+export function parseRecord(str: string): Record {
+    const parts = str.split("-").map(Number)
+    return {
+        wins: parts[0] || 0,
+        losses: parts[1] || 0,
+        draws: parts[2] || 0,
+    }
 }
 
 export interface Referee {

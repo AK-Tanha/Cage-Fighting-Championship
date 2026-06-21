@@ -1,5 +1,6 @@
 import FighterProfile from "@/components/FighterProfile";
 import { getFighterById } from "@/lib/api";
+import { formatRecord } from "@/types";
 import type { Metadata } from "next";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -7,13 +8,17 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         const { id } = await params;
         const fighter = await getFighterById(id);
 
-        const record = fighter.record || '0-0';
+        const pi = fighter.personal_info || {}
+        const pa = fighter.physical_attributes || {}
+        const media = fighter.media || {}
+        const career = fighter.career || {}
+        const recordStr = formatRecord(fighter.record)
 
-        const title = `${fighter.name} ${fighter.nick_name ? `"${fighter.nick_name}"` : ''} | CFC Fighter Profile`;
-        const description = `${fighter.name} - ${fighter.weight_class} division fighter with a ${record} record. ${fighter.bio ? fighter.bio.substring(0, 150) + '...' : 'Elite MMA athlete competing in the Cage Fighting Championship.'}`;
+        const title = `${pi.full_name} ${pi.nickname ? `"${pi.nickname}"` : ''} | CFC Fighter Profile`;
+        const description = `${pi.full_name} - ${pa.weight_class} division fighter with a ${recordStr} record. ${career.bio ? career.bio.substring(0, 150) + '...' : 'Elite MMA athlete competing in the Cage Fighting Championship.'}`;
 
         return {
-            title: fighter.name,
+            title: pi.full_name,
             description,
             openGraph: {
                 title,
@@ -22,10 +27,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
                 type: 'profile',
                 images: [
                     {
-                        url: fighter.image_url || `/og-fighter-default.jpg`,
+                        url: media.profile_image || `/og-fighter-default.jpg`,
                         width: 1200,
                         height: 630,
-                        alt: `${fighter.name} - CFC Fighter`,
+                        alt: `${pi.full_name} - CFC Fighter`,
                     }
                 ],
             },
@@ -33,7 +38,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
                 card: "summary_large_image",
                 title,
                 description,
-                images: [fighter.image_url || `/og-fighter-default.jpg`],
+                images: [media.profile_image || `/og-fighter-default.jpg`],
             },
         };
     } catch (error) {

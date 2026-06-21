@@ -1,6 +1,6 @@
 "use client";
 import { getAllFighters, getAllReferees, getEventById } from "@/lib/api";
-import { Fighter, FightEvent } from "@/types";
+import { Fighter, FightEvent, formatRecord } from "@/types";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -202,17 +202,17 @@ const EventDetailsPage = () => {
                             <div className="relative w-10 h-10 overflow-hidden shrink-0 bg-gray-100 rounded-sm">
                               <Image
                                 src={
-                                  f1?.image_url ||
+                                  f1?.media?.profile_image ||
                                   "/og-fighter-default.jpg"
                                 }
-                                alt={f1?.name || "Fighter"}
+                                alt={f1?.personal_info?.full_name || "Fighter"}
                                 fill
                                 className="object-cover object-top"
                                 sizes="40px"
                               />
                             </div>
                             <span className="font-semibold text-xs whitespace-nowrap pr-2">
-                              {f1?.name ||
+                              {f1?.personal_info?.full_name ||
                                 fight.fighter1Name ||
                                 "Unknown Fighter"}
                             </span>
@@ -237,17 +237,17 @@ const EventDetailsPage = () => {
                             <div className="relative w-10 h-10 overflow-hidden shrink-0 bg-gray-100 rounded-sm">
                               <Image
                                 src={
-                                  f2?.image_url ||
+                                  f2?.media?.profile_image ||
                                   "/og-fighter-default.jpg"
                                 }
-                                alt={f2?.name || "Fighter"}
+                                alt={f2?.personal_info?.full_name || "Fighter"}
                                 fill
                                 className="object-cover object-top"
                                 sizes="40px"
                               />
                             </div>
                             <span className="font-semibold text-xs whitespace-nowrap pr-2">
-                              {f2?.name ||
+                              {f2?.personal_info?.full_name ||
                                 fight.fighter2Name ||
                                 "Unknown Fighter"}
                             </span>

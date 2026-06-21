@@ -1,6 +1,6 @@
 "use client";
 import { deleteFighter, getAllFighters } from "@/lib/api";
-import { Fighter } from "@/types";
+import { Fighter, formatRecord } from "@/types";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
@@ -74,57 +74,65 @@ export default function AdminFightersPage() {
               </tr>
             </thead>
             <tbody className="text-sm font-medium">
-              {fighters.map((fighter, i) => (
-                <tr
-                  key={i}
-                  className="border-b border-black/5 hover:bg-gray-50 transition-colors"
-                >
-                  <td className="p-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-black rounded-sm overflow-hidden relative">
-                        <Image 
-                            src={fighter.image_url || "/og-fighter-default.jpg"} 
-                            alt="fighter image" 
-                            className="w-full h-full object-cover object-top" 
-                            fill 
+              {fighters.map((fighter, i) => {
+                const pi = fighter.personal_info || {}
+                const pa = fighter.physical_attributes || {}
+                const career = fighter.career || {}
+                const media = fighter.media || {}
+                const recordStr = formatRecord(fighter.record)
+
+                return (
+                  <tr
+                    key={i}
+                    className="border-b border-black/5 hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="p-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-black rounded-sm overflow-hidden relative">
+                          <Image
+                            src={media.profile_image || "/og-fighter-default.jpg"}
+                            alt="fighter image"
+                            className="w-full h-full object-cover object-top"
+                            fill
                             sizes="40px"
-                        />
-                      </div>
-                      <div>
-                        <div className="font-display font-black uppercase text-base tracking-tighter">
-                          {fighter.name}
+                          />
+                        </div>
+                        <div>
+                          <div className="font-display font-black uppercase text-base tracking-tighter">
+                            {pi.full_name}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="p-6 text-center font-bold text-gray-700">
-                    {fighter.record}
-                  </td>
-                  <td className="p-6 uppercase text-gray-500 text-[10px] tracking-widest font-bold">
-                    {fighter.weight_class}
-                  </td>
-                  <td className="p-6 text-center">
-                    <span className="bg-green-100 text-green-700 px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
-                      {fighter.style?.join(", ")}
-                    </span>
-                  </td>
-                  <td className="p-6 text-right space-x-2 whitespace-nowrap">
-                    <button className="w-8 h-8 rounded border border-black/10 text-gray-600 hover:text-black hover:bg-black/5 hover:border-black transition-all">
-                      <Link href={`/admin/fighters/${fighter._id}`}>
-                        <i className="fa-solid fa-eye text-xs"></i>
-                      </Link>
-                    </button>
-                    <button className="w-8 h-8 rounded border border-black/10 text-gray-600 hover:text-black hover:bg-black/5 hover:border-black transition-all">
-                      <Link href={`/admin/fighters/edit/${fighter._id}`}>
-                        <i className="fa-solid fa-pen text-xs"></i>
-                      </Link>
-                    </button>
-                    <button className="w-8 h-8 rounded border border-black/10 text-red-500 hover:text-white hover:bg-red-500 hover:border-red-500 transition-all" onClick={() => handleDelete(fighter._id)}>
-                      <i className="fa-solid fa-trash text-xs"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="p-6 text-center font-bold text-gray-700">
+                      {recordStr}
+                    </td>
+                    <td className="p-6 uppercase text-gray-500 text-[10px] tracking-widest font-bold">
+                      {pa.weight_class}
+                    </td>
+                    <td className="p-6 text-center">
+                      <span className="bg-green-100 text-green-700 px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
+                        {career.styles?.join(", ")}
+                      </span>
+                    </td>
+                    <td className="p-6 text-right space-x-2 whitespace-nowrap">
+                      <button className="w-8 h-8 rounded border border-black/10 text-gray-600 hover:text-black hover:bg-black/5 hover:border-black transition-all">
+                        <Link href={`/admin/fighters/${fighter._id}`}>
+                          <i className="fa-solid fa-eye text-xs"></i>
+                        </Link>
+                      </button>
+                      <button className="w-8 h-8 rounded border border-black/10 text-gray-600 hover:text-black hover:bg-black/5 hover:border-black transition-all">
+                        <Link href={`/admin/fighters/edit/${fighter._id}`}>
+                          <i className="fa-solid fa-pen text-xs"></i>
+                        </Link>
+                      </button>
+                      <button className="w-8 h-8 rounded border border-black/10 text-red-500 hover:text-white hover:bg-red-500 hover:border-red-500 transition-all" onClick={() => handleDelete(fighter._id)}>
+                        <i className="fa-solid fa-trash text-xs"></i>
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { getFighterById } from "../lib/api";
-import { Fighter, FightRecord } from "../types";
+import { Fighter, FightRecord, formatRecord } from "../types";
 import { useQuery } from "@tanstack/react-query";
 import { FighterProfileSkeleton } from "./Skeleton";
 import {
@@ -120,7 +120,11 @@ const FighterProfile: React.FC = () => {
       </div>
     );
 
-  const record = fighter.record || "0-0";
+  const pi = fighter.personal_info || {}
+  const pa = fighter.physical_attributes || {}
+  const career = fighter.career || {}
+  const media = fighter.media || {}
+  const recordStr = formatRecord(fighter.record)
 
   return (
     <div className="min-h-screen bg-white text-black selection:bg-[#FE0002] selection:text-white pt-20 md:pt-28">
@@ -129,17 +133,17 @@ const FighterProfile: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="bg-[#FE0002] text-white px-3 py-1 text-[10px] font-black uppercase italic tracking-widest skew-x-[-15deg]">
               <span className="inline-block skew-x-[15deg]">
-                {fighter.weight_class}
+                {pa.weight_class}
               </span>
             </span>
           </div>
         }
-        title={fighter.name}
+        title={pi.full_name}
         subtitle={
-          fighter.nick_name && (
+          pi.nickname && (
             <span className="bg-[#FE0002] text-white px-4 py-1 text-sm md:text-lg font-display font-black italic uppercase tracking-wider skew-x-[-15deg] inline-block">
               <span className="inline-block skew-x-[15deg]">
-                {fighter.nick_name}
+                {pi.nickname}
               </span>
             </span>
           )
@@ -150,7 +154,7 @@ const FighterProfile: React.FC = () => {
               Professional Record
             </p>
             <p className="text-4xl md:text-6xl font-display font-black text-black tracking-tight leading-none">
-              {record}
+              {recordStr}
             </p>
           </div>
         }
@@ -210,10 +214,10 @@ const FighterProfile: React.FC = () => {
               <div className="absolute inset-0 border-2 border-black/5 transform translate-x-3 translate-y-3 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-300" />
               <Image
                 src={
-                  fighter.image_url ||
-                  `https://picsum.photos/seed/${fighter.name}/600/900`
+                  media.profile_image ||
+                  `https://picsum.photos/seed/${pi.full_name}/600/900`
                 }
-                alt={fighter.name}
+                alt={pi.full_name}
                 className="w-full h-full object-cover object-top z-10 shadow-lg"
                 fill
                 sizes="(max-width: 1024px) 100vw, 33vw"
@@ -226,13 +230,13 @@ const FighterProfile: React.FC = () => {
                 Attributes
               </h2>
               <div className="grid grid-cols-1 gap-y-2">
-                <DetailItem label="Division" value={fighter.weight_class} />
+                <DetailItem label="Division" value={pa.weight_class} />
                 <DetailItem
                   label="Style"
-                  value={fighter.style?.join(", ") || "All-Rounder"}
+                  value={career.styles?.join(", ") || "All-Rounder"}
                 />
-                <DetailItem label="Status" value="Active" />
-                <DetailItem label="Hometown" value="Unknown" />
+                <DetailItem label="Status" value={fighter.status || "Active"} />
+                <DetailItem label="Nationality" value={pi.nationality || "Unknown"} />
               </div>
             </section>
           </div>
@@ -244,7 +248,7 @@ const FighterProfile: React.FC = () => {
               </h2>
               <div className="prose prose-lg max-w-none">
                 <p className="text-xl text-gray-600 leading-relaxed font-medium">
-                  {fighter.bio ||
+                  {career.bio ||
                     "No biography available for this fighter. Legend has it they prefer to let their performances inside the cage speak for themselves."}
                 </p>
               </div>
