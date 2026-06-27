@@ -6,7 +6,7 @@ import { EVENTS } from "@/constants";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useMemo } from "react";
 
 const EventCard: React.FC<{ event: FightEvent }> = ({ event }) => (
     <Link
@@ -51,12 +51,17 @@ const FeaturedEvents: React.FC = () => {
         queryFn: async () => {
             try {
                 const data = await getAllEvents();
-                return (Array.isArray(data) ? data : []).slice(0, 3);
+                return Array.isArray(data) ? data : [];
             } catch {
-                return EVENTS.slice(0, 3);
+                return EVENTS;
             }
         },
     });
+
+    const upcomingEvents = useMemo(
+        () => (events ?? []).filter((e) => new Date(e.date) >= new Date()).slice(0, 3),
+        [events],
+    );
 
     return (
         <section className="py-20 md:py-28 bg-white border-t border-black/5">
@@ -91,11 +96,15 @@ const FeaturedEvents: React.FC = () => {
                             </div>
                         ))}
                     </div>
-                ) : (
+                ) : upcomingEvents.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {(events ?? []).map((event) => (
+                        {upcomingEvents.map((event) => (
                             <EventCard key={event._id} event={event} />
                         ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-16 text-gray-400 font-display italic uppercase text-sm tracking-widest">
+                        No upcoming events scheduled
                     </div>
                 )}
             </div>

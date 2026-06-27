@@ -8,6 +8,11 @@ import { FightEvent } from '../types';
 import { useQuery } from '@tanstack/react-query';
 import { HorizontalEventSkeleton } from './Skeleton';
 
+const now = new Date();
+
+const isUpcoming = (event: FightEvent) => new Date(event.date) >= now;
+const isPast = (event: FightEvent) => new Date(event.date) < now;
+
 const Events: React.FC = () => {
     const { data: events = [], isLoading, error } = useQuery({
         queryKey: ["events"],
@@ -17,7 +22,10 @@ const Events: React.FC = () => {
         },
     });
 
-    const eventItems = useMemo(() => events.map((event: FightEvent) => (
+    const upcomingEvents = useMemo(() => events.filter(isUpcoming), [events]);
+    const pastEvents = useMemo(() => events.filter(isPast), [events]);
+
+    const renderEventCard = (event: FightEvent) => (
         <div key={event._id} className="group relative bg-white rounded-lg overflow-hidden flex flex-col lg:flex-row hover:shadow-[0_0_30px_rgba(0,0,0,0.1)] transition-all border border-black/5">
             <div className="lg:w-2/5 h-64 lg:h-auto relative overflow-hidden">
                 <Image
@@ -31,6 +39,9 @@ const Events: React.FC = () => {
             </div>
 
             <div className="p-8 lg:p-12 flex-1 flex flex-col justify-center">
+                {isPast(event) && (
+                    <p className="text-gray-400 font-bold text-[10px] tracking-widest mb-2 uppercase">Past Event</p>
+                )}
                 <p className="text-[#FE0002] font-bold text-sm tracking-widest mb-2 uppercase">
                     {new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                 </p>
@@ -41,20 +52,32 @@ const Events: React.FC = () => {
                         <span className="flex items-center gap-2"><i className="fa-solid fa-trophy text-[#FE0002]"></i> {event.fights.length} Fights Card</span>
                     )}
                 </div>
-                <div className="flex gap-4">
-                    <button className="bg-[#FE0002] text-white px-8 py-3 font-display font-bold uppercase tracking-widest hover:bg-black transition-all">
-                        Get Tickets
-                    </button>
-                    <Link
-                        href={`/events/${event._id}`}
-                        className="border border-black/20 text-center text-black px-8 py-3 font-display font-bold uppercase tracking-widest hover:border-[#FE0002] transition-all"
-                    >
-                        Fight Details
-                    </Link>
-                </div>
+                {isUpcoming(event) && (
+                    <div className="flex gap-4">
+                        <button className="bg-[#FE0002] text-white px-8 py-3 font-display font-bold uppercase tracking-widest hover:bg-black transition-all">
+                            Get Tickets
+                        </button>
+                        <Link
+                            href={`/events/${event._id}`}
+                            className="border border-black/20 text-center text-black px-8 py-3 font-display font-bold uppercase tracking-widest hover:border-[#FE0002] transition-all"
+                        >
+                            Fight Details
+                        </Link>
+                    </div>
+                )}
+                {isPast(event) && (
+                    <div className="flex gap-4">
+                        <Link
+                            href={`/events/${event._id}`}
+                            className="border border-black/20 text-center text-black px-8 py-3 font-display font-bold uppercase tracking-widest hover:border-[#FE0002] transition-all"
+                        >
+                            Results & Details
+                        </Link>
+                    </div>
+                )}
             </div>
         </div>
-    )), [events]);
+    );
 
     if (isLoading) return (
         <div className="pt-20 md:pt-28 pb-20 max-w-7xl mx-auto px-4">
@@ -76,6 +99,8 @@ const Events: React.FC = () => {
         </div>
     );
 
+    const hasAnyEvents = upcomingEvents.length > 0 || pastEvents.length > 0;
+
     return (
         <div className="pt-20 md:pt-28 pb-20 max-w-7xl mx-auto px-4">
             <div className="mb-16">
@@ -84,13 +109,32 @@ const Events: React.FC = () => {
                 </h2>
             </div>
 
-            {events.length === 0 ? (
+            {!hasAnyEvents ? (
                 <div className="text-center py-20 text-xl text-gray-500 font-display italic uppercase">
                     No confirmed dates in the chamber. Check back soon for the next war.
                 </div>
             ) : (
-                <div className="space-y-12">
-                    {eventItems}
+                <div className="space-y-20">
+                    {upcomingEvents.length > 0 && (
+                        <div>
+                            <h3 className="text-sm font-black uppercase tracking-[0.3em] text-[#FE0002] mb-8">
+                                Upcoming Events
+                            </h3>
+                            <div className="space-y-8">
+                                {upcomingEvents.map(renderEventCard)}
+                            </div>
+                        </div>
+                    )}
+                    {pastEvents.length > 0 && (
+                        <div>
+                            <h3 className="text-sm font-black uppercase tracking-[0.3em] text-gray-400 mb-8">
+                                Past Events
+                            </h3>
+                            <div className="space-y-8 opacity-70">
+                                {pastEvents.map(renderEventCard)}
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
         </div>

@@ -60,9 +60,11 @@ export default function AdminEventsPage() {
                             />
                             <div className="absolute top-4 right-4 z-10">
                                 <span
-                                    className="px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded-sm shadow-sm bg-[#FE0002] text-white"
+                                    className={`px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded-sm shadow-sm text-white ${
+                                        new Date(event.date) >= new Date() ? "bg-[#FE0002]" : "bg-gray-500"
+                                    }`}
                                 >
-                                    Upcoming
+                                    {new Date(event.date) >= new Date() ? "Upcoming" : "Past"}
                                 </span>
                             </div>
                         </div>
@@ -85,18 +87,24 @@ export default function AdminEventsPage() {
                                 </div>
                             </div>
 
-                            <div className="flex gap-3 pt-6 border-t border-black/5">
+                            <div className="flex gap-2 pt-6 border-t border-black/5">
+                                <button
+                                    onClick={() => router.push(`/admin/events/${event._id}`)}
+                                    className="flex-1 py-2.5 text-center border border-black/10 hover:bg-black hover:text-white text-[10px] font-bold uppercase tracking-widest transition-all rounded-sm text-black"
+                                >
+                                    View Details
+                                </button>
                                 <button
                                     onClick={() => router.push(`/admin/events/edit/${event._id}`)}
                                     className="flex-1 py-2.5 text-center border border-black/10 hover:bg-black hover:text-white text-[10px] font-bold uppercase tracking-widest transition-all rounded-sm text-black"
                                 >
-                                    Edit Event
+                                    Edit
                                 </button>
                                 <button
                                     onClick={() => handleDelete(event._id)}
-                                    className="flex-1 py-2.5 text-center bg-red-50 hover:bg-red-100 text-[10px] font-bold uppercase tracking-widest transition-all rounded-sm text-red-600"
+                                    className="flex-[0.5] py-2.5 text-center bg-red-50 hover:bg-red-100 text-[10px] font-bold uppercase tracking-widest transition-all rounded-sm text-red-600"
                                 >
-                                    Delete
+                                    <i className="fa-solid fa-trash-can"></i>
                                 </button>
                             </div>
                         </div>

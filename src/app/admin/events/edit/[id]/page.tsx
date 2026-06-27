@@ -2,10 +2,11 @@
 
 import { getAllFighters, getAllReferees, getEventById, updateEvent, uploadImage } from "@/lib/api";
 import { Fighter, Referee } from "@/types";
+import SelectWithImage from "@/components/SelectWithImage";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Section = "event-info" | "matchmaking";
 
@@ -160,6 +161,18 @@ const EventEditPage = () => {
       if (!data.name || !data.date || !data.location) {
         throw new Error("Name, Date, and Location are required.");
       }
+      for (let i = 0; i < data.fights.length; i++) {
+        const f = data.fights[i];
+        if (!f.fighter1 || !f.fighter2) {
+          throw new Error(`Fight ${i + 1}: Both fighters must be selected.`);
+        }
+        if (f.fighter1 === f.fighter2) {
+          throw new Error(`Fight ${i + 1}: Fighter 1 and Fighter 2 cannot be the same person.`);
+        }
+        if (!f.referee) {
+          throw new Error(`Fight ${i + 1}: A referee must be selected.`);
+        }
+      }
       await updateEvent(eventId, data as any);
       setSuccess(true);
       setTimeout(() => router.push("/admin/events"), 2000);
@@ -169,6 +182,18 @@ const EventEditPage = () => {
       setSubmitting(false);
     }
   };
+
+  const fighterOptions = useMemo(() => fighters.map((f) => ({
+    value: f._id,
+    label: `${f.personal_info?.full_name} (${f.physical_attributes?.weight_class})`,
+    imageUrl: f.media?.profile_image,
+  })), [fighters]);
+
+  const refereeOptions = useMemo(() => referees.map((r) => ({
+    value: r._id,
+    label: r.name,
+    imageUrl: r.image_url,
+  })), [referees]);
 
   if (loading) {
     return (
@@ -496,19 +521,13 @@ const EventEditPage = () => {
                           <div className="md:col-span-2">
                             <div className={`p-3 rounded-sm border-2 text-center transition-all ${fight.fighter1 ? 'border-red-200 bg-red-50' : 'border-dashed border-gray-200 bg-white'}`}>
                               <label className="block text-[9px] font-black uppercase tracking-widest text-red-500 mb-2">Red Corner</label>
-                              <select
-                                required
+                              <SelectWithImage
+                                options={fighterOptions}
                                 value={fight.fighter1}
-                                onChange={(e) => handleFightChange(index, "fighter1", e.target.value)}
-                                className="w-full bg-transparent border-none text-center text-sm font-bold focus:outline-none cursor-pointer"
-                              >
-                                <option value="" disabled>Select Fighter</option>
-                                {fighters.map((f) => (
-                                  <option key={f._id} value={f._id}>
-                                    {f.personal_info?.full_name} ({f.physical_attributes?.weight_class})
-                                  </option>
-                                ))}
-                              </select>
+                                onChange={(v) => handleFightChange(index, "fighter1", v)}
+                                placeholder="Select Fighter"
+                                required
+                              />
                             </div>
                           </div>
 
@@ -524,19 +543,13 @@ const EventEditPage = () => {
                           <div className="md:col-span-2">
                             <div className={`p-3 rounded-sm border-2 text-center transition-all ${fight.fighter2 ? 'border-blue-200 bg-blue-50' : 'border-dashed border-gray-200 bg-white'}`}>
                               <label className="block text-[9px] font-black uppercase tracking-widest text-blue-500 mb-2">Blue Corner</label>
-                              <select
-                                required
+                              <SelectWithImage
+                                options={fighterOptions}
                                 value={fight.fighter2}
-                                onChange={(e) => handleFightChange(index, "fighter2", e.target.value)}
-                                className="w-full bg-transparent border-none text-center text-sm font-bold focus:outline-none cursor-pointer"
-                              >
-                                <option value="" disabled>Select Fighter</option>
-                                {fighters.map((f) => (
-                                  <option key={f._id} value={f._id}>
-                                    {f.personal_info?.full_name} ({f.physical_attributes?.weight_class})
-                                  </option>
-                                ))}
-                              </select>
+                                onChange={(v) => handleFightChange(index, "fighter2", v)}
+                                placeholder="Select Fighter"
+                                required
+                              />
                             </div>
                           </div>
                         </div>
@@ -559,17 +572,13 @@ const EventEditPage = () => {
                             <label className="mb-1 text-[9px] font-black uppercase tracking-widest text-gray-500">
                               Referee
                             </label>
-                            <select
-                              required
+                            <SelectWithImage
+                              options={refereeOptions}
                               value={fight.referee}
-                              onChange={(e) => handleFightChange(index, "referee", e.target.value)}
-                              className="bg-white border border-black/10 rounded-sm px-3 py-2 focus:outline-none focus:border-[#FE0002] transition-colors text-sm font-medium"
-                            >
-                              <option value="" disabled>Select referee</option>
-                              {referees.map((r) => (
-                                <option key={r._id} value={r._id}>{r.name}</option>
-                              ))}
-                            </select>
+                              onChange={(v) => handleFightChange(index, "referee", v)}
+                              placeholder="Select referee"
+                              required
+                            />
                           </div>
                           <div className="flex flex-col">
                             <label className="mb-1 text-[9px] font-black uppercase tracking-widest text-gray-500">

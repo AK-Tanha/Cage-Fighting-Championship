@@ -285,7 +285,7 @@ const EventDetails: React.FC = () => {
       <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 md:py-10 relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-full bg-gradient-to-b from-transparent via-gray-100/50 to-transparent -z-10 pointer-events-none blur-3xl" />
 
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 border-b-2 border-black/10 pb-8 relative">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 border-b-2 border-black/10 pb-8 relative">
           <div className="flex items-center gap-4">
             <div className="w-2 h-12 bg-[#FE0002] skew-x-[-15deg]"></div>
             <div>
