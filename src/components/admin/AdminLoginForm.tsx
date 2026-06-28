@@ -36,7 +36,7 @@ const AdminLoginForm: React.FC = () => {
     };
 
     return (
-        <div className="w-full max-w-md bg-white border border-black/5 rounded-sm p-8 shadow-sm">
+        <div className="w-full max-w-md bg-white border border-black/5 rounded-sm p-5 md:p-8 shadow-sm">
             <div className="text-center mb-8">
                 <div className="bg-[#FE0002] text-white w-12 h-12 flex items-center justify-center rounded-sm text-2xl mx-auto mb-4">
                     <span className="font-display font-black">C</span>

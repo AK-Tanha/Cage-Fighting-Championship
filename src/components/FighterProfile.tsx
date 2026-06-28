@@ -35,8 +35,8 @@ const FightCard: React.FC<{ fight: FightRecord; showResult: boolean }> = ({
   fight,
   showResult,
 }) => (
-  <div className="flex items-center gap-8">
-    <div className="w-20 h-20 bg-white/10 flex items-center justify-center font-display font-black text-3xl italic overflow-hidden rounded-full shrink-0">
+  <div className="flex items-center gap-3 md:gap-8">
+    <div className="w-14 h-14 md:w-20 md:h-20 bg-white/10 flex items-center justify-center font-display font-black text-xl md:text-3xl italic overflow-hidden rounded-full shrink-0">
       {fight.opponent_image ? (
         <Image
           src={fight.opponent_image}
@@ -53,7 +53,7 @@ const FightCard: React.FC<{ fight: FightRecord; showResult: boolean }> = ({
     </div>
     <div className="flex-1 min-w-0">
       {showResult && fight.result && (
-        <p className="text-gray-400 text-xs uppercase font-black tracking-[0.2em] mb-1">
+        <p className="text-gray-400 text-[10px] md:text-xs uppercase font-black tracking-[0.2em] mb-1">
           {fight.result === "win" ? (
             <span className="text-green-400">WIN</span>
           ) : (
@@ -65,23 +65,27 @@ const FightCard: React.FC<{ fight: FightRecord; showResult: boolean }> = ({
         </p>
       )}
       {!showResult && (
-        <p className="text-gray-400 text-xs uppercase font-black tracking-[0.2em] mb-1">
+        <p className="text-gray-400 text-[10px] md:text-xs uppercase font-black tracking-[0.2em] mb-1">
           Next Fight
         </p>
       )}
-      <p className="text-2xl font-display font-black uppercase italic leading-none mb-1 truncate">
+      <p className="text-base md:text-2xl font-display font-black uppercase italic leading-none mb-1 truncate">
         vs {fight.opponent_name}
       </p>
-      <p className="text-sm text-gray-400 font-bold tracking-wide">
+      <p className="text-[11px] md:text-sm text-gray-400 font-bold tracking-wide truncate">
         {fight.event_name}
         {fight.is_title_fight && fight.title_name && (
-          <span className="ml-2 text-[#FE0002]">({fight.title_name})</span>
+          <span className="ml-1 md:ml-2 text-[#FE0002]">({fight.title_name})</span>
         )}
-        <span className="mx-2">&middot;</span>
-        {fight.event_date}
+        {fight.event_date && (
+          <>
+            <span className="mx-1 md:mx-2">&middot;</span>
+            {fight.event_date}
+          </>
+        )}
         {fight.event_location && (
           <>
-            <span className="mx-2">&middot;</span>
+            <span className="mx-1 md:mx-2">&middot;</span>
             {fight.event_location}
           </>
         )}
@@ -255,10 +259,10 @@ const FighterProfile: React.FC = () => {
             </section>
 
             {fighter.upcoming_fight && (
-              <section className="bg-black text-white p-10 rounded-none relative overflow-hidden group shadow-2xl skew-y-1">
+              <section className="bg-black text-white p-6 md:p-10 rounded-none relative overflow-hidden group shadow-2xl skew-y-1">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-[#FE0002] rounded-full blur-[80px] opacity-20 -mr-20 -mt-20 group-hover:opacity-40 transition-opacity" />
                 <div className="-skew-y-1">
-                  <h2 className="text-2xl font-display font-black uppercase italic mb-6 tracking-tight">
+                  <h2 className="text-xl md:text-2xl font-display font-black uppercase italic mb-4 md:mb-6 tracking-tight">
                     Upcoming Bout
                   </h2>
                   <FightCard fight={fighter.upcoming_fight} showResult={false} />
@@ -266,16 +270,16 @@ const FighterProfile: React.FC = () => {
               </section>
             )}
 
-            <section className="bg-black text-white p-10 rounded-none relative overflow-hidden group shadow-2xl skew-y-1">
+            <section className="bg-black text-white p-6 md:p-10 rounded-none relative overflow-hidden group shadow-2xl skew-y-1">
               <div className="absolute top-0 right-0 w-64 h-64 bg-[#FE0002] rounded-full blur-[80px] opacity-20 -mr-20 -mt-20 group-hover:opacity-40 transition-opacity" />
               <div className="-skew-y-1">
-                <h2 className="text-2xl font-display font-black uppercase italic mb-6 tracking-tight">
+                <h2 className="text-xl md:text-2xl font-display font-black uppercase italic mb-4 md:mb-6 tracking-tight">
                   {fighter.latest_fight ? "Latest Bout" : "Fight History"}
                 </h2>
                 {fighter.latest_fight ? (
                   <FightCard fight={fighter.latest_fight} showResult={true} />
                 ) : (
-                  <p className="text-gray-400 text-lg font-bold tracking-wide">
+                  <p className="text-gray-400 text-sm md:text-lg font-bold tracking-wide">
                     No fight history yet
                   </p>
                 )}

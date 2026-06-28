@@ -30,9 +30,9 @@ const FightRow: React.FC<{
   const f2 = fighters[fight.fighter2];
 
   return (
-    <div className="group relative bg-white border border-black/5 hover:border-[#FE0002]/30 transition-all rounded-sm p-3 md:p-4 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 shadow-sm">
+    <div className="group relative bg-white border border-black/5 hover:border-[#FE0002]/30 transition-all rounded-sm p-2 sm:p-3 md:p-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-6 shadow-sm">
       <div
-        className="flex-1 flex items-center gap-3 md:gap-4 w-full md:w-auto min-w-0"
+        className="flex-1 flex items-center gap-2 md:gap-4 w-full md:w-auto min-w-0"
         onMouseEnter={() =>
           setFighterHoverCard && f1 && setFighterHoverCard(f1)
         }
@@ -41,11 +41,11 @@ const FightRow: React.FC<{
         }
         onMouseLeave={() => setFighterHoverCard && setFighterHoverCard(null)}
       >
-        <div className="text-xl md:text-2xl font-display font-black text-black/5 group-hover:text-[#FE0002]/10 transition-colors shrink-0">
+        <div className="text-lg md:text-2xl font-display font-black text-black/5 group-hover:text-[#FE0002]/10 transition-colors shrink-0">
           {String(index + 1).padStart(2, "0")}
         </div>
         <div className="flex-1 text-right min-w-0">
-          <h4 className="text-lg md:text-xl font-display font-black uppercase italic truncate">
+          <h4 className="text-sm sm:text-lg md:text-xl font-display font-black uppercase italic truncate">
             <Link
               href={`/fighters/${f1?._id}`}
               className="hover:text-[#FE0002] transition-colors"
@@ -53,11 +53,11 @@ const FightRow: React.FC<{
               {f1?.personal_info?.full_name || "Unknown Fighter"}
             </Link>
           </h4>
-          <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
+          <p className="text-[8px] md:text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
             {formatRecord(f1?.record)}
           </p>
         </div>
-        <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-none overflow-hidden border border-black/5 group-hover:border-[#FE0002]/30 transition-all bg-gray-50 relative">
+        <div className="w-10 h-10 md:w-14 md:h-14 shrink-0 rounded-none overflow-hidden border border-black/5 group-hover:border-[#FE0002]/30 transition-all bg-gray-50 relative">
           <Image
             src={
               f1?.media?.profile_image || '/og-fighter-default.jpg'
@@ -70,34 +70,34 @@ const FightRow: React.FC<{
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center shrink-0 min-w-[100px] border-x border-black/5 px-4 h-full">
-        <div className="text-2xl font-display font-black italic text-black/10 group-hover:text-[#FE0002]/20 transition-colors">
+      <div className="flex flex-row md:flex-col items-center justify-center shrink-0 gap-2 md:gap-1 w-full md:w-auto border-y md:border-y-0 border-x-0 md:border-x border-black/5 px-0 md:px-4 py-2 md:py-0">
+        <div className="text-base md:text-2xl font-display font-black italic text-black/10 group-hover:text-[#FE0002]/20 transition-colors">
           VS
         </div>
-        <p className="text-[8px] font-black uppercase tracking-[0.2em] text-black mb-1">
+        <p className="text-[8px] font-black uppercase tracking-[0.2em] text-black hidden sm:block">
           {fight.weight_class}
         </p>
-
-        <div className="flex flex-col items-center mt-1">
-          <p className="text-[7px] font-black uppercase tracking-widest text-[#FE0002] mb-0.5 opacity-60">
-            Referee
-          </p>
-          <p className="text-[9px] font-bold uppercase tracking-tight text-gray-500 whitespace-nowrap">
-            {fight.referee && referees[fight.referee]
-              ? referees[fight.referee].name
-              : "Pending"}
-          </p>
+        <div className="flex flex-row md:flex-col items-center gap-2 md:gap-0">
+          <div className="flex flex-col items-center">
+            <p className="text-[6px] md:text-[7px] font-black uppercase tracking-widest text-[#FE0002] opacity-60">
+              Ref
+            </p>
+            <p className="text-[8px] md:text-[9px] font-bold uppercase tracking-tight text-gray-500 whitespace-nowrap">
+              {fight.referee && referees[fight.referee]
+                ? referees[fight.referee].name
+                : "Pending"}
+            </p>
+          </div>
+          {fight.title_fight && (
+            <span className="bg-black text-white text-[7px] font-black px-2 py-0.5 uppercase tracking-widest shrink-0">
+              TITLE
+            </span>
+          )}
         </div>
-
-        {fight.title_fight && (
-          <span className="bg-black text-white text-[7px] font-black px-2 py-0.5 rounded-none mt-2 uppercase tracking-widest">
-            TITLE FIGHT
-          </span>
-        )}
       </div>
 
       <div
-        className="flex-1 flex flex-row-reverse items-center gap-3 md:gap-4 w-full md:w-auto min-w-0"
+        className="flex-1 flex flex-row-reverse items-center gap-2 md:gap-4 w-full md:w-auto min-w-0"
         onMouseEnter={() =>
           setFighterHoverCard && f2 && setFighterHoverCard(f2)
         }
@@ -106,7 +106,7 @@ const FightRow: React.FC<{
         }
         onMouseLeave={() => setFighterHoverCard && setFighterHoverCard(null)}
       >
-        <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-none overflow-hidden border border-black/5 group-hover:border-[#FE0002]/30 transition-all bg-gray-50 relative">
+        <div className="w-10 h-10 md:w-14 md:h-14 shrink-0 rounded-none overflow-hidden border border-black/5 group-hover:border-[#FE0002]/30 transition-all bg-gray-50 relative">
           <Image
             src={
               f2?.media?.profile_image || `https://picsum.photos/seed/${f2?._id}/300/300`
@@ -118,7 +118,7 @@ const FightRow: React.FC<{
           />
         </div>
         <div className="flex-1 text-left min-w-0">
-          <h4 className="text-lg md:text-xl font-display font-black uppercase italic truncate">
+          <h4 className="text-sm sm:text-lg md:text-xl font-display font-black uppercase italic truncate">
             <Link
               href={`/fighters/${f2?._id}`}
               className="hover:text-[#FE0002] transition-colors"
@@ -126,7 +126,7 @@ const FightRow: React.FC<{
               {f2?.personal_info?.full_name || "Unknown Fighter"}
             </Link>
           </h4>
-          <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
+          <p className="text-[8px] md:text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
             {formatRecord(f2?.record)}
           </p>
         </div>
@@ -260,21 +260,21 @@ const EventDetails: React.FC = () => {
           </div>
         }
         bottomRightSection={
-          <div className="bg-black text-white px-8 py-5 flex items-center gap-5 skew-x-[-12deg] shadow-xl shadow-black/30">
+          <div className="bg-black text-white px-6 md:px-8 py-4 md:py-5 flex items-center gap-4 md:gap-5 skew-x-[-12deg] shadow-xl shadow-black/30">
             <div className="skew-x-[12deg] text-center">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-1">
+              <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-1">
                 Fight Card
               </p>
-              <p className="text-4xl font-display font-black italic leading-none">
+              <p className="text-2xl md:text-4xl font-display font-black italic leading-none">
                 {event.fights?.length || 0}
               </p>
             </div>
-            <div className="w-px h-10 bg-white/20 skew-x-[12deg]" />
+            <div className="w-px h-8 md:h-10 bg-white/20 skew-x-[12deg]" />
             <div className="skew-x-[12deg]">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-1">
+              <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-1">
                 Status
               </p>
-              <p className="text-xl font-display font-black italic leading-none text-[#FE0002]">
+              <p className="text-base md:text-xl font-display font-black italic leading-none text-[#FE0002]">
                 BOUTS
               </p>
             </div>
@@ -353,29 +353,29 @@ const EventDetails: React.FC = () => {
             <h3 className="text-xl font-display font-black uppercase italic mb-2 text-black">
               Want to witness history?
             </h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 text-sm md:text-base">
               Tickets are selling fast. Secure your seat at the arena now.
             </p>
           </div>
-          <button className="bg-[#FE0002] hover:bg-black text-white px-12 py-4 font-display font-black uppercase italic tracking-widest transition-all">
+          <button className="w-full md:w-auto bg-[#FE0002] hover:bg-black text-white px-8 md:px-12 py-4 font-display font-black uppercase italic tracking-widest transition-all">
             Buy Live Tickets
           </button>
         </div>
 
-        <div className="mt-12 text-center">
+        <div className="mt-12 text-center pb-16 md:pb-0">
           <Link
             href="/events"
             className="text-gray-500 hover:text-black transition-colors font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2 group"
           >
-            <span className="w-10 h-px bg-gray-500 group-hover:bg-black group-hover:w-16 transition-all" />
+            <span className="w-6 md:w-10 h-px bg-gray-500 group-hover:bg-black group-hover:w-16 transition-all" />
             Back to Events
-            <span className="w-10 h-px bg-gray-500 group-hover:bg-black group-hover:w-16 transition-all" />
+            <span className="w-6 md:w-10 h-px bg-gray-500 group-hover:bg-black group-hover:w-16 transition-all" />
           </Link>
         </div>
       </div>
 
-      <div className="md:hidden fixed bottom-10 left-6 right-6 z-50 animate-slide-in-bottom">
-        <button className="w-full bg-[#FE0002] text-white py-4 font-display font-black uppercase italic tracking-widest shadow-2xl shadow-[#FE0002]/40 rounded-sm">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-black/10 px-4 py-3 shadow-2xl">
+        <button className="w-full bg-[#FE0002] text-white py-3.5 font-display font-black uppercase italic tracking-widest shadow-lg shadow-[#FE0002]/30 rounded-sm text-sm">
           Live Tickets - CFC {event.name.split(":")?.[0]}
         </button>
       </div>

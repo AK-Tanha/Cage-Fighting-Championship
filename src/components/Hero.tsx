@@ -64,7 +64,7 @@ const Hero: React.FC = () => {
 
     if (slides.length === 0) {
         return (
-            <section className="relative min-h-screen max-h-[900px] 2xl:max-h-[1000px] overflow-hidden flex items-center mt-20">
+            <section className="relative min-h-[80vh] md:min-h-screen max-h-[900px] 2xl:max-h-[1000px] overflow-hidden flex items-center mt-20">
                 <div className="absolute inset-0 z-0 pointer-events-none">
                     <Image
                         src="/og-fighter-default.jpg"
@@ -77,34 +77,34 @@ const Hero: React.FC = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/50 to-transparent"></div>
                 </div>
-                <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-20 -mt-20">
+                <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-20 -mt-20">
                     <div className="max-w-3xl">
-                        <div className="flex items-center gap-3 mb-8">
-                            <span className="bg-[#FE0002] text-white text-[11px] font-black px-4 py-1.5 uppercase tracking-[0.25em] skew-x-[-12deg] shadow-lg shadow-[#FE0002]/20">
+                        <div className="flex items-center gap-3 mb-6 md:mb-8">
+                            <span className="bg-[#FE0002] text-white text-[10px] md:text-[11px] font-black px-3 md:px-4 py-1.5 uppercase tracking-[0.25em] skew-x-[-12deg] shadow-lg shadow-[#FE0002]/20">
                                 <span className="inline-block skew-x-[12deg]">CFC</span>
                             </span>
-                            <div className="h-[2px] w-12 bg-black/10"></div>
+                            <div className="h-[2px] w-8 md:w-12 bg-black/10"></div>
                         </div>
-                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black leading-[0.85] mb-8 uppercase tracking-[-0.05em] italic text-black drop-shadow-sm">
+                        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-black leading-[0.85] mb-6 md:mb-8 uppercase tracking-[-0.05em] italic text-black drop-shadow-sm">
                             CAGE <span className="text-[#FE0002]">FIGHTING</span>
                             <br /> CHAMPIONSHIP
                         </h1>
-                        <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-10 mb-12">
-                            <p className="text-lg md:text-xl text-gray-800 max-w-lg leading-relaxed font-semibold border-l-4 border-[#FE0002] pl-6 py-1">
+                        <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-10 mb-8 md:mb-12">
+                            <p className="text-base md:text-xl text-gray-800 max-w-lg leading-relaxed font-semibold border-l-4 border-[#FE0002] pl-4 md:pl-6 py-1">
                                 The global leader in elite MMA competition.
                             </p>
                         </div>
-                        <div className="flex flex-wrap gap-5 mt-12">
+                        <div className="flex flex-col sm:flex-row flex-wrap gap-4 md:gap-5 mt-8 md:mt-12">
                             <Link
                                 href="/events"
-                                className="group relative bg-[#FE0002] text-white px-12 py-5 font-display font-black uppercase tracking-[0.2em] transition-all duration-300 overflow-hidden"
+                                className="group relative bg-[#FE0002] text-white px-8 md:px-12 py-4 md:py-5 font-display font-black uppercase tracking-[0.2em] transition-all duration-300 overflow-hidden text-center text-sm md:text-base"
                             >
                                 <span className="relative z-10">Get Tickets</span>
                                 <div className="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                             </Link>
                             <Link
                                 href="/fighters"
-                                className="group relative border-2 border-black text-black px-12 py-5 font-display font-black uppercase tracking-[0.2em] transition-all duration-300 overflow-hidden hover:text-white"
+                                className="group relative border-2 border-black text-black px-8 md:px-12 py-4 md:py-5 font-display font-black uppercase tracking-[0.2em] transition-all duration-300 overflow-hidden hover:text-white text-center text-sm md:text-base"
                             >
                                 <span className="relative z-10">View Fighters</span>
                                 <div className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
@@ -117,7 +117,7 @@ const Hero: React.FC = () => {
     }
 
     return (
-        <section className="relative min-h-screen max-h-[900px] 2xl:max-h-[1000px] overflow-hidden flex items-center mt-20">
+        <section className="relative min-h-[80vh] md:min-h-screen max-h-[900px] 2xl:max-h-[1000px] overflow-hidden flex items-center mt-20">
             <div className="absolute inset-0 z-0 pointer-events-none">
                 {backgroundImages}
                 <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/50 to-transparent"></div>
@@ -125,17 +125,17 @@ const Hero: React.FC = () => {
 
             <div
                 key={currentSlideIndex}
-                className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-20 -mt-20"
+                className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-20 -mt-20"
             >
                 <div className="max-w-3xl">
-                    <div className="flex items-center gap-3 mb-8 animate-[fade-in_0.5s_ease-out_both,slide-in-left_0.5s_ease-out_both]">
-                        <span className="bg-[#FE0002] text-white text-[11px] font-black px-4 py-1.5 uppercase tracking-[0.25em] skew-x-[-12deg] shadow-lg shadow-[#FE0002]/20">
+                    <div className="flex items-center gap-3 mb-6 md:mb-8 animate-[fade-in_0.5s_ease-out_both,slide-in-left_0.5s_ease-out_both]">
+                        <span className="bg-[#FE0002] text-white text-[10px] md:text-[11px] font-black px-3 md:px-4 py-1.5 uppercase tracking-[0.25em] skew-x-[-12deg] shadow-lg shadow-[#FE0002]/20">
                             <span className="inline-block skew-x-[12deg]">FEATURED</span>
                         </span>
-                        <div className="h-[2px] w-12 bg-black/10"></div>
+                        <div className="h-[2px] w-8 md:w-12 bg-black/10"></div>
                     </div>
 
-                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black leading-[0.85] mb-8 uppercase tracking-[-0.05em] italic text-black drop-shadow-sm animate-[fade-in_0.6s_ease-out_0.1s_both,slide-in-left_0.6s_ease-out_0.1s_both]">
+                    <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-black leading-[0.85] mb-6 md:mb-8 uppercase tracking-[-0.05em] italic text-black drop-shadow-sm animate-[fade-in_0.6s_ease-out_0.1s_both,slide-in-left_0.6s_ease-out_0.1s_both]">
                         {currentSlide?.title?.split(' ').map((word: string, i: number, arr: string[]) => (
                             <React.Fragment key={i}>
                                 {i === 1 ? <span className="text-[#FE0002]">{word}</span> : word}
@@ -144,17 +144,17 @@ const Hero: React.FC = () => {
                         ))}
                     </h1>
 
-                    <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-10 mb-12 animate-[fade-in_0.6s_ease-out_0.2s_both,slide-in-left_0.6s_ease-out_0.2s_both]">
-                        <p className="text-lg md:text-xl text-gray-800 max-w-lg leading-relaxed font-semibold border-l-4 border-[#FE0002] pl-6 py-1">
+                    <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-10 mb-8 md:mb-12 animate-[fade-in_0.6s_ease-out_0.2s_both,slide-in-left_0.6s_ease-out_0.2s_both]">
+                        <p className="text-base md:text-xl text-gray-800 max-w-lg leading-relaxed font-semibold border-l-4 border-[#FE0002] pl-4 md:pl-6 py-1">
                             {currentSlide?.subtitle}
                         </p>
                     </div>
 
-                    <div className="flex flex-wrap gap-5 mt-12 animate-[slide-in-bottom_0.6s_ease-out_0.3s_both]">
+                    <div className="flex flex-col sm:flex-row flex-wrap gap-4 md:gap-5 mt-8 md:mt-12 animate-[slide-in-bottom_0.6s_ease-out_0.3s_both]">
                         {currentSlide.link && (
                             <Link
                                 href={currentSlide.link}
-                                className="group relative bg-[#FE0002] text-white px-12 py-5 font-display font-black uppercase tracking-[0.2em] transition-all duration-300 overflow-hidden"
+                                className="group relative bg-[#FE0002] text-white px-8 md:px-12 py-4 md:py-5 font-display font-black uppercase tracking-[0.2em] transition-all duration-300 overflow-hidden text-center text-sm md:text-base"
                             >
                                 <span className="relative z-10">Learn More</span>
                                 <div className="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
@@ -163,7 +163,7 @@ const Hero: React.FC = () => {
 
                         <Link
                             href="/events"
-                            className="group relative border-2 border-black text-black px-12 py-5 font-display font-black uppercase tracking-[0.2em] transition-all duration-300 overflow-hidden hover:text-white"
+                            className="group relative border-2 border-black text-black px-8 md:px-12 py-4 md:py-5 font-display font-black uppercase tracking-[0.2em] transition-all duration-300 overflow-hidden hover:text-white text-center text-sm md:text-base"
                         >
                             <span className="relative z-10">Get Tickets</span>
                             <div className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
@@ -172,7 +172,7 @@ const Hero: React.FC = () => {
                 </div>
             </div>
 
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+            <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-2 md:gap-3">
                 {slideIndicators}
             </div>
 

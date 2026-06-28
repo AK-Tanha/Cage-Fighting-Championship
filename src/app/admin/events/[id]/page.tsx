@@ -78,6 +78,15 @@ const EventDetailsPage = () => {
     loadData();
   }, [params?.id]);
 
+  useEffect(() => {
+    if (detailsIndex !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [detailsIndex]);
+
   const fighterList = useMemo(() => Object.values(fighters), [fighters]);
   const refereeList = useMemo(() => Object.values(referees), [referees]);
 
@@ -218,19 +227,19 @@ const EventDetailsPage = () => {
         />
       )}
 
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div className="flex items-center gap-4">
           <button
             onClick={() => router.back()}
-            className="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all shadow-sm"
+            className="w-10 h-10 shrink-0 rounded-full border border-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all shadow-sm"
           >
             <i className="fa-solid fa-arrow-left"></i>
           </button>
-          <h2 className="font-display text-2xl font-black uppercase tracking-tight">
+          <h2 className="font-display text-xl sm:text-2xl font-black uppercase tracking-tight">
             Event Details
           </h2>
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={() => {
               const pw = window.open("", "_blank");
@@ -296,27 +305,27 @@ const EventDetailsPage = () => {
               pw.focus();
               setTimeout(() => pw.print(), 500);
             }}
-            className="border border-black/20 text-black px-4 py-2 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black hover:text-white transition-colors rounded-sm shadow-sm active:scale-95"
+            className="border border-black/20 text-black px-3 sm:px-4 py-2 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 hover:bg-black hover:text-white transition-colors rounded-sm shadow-sm active:scale-95"
           >
-            <i className="fa-solid fa-print"></i> Print Card
+            <i className="fa-solid fa-print"></i> <span className="hidden sm:inline">Print Card</span>
           </button>
           <button
-            className="bg-black text-white px-6 py-2 text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-[#FE0002] transition-colors rounded-sm shadow-sm active:scale-95"
+            className="bg-black text-white px-4 sm:px-6 py-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 hover:bg-[#FE0002] transition-colors rounded-sm shadow-sm active:scale-95"
             onClick={() => router.push(`/admin/events/edit/${event._id}`)}
           >
-            <i className="fa-solid fa-pen"></i> Edit
+            <i className="fa-solid fa-pen"></i> <span className="hidden sm:inline">Edit</span>
           </button>
           <button
-            className="bg-[#FE0002] text-white px-6 py-2 text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-colors rounded-sm shadow-sm active:scale-95"
+            className="bg-[#FE0002] text-white px-4 sm:px-6 py-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 hover:bg-black transition-colors rounded-sm shadow-sm active:scale-95"
             onClick={() => router.push("/admin/events/create")}
           >
-            <i className="fa-solid fa-plus"></i> Add Event
+            <i className="fa-solid fa-plus"></i> <span className="hidden sm:inline">Add Event</span>
           </button>
         </div>
       </div>
 
       <div className="bg-white border border-black/5 rounded-sm overflow-hidden shadow-sm">
-        <div className="w-full bg-black relative h-[300px] md:h-[400px]">
+        <div className="w-full bg-black relative h-[200px] md:h-[400px]">
           <Image
             src={event.image_url || "/og-event-default.jpg"}
             alt={event.name}
@@ -327,9 +336,9 @@ const EventDetailsPage = () => {
           />
         </div>
 
-        <div className="p-8 md:p-12">
+        <div className="p-5 md:p-12">
           <div className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-black font-display uppercase tracking-tighter mb-4 leading-none">
+            <h1 className="text-2xl md:text-5xl font-black font-display uppercase tracking-tighter mb-4 leading-none">
               {event.name}
             </h1>
             <p className="text-gray-600 mb-6">
@@ -389,7 +398,7 @@ const EventDetailsPage = () => {
 
             {/* Edit form */}
             {editingIndex !== null && editFight && (
-              <div className="mb-6 p-6 bg-gray-50 border-2 border-[#FE0002]/30 rounded-sm">
+              <div className="mb-6 p-4 md:p-6 bg-gray-50 border-2 border-[#FE0002]/30 rounded-sm">
                 <h4 className="text-xs font-bold uppercase tracking-widest mb-4">
                   {editingIndex === -1 ? "Add Bout" : `Edit Bout ${editingIndex + 1}`}
                 </h4>
@@ -454,7 +463,7 @@ const EventDetailsPage = () => {
                     <label className="block text-[9px] font-black uppercase tracking-widest text-gray-500 mb-1">Time Ended</label>
                     <input type="text" value={editFight.time_ended || ""} onChange={(e) => handleEditChange("time_ended", e.target.value)} placeholder="e.g. 2:35" className="w-full bg-white border border-black/10 rounded-sm px-3 py-2 text-sm focus:outline-none focus:border-[#FE0002]" />
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-4">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input type="checkbox" checked={editFight.title_fight || false} onChange={(e) => handleEditChange("title_fight", e.target.checked)} className="w-4 h-4 text-[#FE0002] focus:ring-[#FE0002] border-gray-300 rounded" />
                       <span className="text-[9px] font-bold uppercase tracking-widest text-gray-600">Title Fight</span>
@@ -520,7 +529,7 @@ const EventDetailsPage = () => {
                             <span className="font-semibold text-xs whitespace-nowrap">{f2?.personal_info?.full_name || "Unknown"}</span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2 w-full md:w-auto justify-start md:justify-end">
+                        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-start md:justify-end">
                           <span className="text-[9px] text-gray-500 font-bold uppercase tracking-widest bg-white border border-black/5 px-2 py-1 rounded whitespace-nowrap">{fight.weight_class || "TBD"}</span>
                           <span className="text-[9px] text-gray-500 font-bold uppercase tracking-tight bg-white border border-black/5 px-2 py-1 rounded whitespace-nowrap">Ref: {ref?.name || "N/A"}</span>
                           {fight.title_fight && <span className="text-[8px] text-white font-bold uppercase tracking-widest bg-[#FE0002] px-1.5 py-0.5 rounded whitespace-nowrap">Title</span>}
@@ -740,7 +749,7 @@ const EventDetailsPage = () => {
 
                   <div className="p-6">
                     {/* Fighter matchup with center column */}
-                    <div className="flex items-start justify-between gap-6">
+                    <div className="flex flex-col md:flex-row items-start justify-between gap-6">
                       <div className="flex-1">
                         <div className="text-center mb-4">
                           <div className="relative w-24 h-24 mx-auto mb-3 rounded-full overflow-hidden bg-gray-100 border-2 border-red-200">

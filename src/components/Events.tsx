@@ -38,38 +38,38 @@ const Events: React.FC = () => {
                 />
             </div>
 
-            <div className="p-8 lg:p-12 flex-1 flex flex-col justify-center">
+            <div className="p-6 md:p-8 lg:p-12 flex-1 flex flex-col justify-center">
                 {isPast(event) && (
                     <p className="text-gray-400 font-bold text-[10px] tracking-widest mb-2 uppercase">Past Event</p>
                 )}
-                <p className="text-[#FE0002] font-bold text-sm tracking-widest mb-2 uppercase">
+                <p className="text-[#FE0002] font-bold text-[11px] md:text-sm tracking-widest mb-2 uppercase">
                     {new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                 </p>
-                <h3 className="text-3xl md:text-4xl font-display font-black uppercase mb-4 group-hover:text-[#FE0002] transition-colors">{event.name}</h3>
-                <div className="flex items-center gap-6 mb-8 text-gray-500 font-medium">
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-display font-black uppercase mb-4 group-hover:text-[#FE0002] transition-colors">{event.name}</h3>
+                <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-8 text-gray-500 font-medium text-sm md:text-base">
                     <span className="flex items-center gap-2"><i className="fa-solid fa-location-dot text-[#FE0002]"></i> {event.location}</span>
                     {event.fights && event.fights.length > 0 && (
                         <span className="flex items-center gap-2"><i className="fa-solid fa-trophy text-[#FE0002]"></i> {event.fights.length} Fights Card</span>
                     )}
                 </div>
                 {isUpcoming(event) && (
-                    <div className="flex gap-4">
-                        <button className="bg-[#FE0002] text-white px-8 py-3 font-display font-bold uppercase tracking-widest hover:bg-black transition-all">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <button className="bg-[#FE0002] text-white px-8 py-3 font-display font-bold uppercase tracking-widest hover:bg-black transition-all text-sm">
                             Get Tickets
                         </button>
                         <Link
                             href={`/events/${event._id}`}
-                            className="border border-black/20 text-center text-black px-8 py-3 font-display font-bold uppercase tracking-widest hover:border-[#FE0002] transition-all"
+                            className="border border-black/20 text-center text-black px-8 py-3 font-display font-bold uppercase tracking-widest hover:border-[#FE0002] transition-all text-sm"
                         >
                             Fight Details
                         </Link>
                     </div>
                 )}
                 {isPast(event) && (
-                    <div className="flex gap-4">
+                    <div className="flex flex-col sm:flex-row gap-3">
                         <Link
                             href={`/events/${event._id}`}
-                            className="border border-black/20 text-center text-black px-8 py-3 font-display font-bold uppercase tracking-widest hover:border-[#FE0002] transition-all"
+                            className="border border-black/20 text-center text-black px-8 py-3 font-display font-bold uppercase tracking-widest hover:border-[#FE0002] transition-all text-sm"
                         >
                             Results & Details
                         </Link>

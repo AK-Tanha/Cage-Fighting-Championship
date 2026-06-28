@@ -32,21 +32,21 @@ const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
                 <div className="absolute inset-0 bg-gradient-to-r from-[#FE0002]/0 via-[#FE0002]/10 to-[#FE0002]/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out z-20" />
             </div>
 
-            <div className="relative z-10 px-5 pb-5 pt-12 flex flex-col justify-end h-full">
+            <div className="relative z-10 px-3 pb-4 pt-10 md:px-5 md:pb-5 flex flex-col justify-end h-full">
                 <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                     <div className="mb-1">
-                        <span className="inline-block bg-black text-white font-display font-black text-[10px] md:text-xs uppercase tracking-[0.2em] px-2 py-0.5 skew-x-[-10deg]">
+                        <span className="inline-block bg-black text-white font-display font-black text-[9px] md:text-xs uppercase tracking-[0.2em] px-1.5 md:px-2 py-0.5 skew-x-[-10deg]">
                             {pa.weight_class}
                         </span>
                     </div>
-                    <h3 className="text-2xl md:text-3xl font-display font-black uppercase italic leading-[0.85] tracking-tighter text-black mb-2 group-hover:text-[#FE0002] transition-colors duration-200 drop-shadow-sm">
+                    <h3 className="text-lg sm:text-xl md:text-3xl font-display font-black uppercase italic leading-[0.85] tracking-tighter text-black mb-2 group-hover:text-[#FE0002] transition-colors duration-200 drop-shadow-sm line-clamp-2">
                         {pi.full_name}
                     </h3>
-                    <div className="flex items-center gap-3 border-t-2 border-black/10 pt-2 group-hover:border-[#FE0002]/50 transition-colors">
-                        <p className="font-display font-black text-xl text-black tracking-tighter leading-none">
+                    <div className="flex items-center gap-2 md:gap-3 border-t-2 border-black/10 pt-2 group-hover:border-[#FE0002]/50 transition-colors">
+                        <p className="font-display font-black text-sm sm:text-base md:text-xl text-black tracking-tighter leading-none">
                             {recordStr}
                         </p>
-                        <span className="text-[#FE0002] font-bold text-[9px] uppercase tracking-widest">Pro Record</span>
+                        <span className="text-[#FE0002] font-bold text-[8px] md:text-[9px] uppercase tracking-widest">Pro Record</span>
                     </div>
                 </div>
             </div>
@@ -71,10 +71,42 @@ const FeaturedFighters: React.FC = () => {
         },
     });
 
+    const scrollRef = React.useRef<HTMLDivElement>(null);
+    const [scrollIndex, setScrollIndex] = React.useState(0);
+    const [paused, setPaused] = React.useState(false);
+    const timerRef = React.useRef<ReturnType<typeof setInterval>>(undefined);
+    const list = fighters ?? [];
+
+    React.useEffect(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+        const onScroll = () => {
+            const idx = Math.round(el.scrollLeft / el.clientWidth);
+            setScrollIndex(idx);
+        };
+        el.addEventListener('scroll', onScroll);
+        return () => el.removeEventListener('scroll', onScroll);
+    }, []);
+
+    React.useEffect(() => {
+        if (list.length <= 1 || paused) return;
+        timerRef.current = setInterval(() => {
+            const next = (scrollIndex + 1) % list.length;
+            scrollRef.current?.scrollTo({ left: next * (scrollRef.current?.clientWidth || 0), behavior: 'smooth' });
+        }, 4000);
+        return () => clearInterval(timerRef.current);
+    }, [list.length, scrollIndex, paused]);
+
+    const scrollTo = (index: number) => {
+        setPaused(true);
+        scrollRef.current?.scrollTo({ left: index * scrollRef.current.clientWidth, behavior: 'smooth' });
+        setTimeout(() => setPaused(false), 8000);
+    };
+
     return (
         <section className="py-20 md:py-28 bg-gray-50 border-t border-black/5">
             <div className="max-w-7xl mx-auto px-4">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-14">
                     <div>
                         <span className="text-[#FE0002] text-[10px] font-black uppercase tracking-[0.3em] block mb-3">
                             ELITE COMBATANTS
@@ -93,17 +125,69 @@ const FeaturedFighters: React.FC = () => {
                 </div>
 
                 {isLoading ? (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                        {[...Array(4)].map((_, i) => (
-                            <div key={i} className="animate-pulse aspect-[3/4] bg-gray-200 rounded-sm" />
-                        ))}
-                    </div>
+                    <>
+                        {/* Mobile skeleton */}
+                        <div className="md:hidden">
+                            <div className="flex gap-4 overflow-hidden">
+                                <div className="shrink-0 w-[70vw] max-w-[280px] animate-pulse aspect-[3/4] bg-gray-200 rounded-sm" />
+                            </div>
+                        </div>
+                        {/* Desktop skeleton */}
+                        <div className="hidden md:grid md:grid-cols-4 gap-6">
+                            {[...Array(4)].map((_, i) => (
+                                <div key={i} className="animate-pulse aspect-[3/4] bg-gray-200 rounded-sm" />
+                            ))}
+                        </div>
+                    </>
                 ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                        {(fighters ?? []).map((fighter: Fighter) => (
-                            <FighterCard key={fighter._id} fighter={fighter} />
-                        ))}
-                    </div>
+                    <>
+                        {/* Mobile: snap carousel */}
+                        <div className="relative md:hidden">
+                            <div
+                                ref={scrollRef}
+                                className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-4 -mx-4 px-4 no-scrollbar"
+                            >
+                                {list.map((fighter: Fighter) => (
+                                    <div key={fighter._id} className="snap-center shrink-0 w-[70vw] max-w-[280px]">
+                                        <FighterCard fighter={fighter} />
+                                    </div>
+                                ))}
+                            </div>
+
+                            {list.length > 1 && (
+                                <>
+                                    <button
+                                        onClick={() => scrollTo((scrollIndex - 1 + list.length) % list.length)}
+                                        className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/90 border border-black/10 shadow-md rounded-full flex items-center justify-center text-black hover:bg-[#FE0002] hover:text-white transition-all"
+                                    >
+                                        <i className="fa-solid fa-chevron-left text-xs"></i>
+                                    </button>
+                                    <button
+                                        onClick={() => scrollTo((scrollIndex + 1) % list.length)}
+                                        className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/90 border border-black/10 shadow-md rounded-full flex items-center justify-center text-black hover:bg-[#FE0002] hover:text-white transition-all"
+                                    >
+                                        <i className="fa-solid fa-chevron-right text-xs"></i>
+                                    </button>
+                                    <div className="flex justify-center gap-2 mt-6">
+                                        {list.map((_: Fighter, i: number) => (
+                                            <button
+                                                key={i}
+                                                onClick={() => scrollTo(i)}
+                                                className={`w-2 h-2 rounded-full transition-all duration-300 ${i === scrollIndex ? 'bg-[#FE0002] w-5' : 'bg-black/20 hover:bg-black/40'}`}
+                                            />
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
+                        {/* Desktop: grid */}
+                        <div className="hidden md:grid md:grid-cols-4 gap-6">
+                            {list.map((fighter: Fighter) => (
+                                <FighterCard key={fighter._id} fighter={fighter} />
+                            ))}
+                        </div>
+                    </>
                 )}
             </div>
         </section>

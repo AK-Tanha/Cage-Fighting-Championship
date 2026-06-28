@@ -57,8 +57,41 @@ export default function AdminRefereesPage() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[800px]">
+        {/* Mobile cards */}
+        <div className="md:hidden space-y-3">
+          {referees.length === 0 ? (
+            <div className="p-8 text-center text-gray-500 text-sm uppercase tracking-widest font-bold bg-white border border-black/5 rounded-sm">
+              No referees found
+            </div>
+          ) : (
+            referees.map((referee) => (
+              <div key={referee._id} className="bg-white border border-black/5 rounded-sm p-4 space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-black rounded-sm overflow-hidden relative shrink-0">
+                    <Image src={(referee.image_url && referee.image_url.includes('://')) ? referee.image_url : "/og-fighter-default.jpg"} alt={referee.name || "Referee"} fill className="object-cover object-top" sizes="48px" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-display font-black uppercase text-sm tracking-tighter truncate">{referee.name}</div>
+                    <div className="text-[10px] text-gray-500 mt-0.5">{referee.nationality}</div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-bold text-gray-700 text-sm">{referee.record}</div>
+                    <div className="text-[9px] text-gray-400 mt-0.5">{referee.date_of_birth}</div>
+                  </div>
+                </div>
+                <div className="flex gap-2 pt-2 border-t border-black/5">
+                  <Link href={`/admin/referees/${referee._id}`} className="flex-1 text-center py-2 border border-black/10 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all"><i className="fa-solid fa-eye mr-1"></i> View</Link>
+                  <Link href={`/admin/referees/edit/${referee._id}`} className="flex-1 text-center py-2 border border-black/10 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all"><i className="fa-solid fa-pen mr-1"></i> Edit</Link>
+                  <button onClick={() => handleDelete(referee._id)} className="flex-[0.5] text-center py-2 border border-red-200 text-red-500 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all"><i className="fa-solid fa-trash"></i></button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop table */}
+        <div className="hidden md:block overflow-x-auto">
+          <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-white text-[10px] text-gray-400 font-bold uppercase tracking-widest border-b border-black/5">
                 <th className="p-6">Referee</th>

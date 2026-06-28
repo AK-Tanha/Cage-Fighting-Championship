@@ -81,8 +81,8 @@ const RefereeCreate = () => {
             >
               <i className="fa-solid fa-arrow-left text-xs"></i> Back to Referees
             </Link>
-            <h1 className="text-4xl font-display font-black uppercase italic tracking-tighter">
-              Create <span className="text-[#FE0002]">Referee</span>
+            <h1 className="text-2xl md:text-4xl font-display font-black uppercase italic tracking-tighter">
+                Create <span className="text-[#FE0002]">Referee</span>
             </h1>
           </div>
         </div>
@@ -103,7 +103,7 @@ const RefereeCreate = () => {
           onSubmit={handleSubmit}
           className="bg-white border border-black/5 shadow-xl rounded-sm overflow-hidden"
         >
-          <div className="p-8 space-y-8">
+          <div className="p-5 md:p-8 space-y-6 md:space-y-8">
             {/* Basic Info Section */}
             <div>
               <h3 className="text-xs font-display font-bold uppercase tracking-[0.3em] text-gray-400 mb-6 border-b border-black/5 pb-2">
@@ -253,12 +253,12 @@ const RefereeCreate = () => {
           </div>
 
           {/* Submit */}
-          <div className="p-8 bg-gray-50 border-t border-black/5 flex justify-end">
+          <div className="p-5 md:p-8 bg-gray-50 border-t border-black/5 flex justify-end">
             <button
               type="submit"
               disabled={loading}
               className={`
-                group relative bg-black text-white px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all 
+                group relative bg-black text-white px-6 md:px-10 py-3 md:py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all 
                 ${loading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#FE0002] active:scale-95"}
               `}
             >

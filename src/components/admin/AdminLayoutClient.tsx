@@ -2,10 +2,19 @@
 
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminTopbar from '@/components/admin/AdminTopbar';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    useEffect(() => {
+        if (sidebarOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => { document.body.style.overflow = ''; };
+    }, [sidebarOpen]);
 
     return (
         <div className="min-h-screen bg-gray-50 flex">

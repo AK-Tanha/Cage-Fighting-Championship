@@ -209,21 +209,19 @@ const EventEditPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+    <div className="min-h-screen bg-gray-50 md:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
+        <div className="mb-6 md:mb-8">
             <Link
               href="/admin/events"
-              className="text-[#FE0002] text-sm font-bold uppercase tracking-widest hover:underline flex items-center gap-2 mb-2"
+              className="text-[#FE0002] text-xs md:text-sm font-bold uppercase tracking-widest hover:underline inline-flex items-center gap-2 mb-1 md:mb-2"
             >
               <i className="fa-solid fa-arrow-left text-xs"></i> Back to Events
             </Link>
-            <h1 className="text-4xl font-display font-black uppercase italic tracking-tighter">
-              Edit <span className="text-[#FE0002]">Event</span>
+            <h1 className="text-2xl md:text-4xl font-display font-black uppercase italic tracking-tighter">
+                Edit <span className="text-[#FE0002]">Event</span>
             </h1>
-          </div>
         </div>
 
         {/* Status Messages */}
@@ -246,7 +244,7 @@ const EventEditPage = () => {
                 key={tab.key}
                 type="button"
                 onClick={() => setSection(tab.key)}
-                className={`flex-1 py-4 text-xs font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-3 ${
+                className={`flex-1 py-3 md:py-4 text-[9px] md:text-xs font-black uppercase tracking-[0.15em] md:tracking-[0.3em] transition-all flex items-center justify-center gap-1.5 md:gap-3 ${
                   section === tab.key
                     ? "bg-black text-white"
                     : "bg-gray-50 text-gray-400 hover:text-black hover:bg-gray-100"
@@ -258,7 +256,7 @@ const EventEditPage = () => {
             ))}
           </div>
 
-          <div className="p-8">
+          <div className="p-4 md:p-8">
             {/* EVENT INFO SECTION */}
             {section === "event-info" && (
               <div className="space-y-8">
@@ -455,11 +453,11 @@ const EventEditPage = () => {
                             el.classList.remove("border-[#FE0002]", "border-2");
                           });
                         }}
-                        className="p-6 bg-gray-50 border border-black/5 rounded-sm relative transition-all"
+                        className="p-4 md:p-6 bg-gray-50 border border-black/5 rounded-sm relative transition-all"
                       >
                         {/* Top bar */}
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-center gap-3">
+                        <div className="w-full flex items-center justify-between mb-4">
+                          <div className="flex items-center flex-wrap gap-3 min-w-0">
                             <i className="fa-solid fa-grip-vertical text-gray-300 cursor-grab active:cursor-grabbing"></i>
                             <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 bg-white px-2 py-1 rounded-sm border border-black/5">
                               Fight {index + 1}
@@ -555,7 +553,7 @@ const EventEditPage = () => {
                         </div>
 
                         {/* Auto-filled weight class input */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-3">
                           <div className="flex flex-col">
                             <label className="mb-1 text-[9px] font-black uppercase tracking-widest text-gray-500">
                               Weight Class
@@ -614,7 +612,7 @@ const EventEditPage = () => {
                             <i className="fa-solid fa-chevron-right text-[8px] group-open:rotate-90 transition-transform"></i>
                             Match Details
                           </summary>
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3 pt-3 border-t border-black/5">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mt-3 pt-3 border-t border-black/5">
                             <div className="flex flex-col">
                               <label className="mb-1 text-[9px] font-black uppercase tracking-widest text-gray-500">Rounds</label>
                               <input
@@ -779,30 +777,30 @@ const EventEditPage = () => {
           </div>
 
           {/* Footer Actions */}
-          <div className="p-8 bg-gray-50 border-t border-black/5 flex items-center justify-between">
+          <div className="p-4 md:p-8 bg-gray-50 border-t border-black/5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             {section === "matchmaking" ? (
               <>
                 <button
                   type="button"
                   onClick={() => setSection("event-info")}
-                  className="text-gray-500 hover:text-black text-xs font-bold uppercase tracking-[0.2em] transition-all flex items-center gap-2"
+                  className="text-gray-500 hover:text-black text-xs font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center sm:justify-start gap-2 py-2"
                 >
                   <i className="fa-solid fa-arrow-left"></i>
-                  Back: Event Info
+                  <span className="hidden sm:inline">Back: </span>Event Info
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className={`group bg-black text-white px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all ${
+                  className={`group bg-black text-white px-6 md:px-10 py-3 md:py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all w-full sm:w-auto text-center ${
                     submitting ? "opacity-70 cursor-not-allowed" : "hover:bg-[#FE0002] active:scale-95"
                   }`}
                 >
                   {submitting ? (
-                    <span className="flex items-center gap-2">
+                    <span className="flex items-center justify-center gap-2">
                       <i className="fa-solid fa-circle-notch animate-spin"></i> Processing...
                     </span>
                   ) : (
-                    <span className="flex items-center gap-2">
+                    <span className="flex items-center justify-center gap-2">
                       <i className="fa-solid fa-save group-hover:scale-110 transition-transform"></i> Save Changes
                     </span>
                   )}
@@ -813,7 +811,7 @@ const EventEditPage = () => {
                 <button
                   type="button"
                   onClick={() => setSection("matchmaking")}
-                  className="bg-black text-white px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#FE0002] transition-all flex items-center gap-2"
+                  className="bg-black text-white px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#FE0002] transition-all flex items-center justify-center gap-2 w-full sm:w-auto"
                 >
                   Next: Matchmaking
                   <i className="fa-solid fa-arrow-right"></i>

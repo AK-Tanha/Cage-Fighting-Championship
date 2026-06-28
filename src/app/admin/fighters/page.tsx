@@ -62,8 +62,42 @@ export default function AdminFightersPage() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[800px]">
+        {/* Mobile cards */}
+        <div className="md:hidden space-y-3">
+          {fighters.map((fighter) => {
+            const pi = fighter.personal_info || {}
+            const pa = fighter.physical_attributes || {}
+            const career = fighter.career || {}
+            const media = fighter.media || {}
+            const recordStr = formatRecord(fighter.record)
+            return (
+              <div key={fighter._id} className="bg-white border border-black/5 rounded-sm p-4 space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-black rounded-sm overflow-hidden relative shrink-0">
+                    <Image src={media.profile_image || "/og-fighter-default.jpg"} alt={pi.full_name} fill className="object-cover object-top" sizes="48px" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-display font-black uppercase text-sm tracking-tighter truncate">{pi.full_name}</div>
+                    <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">{pa.weight_class}</div>
+                  </div>
+                  <div className="ml-auto text-center">
+                    <div className="font-bold text-gray-700 text-sm">{recordStr}</div>
+                    <span className="bg-green-100 text-green-700 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest rounded-full inline-block mt-1">{career.styles?.join(", ")}</span>
+                  </div>
+                </div>
+                <div className="flex gap-2 pt-2 border-t border-black/5">
+                  <Link href={`/admin/fighters/${fighter._id}`} className="flex-1 text-center py-2 border border-black/10 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all"><i className="fa-solid fa-eye mr-1"></i> View</Link>
+                  <Link href={`/admin/fighters/edit/${fighter._id}`} className="flex-1 text-center py-2 border border-black/10 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all"><i className="fa-solid fa-pen mr-1"></i> Edit</Link>
+                  <button onClick={() => handleDelete(fighter._id)} className="flex-[0.5] text-center py-2 border border-red-200 text-red-500 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all"><i className="fa-solid fa-trash"></i></button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Desktop table */}
+        <div className="hidden md:block overflow-x-auto">
+          <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-white text-[10px] text-gray-400 font-bold uppercase tracking-widest border-b border-black/5">
                 <th className="p-6">Fighter</th>

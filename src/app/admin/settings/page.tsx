@@ -29,7 +29,7 @@ export default function AdminSettingsPage() {
                         />
                     </div>
 
-                    <div className="flex items-center justify-between border-t border-black/5 pt-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-black/5 pt-6">
                         <div className="space-y-1">
                             <h4 className="font-display font-bold uppercase tracking-widest text-sm text-black">Maintenance Mode</h4>
                             <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Disable site access for visitors while making changes</p>

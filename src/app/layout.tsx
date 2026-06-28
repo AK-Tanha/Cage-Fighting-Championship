@@ -1,9 +1,14 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import QueryProvider from "@/components/QueryProvider";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Montserrat, Rubik } from "next/font/google";
 import "./globals.css";
+
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+};
 
 const montserrat = Montserrat({
     subsets: ["latin"],
