@@ -238,6 +238,17 @@ export const uploadImage = async (file: File, folder: string = 'media') => {
     }
 };
 
+// Dashboard
+export const getDashboard = async () => {
+    try {
+        const response = await api.get('/dashboard/');
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
 // Hero Slides
 export const createHeroSlide = async (heroSlide: HeroSlideCreate) => {
     try {

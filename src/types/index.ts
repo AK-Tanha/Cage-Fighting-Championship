@@ -215,6 +215,22 @@ export interface HeroSlideCreate {
     order?: number
 }
 
+export interface DashboardStats {
+    total_fighters: number
+    active_fighters: number
+    total_referees: number
+    total_hero_slides: number
+    total_events: number
+    upcoming_events: number
+    past_events: number
+}
+
+export interface DashboardResponse {
+    stats: DashboardStats
+    next_event: FightEvent | null
+    recent_events: FightEvent[]
+}
+
 export type View = 'home' | 'fighters' | 'events'
 
 export interface ChatMessage {
