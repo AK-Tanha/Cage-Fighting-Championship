@@ -23,19 +23,56 @@ export default function ImageCropper({
   const [imageNatural, setImageNatural] = useState({ w: 0, h: 0 });
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [panStart, setPanStart] = useState({ x: 0, y: 0 });
 
   const frameRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const dragRef = useRef({ isDragging: false, startX: 0, startY: 0, panX: 0, panY: 0 });
 
   useEffect(() => {
     const url = URL.createObjectURL(file);
     setImageUrl(url);
     return () => URL.revokeObjectURL(url);
   }, [file]);
+
+  useEffect(() => {
+    const el = frameRef.current;
+    if (!el) return;
+
+    const onDown = (e: MouseEvent) => {
+      dragRef.current = {
+        isDragging: true,
+        startX: e.clientX,
+        startY: e.clientY,
+        panX: pan.x,
+        panY: pan.y,
+      };
+    };
+
+    const onMove = (e: MouseEvent) => {
+      const d = dragRef.current;
+      if (!d.isDragging) return;
+      setPan({
+        x: d.panX + (e.clientX - d.startX),
+        y: d.panY + (e.clientY - d.startY),
+      });
+    };
+
+    const onUp = () => {
+      dragRef.current.isDragging = false;
+    };
+
+    el.addEventListener("mousedown", onDown);
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+
+    return () => {
+      el.removeEventListener("mousedown", onDown);
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+    };
+  }, [pan]);
 
   const frameSize = useCallback(() => {
     if (!frameRef.current) return { w: 400, h: 400 / aspectRatio };
@@ -49,7 +86,7 @@ export default function ImageCropper({
     const nh = imageNatural.h;
     if (!nw || !nh) return { scale: 1, dx: 0, dy: 0, displayW: fw, displayH: fh };
 
-    const baseScale = Math.max(fw / nw, fh / nh);
+    const baseScale = Math.max(fw / nw, fh / nh) * 1.25;
     const scale = baseScale * zoom;
     const displayW = nw * scale;
     const displayH = nh * scale;
@@ -61,23 +98,6 @@ export default function ImageCropper({
 
     return { scale, dx, dy, displayW, displayH, maxDx, maxDy };
   }, [imageNatural, zoom, pan, frameSize]);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    setDragStart({ x: e.clientX, y: e.clientY });
-    setPanStart({ ...pan });
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    const dx = e.clientX - dragStart.x;
-    const dy = e.clientY - dragStart.y;
-    setPan({ x: panStart.x + dx, y: panStart.y + dy });
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
 
   const handleZoomChange = (v: number) => {
     setZoom(Math.max(1, Math.min(5, v)));
@@ -101,7 +121,7 @@ export default function ImageCropper({
     const nh = imageNatural.h;
     if (!nw || !nh) return;
 
-    const baseScale = Math.max(fw / nw, fh / nh);
+    const baseScale = Math.max(fw / nw, fh / nh) * 1.25;
     const scale = baseScale * zoom;
     const displayW = nw * scale;
     const displayH = nh * scale;
@@ -130,12 +150,10 @@ export default function ImageCropper({
   }, [imageNatural, zoom, pan, frameSize, outputWidth, outputHeight, file, onApply]);
 
   const { scale, dx, dy, displayW, displayH } = getTransform();
-  const { w: frameW, h: frameH } = frameSize();
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-2 md:p-4">
       <div className="bg-white rounded-sm w-full max-w-4xl max-h-[95vh] flex flex-col shadow-2xl">
-        {/* header */}
         <div className="flex items-center justify-between px-4 md:px-6 py-3 border-b border-black/10 flex-shrink-0">
           <h2 className="text-xs font-black uppercase tracking-[0.2em]">
             Image <span className="text-[#FE0002]">Cropper</span>
@@ -148,23 +166,17 @@ export default function ImageCropper({
           </button>
         </div>
 
-        {/* body */}
         <div className="flex-1 overflow-auto grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 p-4 md:p-6">
-          {/* frame preview */}
           <div className="lg:col-span-2 flex items-center justify-center min-h-[350px]">
             <div
               ref={frameRef}
-              className="relative overflow-hidden bg-gray-900 rounded-sm"
+              className="relative overflow-hidden bg-gray-900 rounded-sm select-none"
               style={{
                 width: "100%",
                 maxWidth: "500px",
                 aspectRatio: `${aspectRatio}`,
-                cursor: isDragging ? "grabbing" : "grab",
+                cursor: "grab",
               }}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
             >
               {imageUrl && (
                 <img
@@ -200,26 +212,21 @@ export default function ImageCropper({
                 </div>
               )}
 
-              {/* grid overlay */}
               <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent calc(33.33% - 1px), rgba(255,255,255,0.15) calc(33.33% - 1px), rgba(255,255,255,0.15) 33.33%), repeating-linear-gradient(90deg, transparent, transparent calc(33.33% - 1px), rgba(255,255,255,0.15) calc(33.33% - 1px), rgba(255,255,255,0.15) 33.33%)` }} />
 
-              {/* aspect ratio label */}
               <div className="absolute bottom-2 left-2 px-2 py-1 bg-black/60 rounded-sm text-[10px] font-bold text-white/80 tracking-widest pointer-events-none">
                 {aspectRatio === 1 ? "1:1" : aspectRatio === 9 / 16 ? "9:16" : aspectRatio === 16 / 9 ? "16:9" : `${aspectRatio}:1`}
               </div>
             </div>
           </div>
 
-          {/* controls */}
           <div className="flex flex-col gap-5 flex-shrink-0">
             <div>
               <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-3">
                 Zoom
               </h3>
               <div className="flex items-center gap-3">
-                <span className="text-[10px] font-bold text-gray-400 w-6 text-center">
-                  1×
-                </span>
+                <span className="text-[10px] font-bold text-gray-400 w-6 text-center">1×</span>
                 <input
                   type="range"
                   min={1}
@@ -229,21 +236,15 @@ export default function ImageCropper({
                   onChange={(e) => handleZoomChange(Number(e.target.value))}
                   className="flex-1 h-1.5 accent-[#FE0002]"
                 />
-                <span className="text-[10px] font-bold text-gray-400 w-6 text-center">
-                  5×
-                </span>
+                <span className="text-[10px] font-bold text-gray-400 w-6 text-center">5×</span>
               </div>
               <div className="text-center mt-1">
-                <span className="text-[11px] font-bold text-gray-600 tabular-nums">
-                  {zoom.toFixed(1)}×
-                </span>
+                <span className="text-[11px] font-bold text-gray-600 tabular-nums">{zoom.toFixed(1)}×</span>
               </div>
             </div>
 
             <div>
-              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-3">
-                Output
-              </h3>
+              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-3">Output</h3>
               <div className="bg-gray-50 rounded-sm px-3 py-2.5 text-xs text-gray-600 font-medium">
                 {outputWidth} × {outputHeight}px
                 <span className="block text-[10px] text-gray-400 font-medium mt-0.5">
@@ -253,9 +254,7 @@ export default function ImageCropper({
             </div>
 
             <div>
-              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-3">
-                Actions
-              </h3>
+              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-3">Actions</h3>
               <div className="flex flex-col gap-2">
                 <button
                   onClick={resetView}
@@ -263,10 +262,9 @@ export default function ImageCropper({
                 >
                   <i className="fa-solid fa-rotate-left"></i> Reset View
                 </button>
-
                 <div className="bg-gray-50 rounded-sm px-3 py-2.5">
                   <p className="text-[10px] text-gray-500 font-medium leading-relaxed">
-                    <i className="fa-solid fa-arrows mr-1"></i> Drag to reposition · Scroll to zoom
+                    <i className="fa-solid fa-arrows mr-1"></i> Drag to reposition · Slide to zoom
                   </p>
                 </div>
               </div>
@@ -274,7 +272,6 @@ export default function ImageCropper({
           </div>
         </div>
 
-        {/* footer */}
         <div className="flex items-center justify-end gap-3 px-4 md:px-6 py-3 border-t border-black/10 flex-shrink-0">
           <button
             onClick={onCancel}
