@@ -1,7 +1,9 @@
 "use client";
 
 import { getFighterById, updateFighter, uploadImage } from "@/lib/api";
+import { fetchImageForEdit } from "@/lib/image";
 import { parseRecord } from "@/types";
+import ImageCropper from "@/components/ImageCropper";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -17,6 +19,7 @@ const FighterEditPage = () => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
 
   const [data, setData] = useState({
     name: "",
@@ -87,11 +90,25 @@ const FighterEditPage = () => {
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setPendingFile(file);
+  };
 
+  const handleEditImage = async () => {
+    if (!data.image_url) return;
+    try {
+      const file = await fetchImageForEdit(data.image_url);
+      setPendingFile(file);
+    } catch {
+      setError("Failed to load image for editing");
+    }
+  };
+
+  const handleAdjustedImage = async (adjustedFile: File) => {
+    setPendingFile(null);
     setUploadingImage(true);
     setError(null);
     try {
-      const url = await uploadImage(file);
+      const url = await uploadImage(adjustedFile);
       setData((prev) => ({ ...prev, image_url: url }));
     } catch (err: any) {
       console.error("Image upload error", err);
@@ -390,7 +407,7 @@ const FighterEditPage = () => {
                   />
 
                   {data.image_url ? (
-                    <div className="relative aspect-video w-full">
+                    <div className="relative aspect-[9/16] w-full">
                       <Image
                         src={data.image_url}
                         alt="Fighter preview"
@@ -416,6 +433,16 @@ const FighterEditPage = () => {
                     </div>
                   )}
                 </div>
+
+                {data.image_url && (
+                  <button
+                    type="button"
+                    onClick={handleEditImage}
+                    className="w-full px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest bg-gray-100 hover:bg-gray-200 rounded-sm transition-colors flex items-center justify-center gap-1.5"
+                  >
+                    <i className="fa-solid fa-crop"></i> Edit Image (Reposition & Crop)
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -445,6 +472,13 @@ const FighterEditPage = () => {
           </div>
         </form>
       </div>
+      {pendingFile && (
+        <ImageCropper
+          file={pendingFile}
+          onApply={handleAdjustedImage}
+          onCancel={() => setPendingFile(null)}
+        />
+      )}
     </div>
   );
 };

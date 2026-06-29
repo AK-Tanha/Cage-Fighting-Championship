@@ -17,11 +17,11 @@ const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
     return (
         <Link
             href={`/fighters/${fighter._id}`}
-            className="group relative bg-white overflow-hidden border-2 border-black/5 hover:border-[#FE0002] transition-all duration-300 aspect-[3/4] flex flex-col justify-end shadow-sm hover:shadow-xl"
+            className="group relative bg-white overflow-hidden border-2 border-black/5 hover:border-[#FE0002] transition-all duration-300 aspect-[9/16] flex flex-col justify-end shadow-sm hover:shadow-xl"
         >
             <div className="absolute inset-0 z-0">
                 <Image
-                    src={media.profile_image || `https://picsum.photos/seed/${pi.full_name}/350/254`}
+                    src={media.profile_image || `https://picsum.photos/seed/${pi.full_name}/360/640`}
                     alt={pi.full_name}
                     className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500 ease-out"
                     fill

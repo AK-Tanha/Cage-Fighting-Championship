@@ -214,12 +214,12 @@ const FighterProfile: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           <div className="lg:col-span-1 space-y-12">
-            <section className="relative group aspect-[3/4.5] md:aspect-[3/4] overflow-hidden">
+            <section className="relative group aspect-[9/16] overflow-hidden">
               <div className="absolute inset-0 border-2 border-black/5 transform translate-x-3 translate-y-3 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-300" />
               <Image
                 src={
                   media.profile_image ||
-                  `https://picsum.photos/seed/${pi.full_name}/600/900`
+                  `https://picsum.photos/seed/${pi.full_name}/360/640`
                 }
                 alt={pi.full_name}
                 className="w-full h-full object-cover object-top z-10 shadow-lg"

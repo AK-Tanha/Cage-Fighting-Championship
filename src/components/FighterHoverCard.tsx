@@ -38,7 +38,7 @@ const FighterHoverCard = forwardRef<HTMLDivElement, FighterHoverCardProps>(
                 className="fixed z-[9999] bg-white border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.15)] w-[340px] pointer-events-none flex overflow-hidden"
             >
                 {/* Left: Photo */}
-                <div className="relative w-28 shrink-0 bg-gray-100">
+                <div className="relative w-28 shrink-0 aspect-[9/16] bg-gray-100">
                     <Image
                         src={media.profile_image || '/og-fighter-default.jpg'}
                         alt={pi.full_name || 'Fighter'}
