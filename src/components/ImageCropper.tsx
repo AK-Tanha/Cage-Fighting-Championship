@@ -29,6 +29,8 @@ export default function ImageCropper({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const dragRef = useRef({ isDragging: false, startX: 0, startY: 0, panX: 0, panY: 0 });
+  const panRef = useRef(pan);
+  panRef.current = pan;
 
   useEffect(() => {
     const url = URL.createObjectURL(file);
@@ -40,39 +42,74 @@ export default function ImageCropper({
     const el = frameRef.current;
     if (!el) return;
 
-    const onDown = (e: MouseEvent) => {
+    const startDrag = (clientX: number, clientY: number) => {
       dragRef.current = {
         isDragging: true,
-        startX: e.clientX,
-        startY: e.clientY,
-        panX: pan.x,
-        panY: pan.y,
+        startX: clientX,
+        startY: clientY,
+        panX: panRef.current.x,
+        panY: panRef.current.y,
       };
     };
 
-    const onMove = (e: MouseEvent) => {
+    const moveDrag = (clientX: number, clientY: number) => {
       const d = dragRef.current;
       if (!d.isDragging) return;
       setPan({
-        x: d.panX + (e.clientX - d.startX),
-        y: d.panY + (e.clientY - d.startY),
+        x: d.panX + (clientX - d.startX),
+        y: d.panY + (clientY - d.startY),
       });
     };
 
-    const onUp = () => {
+    const endDrag = () => {
       dragRef.current.isDragging = false;
     };
 
-    el.addEventListener("mousedown", onDown);
-    document.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseup", onUp);
+    const onMouseDown = (e: MouseEvent) => startDrag(e.clientX, e.clientY);
+    const onMouseMove = (e: MouseEvent) => moveDrag(e.clientX, e.clientY);
+    const onMouseUp = () => endDrag();
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      e.preventDefault();
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (!dragRef.current.isDragging) return;
+      e.preventDefault();
+      const t = e.touches[0];
+      if (!t) return;
+      moveDrag(t.clientX, t.clientY);
+    };
+    const onTouchEnd = () => endDrag();
+    const onTouchCancel = () => endDrag();
+
+    el.addEventListener("mousedown", onMouseDown);
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+    el.addEventListener("touchstart", onTouchStart, { passive: false });
+    document.addEventListener("touchmove", onTouchMove, { passive: false });
+    document.addEventListener("touchend", onTouchEnd);
+    document.addEventListener("touchcancel", onTouchCancel);
 
     return () => {
-      el.removeEventListener("mousedown", onDown);
-      document.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseup", onUp);
+      el.removeEventListener("mousedown", onMouseDown);
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+      el.removeEventListener("touchstart", onTouchStart);
+      document.removeEventListener("touchmove", onTouchMove);
+      document.removeEventListener("touchend", onTouchEnd);
+      document.removeEventListener("touchcancel", onTouchCancel);
     };
-  }, [pan]);
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onCancel();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [onCancel]);
 
   const frameSize = useCallback(() => {
     if (!frameRef.current) return { w: 400, h: 400 / aspectRatio };
@@ -100,7 +137,7 @@ export default function ImageCropper({
   }, [imageNatural, zoom, pan, frameSize]);
 
   const handleZoomChange = (v: number) => {
-    setZoom(Math.max(1, Math.min(5, v)));
+    setZoom(Math.max(0.5, Math.min(5, v)));
   };
 
   const resetView = () => {
@@ -117,18 +154,7 @@ export default function ImageCropper({
     if (!ctx) return;
 
     const { w: fw, h: fh } = frameSize();
-    const nw = imageNatural.w;
-    const nh = imageNatural.h;
-    if (!nw || !nh) return;
-
-    const baseScale = Math.max(fw / nw, fh / nh) * 1.25;
-    const scale = baseScale * zoom;
-    const displayW = nw * scale;
-    const displayH = nh * scale;
-    const maxDx = Math.max(0, (displayW - fw) / 2);
-    const maxDy = Math.max(0, (displayH - fh) / 2);
-    const dx = Math.max(-maxDx, Math.min(maxDx, pan.x));
-    const dy = Math.max(-maxDy, Math.min(maxDy, pan.y));
+    const { scale, dx, dy, displayW, displayH } = getTransform();
 
     const srcX = ((displayW - fw) / 2 - dx) / scale;
     const srcY = ((displayH - fh) / 2 - dy) / scale;
@@ -147,7 +173,7 @@ export default function ImageCropper({
       });
       onApply(adjustedFile);
     }, "image/png");
-  }, [imageNatural, zoom, pan, frameSize, outputWidth, outputHeight, file, onApply]);
+  }, [getTransform, frameSize, outputWidth, outputHeight, file, onApply]);
 
   const { scale, dx, dy, displayW, displayH } = getTransform();
 
@@ -170,12 +196,13 @@ export default function ImageCropper({
           <div className="lg:col-span-2 flex items-center justify-center min-h-[350px]">
             <div
               ref={frameRef}
-              className="relative overflow-hidden bg-gray-900 rounded-sm select-none"
+              className="relative overflow-hidden bg-gray-900 rounded-sm select-none touch-manipulation"
               style={{
                 width: "100%",
-                maxWidth: "500px",
+                maxWidth: "270px",
                 aspectRatio: `${aspectRatio}`,
                 cursor: "grab",
+                touchAction: "none",
               }}
             >
               {imageUrl && (
@@ -226,10 +253,10 @@ export default function ImageCropper({
                 Zoom
               </h3>
               <div className="flex items-center gap-3">
-                <span className="text-[10px] font-bold text-gray-400 w-6 text-center">1×</span>
+                <span className="text-[10px] font-bold text-gray-400 w-6 text-center">0.5×</span>
                 <input
                   type="range"
-                  min={1}
+                  min={0.5}
                   max={5}
                   step={0.1}
                   value={zoom}
