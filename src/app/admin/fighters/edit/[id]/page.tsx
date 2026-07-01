@@ -2,7 +2,7 @@
 
 import { getFighterById, updateFighter, uploadImage } from "@/lib/api";
 import { fetchImageForEdit } from "@/lib/image";
-import { parseRecord } from "@/types";
+import { formatRecord } from "@/types";
 import ImageCropper from "@/components/ImageCropper";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,7 +25,6 @@ const FighterEditPage = () => {
     name: "",
     nick_name: "",
     weight_class: "",
-    record: "",
     nationality: "",
     club: "",
     date_of_birth: "",
@@ -35,6 +34,7 @@ const FighterEditPage = () => {
   });
 
   const [styleInput, setStyleInput] = useState("");
+  const [autoRecord, setAutoRecord] = useState("0-0-0");
 
   useEffect(() => {
     const fetchFighter = async () => {
@@ -51,7 +51,6 @@ const FighterEditPage = () => {
           name: pi.full_name || "",
           nick_name: pi.nickname || "",
           weight_class: pa.weight_class || "",
-          record: rec ? `${rec.wins}-${rec.losses}-${rec.draws}` : "",
           nationality: pi.nationality || "",
           club: career.gym || "",
           date_of_birth: pi.date_of_birth
@@ -61,6 +60,8 @@ const FighterEditPage = () => {
           image_url: media.profile_image || "",
           status: fighter.status || "active",
         });
+
+        setAutoRecord(formatRecord(rec));
 
         if (career.styles) {
           if (Array.isArray(career.styles)) {
@@ -146,7 +147,6 @@ const FighterEditPage = () => {
           styles: stylesList,
           bio: data.bio || undefined,
         },
-        record: parseRecord(data.record || "0-0-0"),
         media: {
           profile_image: data.image_url || undefined,
         },
@@ -266,17 +266,11 @@ const FighterEditPage = () => {
 
                 <div className="flex flex-col">
                   <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                    Record (W-L-D)
+                    Record (Auto-Synced)
                   </label>
-                  <input
-                    type="text"
-                    name="record"
-                    required
-                    value={data.record}
-                    onChange={handleChange}
-                    placeholder="e.g. 10-2-0"
-                    className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
-                  />
+                  <div className="bg-gray-100 border border-black/10 rounded-sm px-4 py-3 text-sm font-bold text-gray-600">
+                    {autoRecord}
+                  </div>
                 </div>
 
                 <div className="flex flex-col">

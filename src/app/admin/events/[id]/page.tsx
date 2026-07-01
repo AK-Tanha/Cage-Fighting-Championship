@@ -151,10 +151,6 @@ const EventDetailsPage = () => {
       setError("Fighter 1 and Fighter 2 cannot be the same person.");
       return;
     }
-    if (!editFight.referee) {
-      setError("A referee must be selected.");
-      return;
-    }
     setSaving(true);
     setError(null);
     try {
@@ -427,8 +423,9 @@ const EventDetailsPage = () => {
                         const val = e.target.value;
                         setEditFight((prev: any) => ({
                           ...prev,
-                          winner_id: val,
+                          winner_id: val === "draw" ? "" : val,
                           result: !val ? "" : val === "draw" ? "Draw" : "Win",
+                          method: val === "draw" ? "Draw" : prev.method,
                         }));
                       }}
                       className="w-full bg-white border border-black/10 rounded-sm px-3 py-2.5 text-sm focus:outline-none focus:border-[#FE0002]"

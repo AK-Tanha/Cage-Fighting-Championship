@@ -169,6 +169,30 @@ export interface FightEventCreate {
     fights?: Fight[]
 }
 
+export interface StandaloneFight {
+    _id: string
+    fighter_1: string
+    fighter_2: string
+    event: string
+    weight_class: string
+    rounds?: number
+    is_title_fight?: boolean
+    title_name?: string
+    is_main_event?: boolean
+    is_co_main_event?: boolean
+    referee?: string
+    status: "scheduled" | "completed" | "cancelled"
+    result?: "win" | "loss" | "draw" | "no_contest"
+    method?: "KO/TKO" | "Submission" | "Decision" | "Disqualification" | "No Contest" | "Draw"
+    winner_id?: string
+    round_ended?: number
+    time_ended?: string
+    fight_order?: number
+    fight_type?: "Professional" | "Amateur" | "Exhibition"
+    created_at?: string
+    updated_at?: string
+}
+
 export interface FightRecord {
     event_id: string
     event_name: string

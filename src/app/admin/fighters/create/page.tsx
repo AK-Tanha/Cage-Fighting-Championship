@@ -2,7 +2,6 @@
 
 import { createFighter, uploadImage } from "@/lib/api";
 import { fetchImageForEdit } from "@/lib/image";
-import { parseRecord } from "@/types";
 import ImageCropper from "@/components/ImageCropper";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,7 +20,6 @@ const FighterCreate = () => {
     name: "",
     nick_name: "",
     weight_class: "",
-    record: "",
     nationality: "",
     club: "",
     date_of_birth: "",
@@ -98,7 +96,6 @@ const FighterCreate = () => {
           styles: stylesList,
           bio: data.bio || undefined,
         },
-        record: parseRecord(data.record || "0-0-0"),
         media: {
           profile_image: data.image_url || undefined,
         },
@@ -203,21 +200,6 @@ const FighterCreate = () => {
                     value={data.weight_class}
                     onChange={handleChange}
                     placeholder="e.g. Lightweight"
-                    className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="mb-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                    Record (W-L-D)
-                  </label>
-                  <input
-                    type="text"
-                    name="record"
-                    required
-                    value={data.record}
-                    onChange={handleChange}
-                    placeholder="e.g. 10-2-0"
                     className="bg-gray-50 border border-black/10 rounded-sm px-4 py-3 focus:outline-none focus:border-[#FE0002] transition-colors font-medium text-sm"
                   />
                 </div>

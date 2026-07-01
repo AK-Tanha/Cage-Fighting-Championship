@@ -2,6 +2,7 @@ import {
     Fighter, 
     FighterCreate, 
     FighterUpdate, 
+    StandaloneFight, 
     FightEvent, 
     FightEventCreate,
     HeroSlide,
@@ -283,6 +284,57 @@ export const deleteHeroSlide = async (id: string) => {
 export const getAllHeroSlides = async () => {
     try {
         const response = await api.get('/hero-slides/');
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// Fights
+export const createFight = async (fight: Partial<StandaloneFight>) => {
+    try {
+        const response = await api.post('/fights/', fight);
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const getAllFights = async (params?: { event?: string; fighter?: string; status?: string }) => {
+    try {
+        const response = await api.get('/fights/', { params });
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const getFightById = async (id: string) => {
+    try {
+        const response = await api.get(`/fights/${id}/`);
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const updateFight = async (id: string, fight: Partial<StandaloneFight>) => {
+    try {
+        const response = await api.put(`/fights/${id}/`, fight);
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const deleteFight = async (id: string) => {
+    try {
+        const response = await api.delete(`/fights/${id}/`);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);

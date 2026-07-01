@@ -169,9 +169,6 @@ const EventEditPage = () => {
         if (f.fighter1 === f.fighter2) {
           throw new Error(`Fight ${i + 1}: Fighter 1 and Fighter 2 cannot be the same person.`);
         }
-        if (!f.referee) {
-          throw new Error(`Fight ${i + 1}: A referee must be selected.`);
-        }
       }
       await updateEvent(eventId, data as any);
       setSuccess(true);
