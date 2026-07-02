@@ -2,9 +2,16 @@
 import { deleteFighter, getAllFighters } from "@/lib/api";
 import { Fighter, formatRecord } from "@/types";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
+  createColumnHelper,
+} from "@tanstack/react-table";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 
 export default function AdminFightersPage() {
   const router = useRouter();
@@ -30,6 +37,99 @@ export default function AdminFightersPage() {
     if (!confirm("Are you sure you want to delete this fighter?")) return;
     deleteMutation.mutate(id);
   };
+
+  const columnHelper = createColumnHelper<Fighter>();
+
+  const columns = useMemo(() => [
+    columnHelper.accessor((row) => row, {
+      id: "fighter",
+      header: "Fighter",
+      cell: ({ getValue }) => {
+        const fighter = getValue();
+        const pi = fighter.personal_info || {};
+        const media = fighter.media || {};
+        return (
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 bg-black rounded-sm overflow-hidden relative">
+              <Image
+                src={media.profile_image || "/og-fighter-default.jpg"}
+                alt="fighter image"
+                className="w-full h-full object-cover object-top"
+                fill
+                sizes="40px"
+              />
+            </div>
+            <div>
+              <div className="font-display font-black uppercase text-base tracking-tighter">
+                {pi.full_name}
+              </div>
+            </div>
+          </div>
+        );
+      },
+    }),
+    columnHelper.accessor("record", {
+      header: "Record",
+      cell: ({ getValue }) => {
+        const record = getValue();
+        return (
+          <div className="text-center font-bold text-gray-700">
+            {formatRecord(record)}
+          </div>
+        );
+      },
+    }),
+    columnHelper.accessor((row) => row.physical_attributes?.weight_class, {
+      id: "weight_class",
+      header: "Weight Class",
+      cell: ({ getValue }) => (
+        <div className="uppercase text-gray-500 text-[10px] tracking-widest font-bold">
+          {getValue()}
+        </div>
+      ),
+    }),
+    columnHelper.accessor((row) => row.career?.styles, {
+      id: "styles",
+      header: "Style",
+      cell: ({ getValue }) => (
+        <div className="text-center">
+          <span className="bg-green-100 text-green-700 px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
+            {getValue()?.join(", ")}
+          </span>
+        </div>
+      ),
+    }),
+    columnHelper.accessor("_id", {
+      id: "actions",
+      header: "Actions",
+      cell: ({ getValue, row }) => (
+        <div className="text-right space-x-2 whitespace-nowrap">
+          <button className="w-8 h-8 rounded border border-black/10 text-gray-600 hover:text-black hover:bg-black/5 hover:border-black transition-all">
+            <Link href={`/admin/fighters/${getValue()}`}>
+              <i className="fa-solid fa-eye text-xs"></i>
+            </Link>
+          </button>
+          <button className="w-8 h-8 rounded border border-black/10 text-gray-600 hover:text-black hover:bg-black/5 hover:border-black transition-all">
+            <Link href={`/admin/fighters/edit/${getValue()}`}>
+              <i className="fa-solid fa-pen text-xs"></i>
+            </Link>
+          </button>
+          <button
+            className="w-8 h-8 rounded border border-black/10 text-red-500 hover:text-white hover:bg-red-500 hover:border-red-500 transition-all"
+            onClick={() => handleDelete(row.original._id!)}
+          >
+            <i className="fa-solid fa-trash text-xs"></i>
+          </button>
+        </div>
+      ),
+    }),
+  ], []);
+
+  const table = useReactTable({
+    data: fighters,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
   return (
     <div className="space-y-6">
@@ -99,74 +199,32 @@ export default function AdminFightersPage() {
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white text-[10px] text-gray-400 font-bold uppercase tracking-widest border-b border-black/5">
-                <th className="p-6">Fighter</th>
-                <th className="p-6 text-center">Record</th>
-                <th className="p-6">Weight Class</th>
-                <th className="p-6 text-center">Style</th>
-                <th className="p-6 text-right">Actions</th>
-              </tr>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr
+                  key={headerGroup.id}
+                  className="bg-white text-[10px] text-gray-400 font-bold uppercase tracking-widest border-b border-black/5"
+                >
+                  {headerGroup.headers.map((header) => (
+                    <th key={header.id} className="p-6">
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                    </th>
+                  ))}
+                </tr>
+              ))}
             </thead>
             <tbody className="text-sm font-medium">
-              {fighters.map((fighter, i) => {
-                const pi = fighter.personal_info || {}
-                const pa = fighter.physical_attributes || {}
-                const career = fighter.career || {}
-                const media = fighter.media || {}
-                const recordStr = formatRecord(fighter.record)
-
-                return (
-                  <tr
-                    key={i}
-                    className="border-b border-black/5 hover:bg-gray-50 transition-colors"
-                  >
-                    <td className="p-6">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-black rounded-sm overflow-hidden relative">
-                          <Image
-                            src={media.profile_image || "/og-fighter-default.jpg"}
-                            alt="fighter image"
-                            className="w-full h-full object-cover object-top"
-                            fill
-                            sizes="40px"
-                          />
-                        </div>
-                        <div>
-                          <div className="font-display font-black uppercase text-base tracking-tighter">
-                            {pi.full_name}
-                          </div>
-                        </div>
-                      </div>
+              {table.getRowModel().rows.map((row) => (
+                <tr
+                  key={row.id}
+                  className="border-b border-black/5 hover:bg-gray-50 transition-colors"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="p-6">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
-                    <td className="p-6 text-center font-bold text-gray-700">
-                      {recordStr}
-                    </td>
-                    <td className="p-6 uppercase text-gray-500 text-[10px] tracking-widest font-bold">
-                      {pa.weight_class}
-                    </td>
-                    <td className="p-6 text-center">
-                      <span className="bg-green-100 text-green-700 px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
-                        {career.styles?.join(", ")}
-                      </span>
-                    </td>
-                    <td className="p-6 text-right space-x-2 whitespace-nowrap">
-                      <button className="w-8 h-8 rounded border border-black/10 text-gray-600 hover:text-black hover:bg-black/5 hover:border-black transition-all">
-                        <Link href={`/admin/fighters/${fighter._id}`}>
-                          <i className="fa-solid fa-eye text-xs"></i>
-                        </Link>
-                      </button>
-                      <button className="w-8 h-8 rounded border border-black/10 text-gray-600 hover:text-black hover:bg-black/5 hover:border-black transition-all">
-                        <Link href={`/admin/fighters/edit/${fighter._id}`}>
-                          <i className="fa-solid fa-pen text-xs"></i>
-                        </Link>
-                      </button>
-                      <button className="w-8 h-8 rounded border border-black/10 text-red-500 hover:text-white hover:bg-red-500 hover:border-red-500 transition-all" onClick={() => handleDelete(fighter._id)}>
-                        <i className="fa-solid fa-trash text-xs"></i>
-                      </button>
-                    </td>
-                  </tr>
-                )
-              })}
+                  ))}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
