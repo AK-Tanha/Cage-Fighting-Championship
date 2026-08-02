@@ -2,7 +2,6 @@
 
 import { getAllFighters } from "@/lib/api";
 import { Fighter, formatRecord } from "@/types";
-import { FIGHTERS } from "@/constants";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,7 +16,7 @@ const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
     return (
         <Link
             href={`/fighters/${fighter._id}`}
-            className="group relative bg-white overflow-hidden border-2 border-black/5 hover:border-[#FE0002] transition-all duration-300 aspect-[9/16] flex flex-col justify-end shadow-sm hover:shadow-xl"
+            className="group relative bg-white overflow-hidden rounded-xl md:rounded-none border-2 border-black/5 hover:border-[#FE0002] transition-all duration-300 aspect-[9/16] flex flex-col justify-end shadow-sm hover:shadow-xl active:scale-[0.99]"
         >
             <div className="absolute inset-0 z-0">
                 <Image
@@ -28,7 +27,7 @@ const FighterCard: React.FC<{ fighter: Fighter }> = ({ fighter }) => {
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     quality={90}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-80" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#101317] via-[#101317]/40 to-transparent opacity-95" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#FE0002]/0 via-[#FE0002]/10 to-[#FE0002]/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out z-20" />
             </div>
 
@@ -61,13 +60,9 @@ const FeaturedFighters: React.FC = () => {
     const { data: fighters, isLoading } = useQuery({
         queryKey: ["featured-fighters"],
         queryFn: async () => {
-            try {
-                const data = await getAllFighters();
-                const list = Array.isArray(data) ? data : (data && typeof data === 'object' && Array.isArray(data.data) ? data.data : []);
-                return list.slice(0, 4);
-            } catch {
-                return FIGHTERS.slice(0, 4);
-            }
+            const data = await getAllFighters();
+            const list = Array.isArray(data) ? data : (data && typeof data === 'object' && Array.isArray(data.data) ? data.data : []);
+            return list.slice(0, 4);
         },
     });
 
@@ -104,14 +99,14 @@ const FeaturedFighters: React.FC = () => {
     };
 
     return (
-        <section className="py-20 md:py-28 bg-gray-50 border-t border-black/5">
+        <section className="pt-12 pb-10 md:py-28 bg-gray-50 border-t border-black/5">
             <div className="max-w-7xl mx-auto px-4">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-14">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 mb-6 md:mb-14">
                     <div>
-                        <span className="text-[#FE0002] text-[10px] font-black uppercase tracking-[0.3em] block mb-3">
+                        <span className="text-[#FE0002] text-[10px] font-black uppercase tracking-[0.3em] block mb-2 md:mb-3">
                             ELITE COMBATANTS
                         </span>
-                        <h2 className="text-4xl md:text-5xl font-display font-black italic uppercase tracking-tighter border-b-4 border-[#FE0002] pb-4 inline-block">
+                        <h2 className="text-3xl md:text-5xl font-display font-black italic uppercase tracking-tighter border-b-4 border-[#FE0002] pb-3 md:pb-4 inline-block">
                             TOP <span className="text-[#FE0002]">FIGHTERS</span>
                         </h2>
                     </div>

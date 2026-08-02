@@ -33,7 +33,7 @@ const AdminTopbar: React.FC<AdminTopbarProps> = ({ onMenuOpen }) => {
     };
 
     return (
-        <header className="h-16 lg:h-20 bg-white border-b border-black/5 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-40">
+        <header className="bg-white border-b border-black/5 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-40 pt-[env(safe-area-inset-top)] py-2 lg:py-4">
             <div className="flex items-center gap-3">
                 {/* Hamburger - mobile only */}
                 <button

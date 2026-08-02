@@ -511,9 +511,17 @@ const EventDetailsPage = () => {
                             <div className="relative w-9 h-9 overflow-hidden shrink-0 bg-gray-100 rounded-full">
                               <Image src={f1?.media?.profile_image || "/og-fighter-default.jpg"} alt={f1?.personal_info?.full_name || "Fighter"} fill className="object-cover object-top" sizes="36px" />
                             </div>
-                            <span className="font-semibold text-xs whitespace-nowrap">{f1?.personal_info?.full_name || "Unknown"}</span>
+                            <div className="flex flex-col">
+                              <span className="font-semibold text-xs whitespace-nowrap">{f1?.personal_info?.full_name || "Unknown"}</span>
+                              {fight.winner_id && fight.winner_id === fight.fighter1 && (
+                                <span className="text-[8px] text-white font-bold uppercase tracking-widest bg-green-600 px-1 py-0.5 rounded-sm mt-0.5 inline-block w-fit">Winner</span>
+                              )}
+                            </div>
                           </div>
                           <span className="text-gray-400 font-display italic text-[10px]">VS</span>
+                          {fight.result === "Draw" || fight.method === "Draw" ? (
+                            <span className="text-[8px] text-white font-bold uppercase tracking-widest bg-amber-500 px-1.5 py-0.5 rounded-sm whitespace-nowrap">Draw</span>
+                          ) : null}
                           <div className="flex items-center gap-2 px-2 py-1 cursor-pointer hover:bg-white hover:shadow-sm transition-all rounded-sm"
                             onClick={() => f2 && router.push(`/admin/fighters/${f2._id}`)}
                             onMouseEnter={() => f2 && setFighterHoverCard(f2)}
@@ -523,7 +531,12 @@ const EventDetailsPage = () => {
                             <div className="relative w-9 h-9 overflow-hidden shrink-0 bg-gray-100 rounded-full">
                               <Image src={f2?.media?.profile_image || "/og-fighter-default.jpg"} alt={f2?.personal_info?.full_name || "Fighter"} fill className="object-cover object-top" sizes="36px" />
                             </div>
-                            <span className="font-semibold text-xs whitespace-nowrap">{f2?.personal_info?.full_name || "Unknown"}</span>
+                            <div className="flex flex-col">
+                              <span className="font-semibold text-xs whitespace-nowrap">{f2?.personal_info?.full_name || "Unknown"}</span>
+                              {fight.winner_id && fight.winner_id === fight.fighter2 && (
+                                <span className="text-[8px] text-white font-bold uppercase tracking-widest bg-[#FE0002] px-1 py-0.5 rounded-sm mt-0.5 inline-block w-fit">Winner</span>
+                              )}
+                            </div>
                           </div>
                         </div>
                         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-start md:justify-end">
@@ -531,7 +544,7 @@ const EventDetailsPage = () => {
                           <span className="text-[9px] text-gray-500 font-bold uppercase tracking-tight bg-white border border-black/5 px-2 py-1 rounded whitespace-nowrap">Ref: {ref?.name || "N/A"}</span>
                           {fight.title_fight && <span className="text-[8px] text-white font-bold uppercase tracking-widest bg-[#FE0002] px-1.5 py-0.5 rounded whitespace-nowrap">Title</span>}
                           {fight.is_main_event && <span className="text-[8px] text-white font-bold uppercase tracking-widest bg-yellow-500 px-1.5 py-0.5 rounded whitespace-nowrap">Main</span>}
-                          {fight.result && <span className="text-[9px] text-white font-bold uppercase tracking-widest bg-black px-2 py-1 rounded whitespace-nowrap">{fight.result}</span>}
+                          {fight.result && <span className={`text-[9px] text-white font-bold uppercase tracking-widest px-2 py-1 rounded whitespace-nowrap ${fight.result === "Draw" || fight.method === "Draw" ? "bg-amber-500" : "bg-black"}`}>{fight.result}</span>}
                           <button onClick={() => setDetailsIndex(index)} className="text-gray-400 hover:text-black p-1 transition-colors" title="Bout details">
                             <i className="fa-solid fa-circle-info text-xs"></i>
                           </button>
@@ -857,10 +870,10 @@ const EventDetailsPage = () => {
                       <div className="bg-gray-50 border border-black/5 rounded-sm p-5">
                         <h4 className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-4">Result</h4>
                         <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm">
-                          <div>
-                            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block">Outcome</span>
-                            <span className={`font-semibold mt-0.5 block ${fight.result === "win" || fight.result === "Win" ? "text-green-700" : ""}`}>{fight.result}</span>
-                          </div>
+<div>
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block">Outcome</span>
+                    <span className={`font-semibold mt-0.5 block ${fight.result === "win" || fight.result === "Win" ? "text-green-700" : fight.result === "Draw" || fight.method === "Draw" ? "text-amber-600" : ""}`}>{fight.result}</span>
+                  </div>
                           {fight.method && (
                             <div>
                               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block">Method</span>

@@ -27,7 +27,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 
         {/* Title & Subtitle */}
         <div className="flex flex-col">
-          <h1 className="text-5xl sm:text-6xl md:text-8xl font-display font-black uppercase italic tracking-tighter leading-[0.85] text-black">
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-display font-black uppercase italic tracking-tighter leading-[0.85] text-black">
             {title}
           </h1>
           {subtitle && <div className="mt-4">{subtitle}</div>}

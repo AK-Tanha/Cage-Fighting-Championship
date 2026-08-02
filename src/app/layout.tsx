@@ -1,5 +1,6 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import BottomNav from "@/components/BottomNav";
 import QueryProvider from "@/components/QueryProvider";
 import type { Metadata, Viewport } from "next";
 import { Montserrat, Rubik } from "next/font/google";
@@ -8,6 +9,9 @@ import "./globals.css";
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
+    maximumScale: 1,
+    viewportFit: 'cover',
+    themeColor: '#000000',
 };
 
 const montserrat = Montserrat({
@@ -101,12 +105,18 @@ export default function RootLayout({
                     rel="stylesheet"
                     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
                 />
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+                <meta name="mobile-web-app-capable" content="yes" />
+                <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+                <meta name="apple-mobile-web-app-title" content="CFC" />
+                <meta name="format-detection" content="telephone=no" />
             </head>
             <body className="font-sans antialiased min-h-screen flex flex-col bg-white text-black selection:bg-[#FE0002] selection:text-white">
                 <QueryProvider>
                     <Navbar />
                     <main className="flex-1">{children}</main>
                     <Footer />
+                    <BottomNav />
                 </QueryProvider>
             </body>
         </html>

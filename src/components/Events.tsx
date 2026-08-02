@@ -27,9 +27,9 @@ const Events: React.FC = () => {
 
     const renderEventCard = (event: FightEvent) => (
         <div key={event._id} className="group relative bg-white rounded-lg overflow-hidden flex flex-col lg:flex-row hover:shadow-[0_0_30px_rgba(0,0,0,0.1)] transition-all border border-black/5">
-            <div className="lg:w-2/5 h-64 lg:h-auto relative overflow-hidden">
+            <div className="lg:w-2/5 h-48 sm:h-60 lg:h-auto relative overflow-hidden">
                 <Image
-                    src={event.image_url || `/api/proxy/events/${event._id}/image/`}
+                    src={event.image_url || "/og-event-default.jpg"}
                     alt={event.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
                     fill
@@ -45,7 +45,7 @@ const Events: React.FC = () => {
                 <p className="text-[#FE0002] font-bold text-[11px] md:text-sm tracking-widest mb-2 uppercase">
                     {new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                 </p>
-                <h3 className="text-2xl md:text-3xl lg:text-4xl font-display font-black uppercase mb-4 group-hover:text-[#FE0002] transition-colors">{event.name}</h3>
+                <h3 className="text-xl md:text-3xl lg:text-4xl font-display font-black uppercase mb-4 group-hover:text-[#FE0002] transition-colors">{event.name}</h3>
                 <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-8 text-gray-500 font-medium text-sm md:text-base">
                     <span className="flex items-center gap-2"><i className="fa-solid fa-location-dot text-[#FE0002]"></i> {event.location}</span>
                     {event.fights && event.fights.length > 0 && (
@@ -80,7 +80,7 @@ const Events: React.FC = () => {
     );
 
     if (isLoading) return (
-        <div className="pt-20 md:pt-28 pb-20 max-w-7xl mx-auto px-4">
+        <div className="pt-14 md:pt-28 pb-20 max-w-7xl mx-auto px-4">
             <div className="mb-16">
                 <div className="h-14 w-80 bg-gray-200 animate-pulse rounded-sm" />
             </div>
@@ -93,7 +93,7 @@ const Events: React.FC = () => {
     );
 
     if (error) return (
-        <div className="pt-20 md:pt-28 pb-20 text-center min-h-[60vh]">
+        <div className="pt-14 md:pt-28 pb-20 text-center min-h-[60vh]">
             <h2 className="text-4xl text-[#FE0002] font-display font-black italic mb-4 uppercase">System Error</h2>
             <p className="text-gray-400">{error instanceof Error ? error.message : 'Failed to load events'}</p>
         </div>
@@ -101,10 +101,10 @@ const Events: React.FC = () => {
 
     const hasAnyEvents = upcomingEvents.length > 0 || pastEvents.length > 0;
 
-    return (
-        <div className="pt-20 md:pt-28 pb-20 max-w-7xl mx-auto px-4">
-            <div className="mb-16">
-                <h2 className="text-4xl md:text-5xl font-display font-black italic uppercase tracking-tighter border-b-4 border-[#FE0002] pb-4 inline-block">
+return (
+        <div className="pt-14 md:pt-24 lg:pt-28 pb-20 max-w-7xl mx-auto px-4">
+            <div className="mb-10 md:mb-16">
+                <h2 className="text-3xl md:text-5xl font-display font-black italic uppercase tracking-tighter border-b-4 border-[#FE0002] pb-4 inline-block">
                     SCHEDULED <span className="text-[#FE0002]">WARS</span>
                 </h2>
             </div>
@@ -114,10 +114,10 @@ const Events: React.FC = () => {
                     No confirmed dates in the chamber. Check back soon for the next war.
                 </div>
             ) : (
-                <div className="space-y-20">
+                <div className="space-y-12 md:space-y-20">
                     {upcomingEvents.length > 0 && (
                         <div>
-                            <h3 className="text-sm font-black uppercase tracking-[0.3em] text-[#FE0002] mb-8">
+                            <h3 className="text-sm font-black uppercase tracking-[0.3em] text-[#FE0002] mb-6 md:mb-8">
                                 Upcoming Events
                             </h3>
                             <div className="space-y-8">
@@ -127,7 +127,7 @@ const Events: React.FC = () => {
                     )}
                     {pastEvents.length > 0 && (
                         <div>
-                            <h3 className="text-sm font-black uppercase tracking-[0.3em] text-gray-400 mb-8">
+                            <h3 className="text-sm font-black uppercase tracking-[0.3em] text-gray-400 mb-6 md:mb-8">
                                 Past Events
                             </h3>
                             <div className="space-y-8 opacity-70">

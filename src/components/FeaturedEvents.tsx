@@ -2,7 +2,6 @@
 
 import { getAllEvents } from "@/lib/api";
 import { FightEvent } from "@/types";
-import { EVENTS } from "@/constants";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,20 +10,20 @@ import React, { useMemo } from "react";
 const EventCard: React.FC<{ event: FightEvent }> = ({ event }) => (
     <Link
         href={`/events/${event._id}`}
-        className="group relative bg-white border border-black/5 hover:border-[#FE0002]/30 transition-all overflow-hidden flex flex-col shadow-sm hover:shadow-lg"
+        className="group relative bg-white rounded-xl md:rounded-sm border border-black/5 hover:border-[#FE0002]/30 transition-all overflow-hidden flex flex-col shadow-sm hover:shadow-lg active:scale-[0.99]"
     >
         <div className="aspect-[16/9] relative overflow-hidden">
             <Image
-                src={event.image_url || "/og-fighter-default.jpg"}
+                src={event.image_url || "/og-event-default.jpg"}
                 alt={event.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 quality={90}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4">
-                <p className="text-white/80 text-[10px] font-bold uppercase tracking-widest">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
+                <p className="text-white text-[10px] font-bold uppercase tracking-widest opacity-90">
                     {new Date(event.date).toLocaleDateString("en-US", {
                         month: "long",
                         day: "numeric",
@@ -33,8 +32,8 @@ const EventCard: React.FC<{ event: FightEvent }> = ({ event }) => (
                 </p>
             </div>
         </div>
-        <div className="p-5 flex flex-col flex-1">
-            <h3 className="font-display font-black uppercase text-sm md:text-base tracking-tighter leading-tight mb-2 group-hover:text-[#FE0002] transition-colors">
+        <div className="p-5 md:p-6 flex flex-col flex-1">
+            <h3 className="font-display font-black uppercase text-sm md:text-base tracking-tighter leading-tight mb-3 group-hover:text-[#FE0002] transition-colors line-clamp-2">
                 {event.name}
             </h3>
             <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 mt-auto">
@@ -49,12 +48,8 @@ const FeaturedEvents: React.FC = () => {
     const { data: events, isLoading } = useQuery({
         queryKey: ["events"],
         queryFn: async () => {
-            try {
-                const data = await getAllEvents();
-                return Array.isArray(data) ? data : [];
-            } catch {
-                return EVENTS;
-            }
+            const data = await getAllEvents();
+            return Array.isArray(data) ? data : [];
         },
     });
 
@@ -107,14 +102,14 @@ const FeaturedEvents: React.FC = () => {
     };
 
     return (
-        <section className="py-20 md:py-28 bg-white border-t border-black/5">
+        <section className="pt-12 pb-10 md:py-28 bg-white border-t border-black/5">
             <div className="max-w-7xl mx-auto px-4">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-10">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 mb-6 md:mb-10">
                     <div>
-                        <span className="text-[#FE0002] text-[10px] font-black uppercase tracking-[0.3em] block mb-3">
+                        <span className="text-[#FE0002] text-[10px] font-black uppercase tracking-[0.3em] block mb-2 md:mb-3">
                             UPCOMING BATTLES
                         </span>
-                        <h2 className="text-4xl md:text-5xl font-display font-black italic uppercase tracking-tighter border-b-4 border-[#FE0002] pb-4 inline-block">
+                        <h2 className="text-3xl md:text-5xl font-display font-black italic uppercase tracking-tighter border-b-4 border-[#FE0002] pb-3 md:pb-4 inline-block">
                             NEXT <span className="text-[#FE0002]">EVENTS</span>
                         </h2>
                     </div>
@@ -128,12 +123,12 @@ const FeaturedEvents: React.FC = () => {
                 </div>
 
                 {/* Tabs */}
-                <div className="flex gap-6 mb-8 border-b border-black/5">
+                <div className="flex gap-6 mb-6 md:mb-8 border-b border-black/5">
                     {(['upcoming', 'past'] as const).map((t) => (
                         <button
                             key={t}
                             onClick={() => setTab(t)}
-                            className={`pb-3 text-[10px] font-black uppercase tracking-[0.3em] transition-all relative ${
+                            className={`pb-3 pt-2 text-[10px] font-black uppercase tracking-[0.3em] transition-all relative ${
                                 tab === t ? 'text-black' : 'text-gray-400 hover:text-black'
                             }`}
                         >
@@ -181,7 +176,7 @@ const FeaturedEvents: React.FC = () => {
                                 className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-4 -mx-4 px-4 no-scrollbar"
                             >
                                 {list.map((event) => (
-                                    <div key={event._id} className="snap-center shrink-0 w-[80vw] max-w-[360px]">
+                                    <div key={event._id} className="snap-center shrink-0 w-[85vw] max-w-[400px]">
                                         <EventCard event={event} />
                                     </div>
                                 ))}

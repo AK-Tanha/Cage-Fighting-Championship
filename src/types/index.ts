@@ -204,7 +204,7 @@ export interface FightRecord {
     weight_class: string
     is_title_fight: boolean
     title_name?: string
-    result?: "win" | "loss"
+    result?: "win" | "loss" | "draw" | "no_contest"
     method?: string
     round_ended?: number
     time_ended?: string
@@ -217,6 +217,7 @@ export interface FightRecord {
 export interface FighterProfile extends Fighter {
     latest_fight?: FightRecord
     upcoming_fight?: FightRecord
+    past_fights?: FightRecord[]
     events?: FightEvent[]
 }
 

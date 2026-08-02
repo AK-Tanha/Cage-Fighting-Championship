@@ -24,11 +24,12 @@
 
 body {
   font-family: var(--font-rubik), ui-sans-serif, system-ui, sans-serif;
-  background-color: #fff;
-  color: #000;
+  background-color: #101317;
+  color: #e8ebef;
   font-size: 15px; /* Rubik at 15px feels like Inter at 16px */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;
 }
 
 h1,
@@ -73,3 +74,71 @@ h6 {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
+
+/*
+ * APP-LIKE MOBILE BEHAVIOR
+ * (targets physical browsing / home-screen installed feel)
+ */
+
+/* Prevent overscroll bounce exposing white/black bars; keep native pull feels */
+html,
+body {
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Fixed bottom tab bar takes visual space; keep content clear on mobile */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* Hide the native scrollbar churn on iOS for snap carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/*
+ * DARK THEME — rich graphite / charcoal (not pure black)
+ * Remaps content-filled light surfaces to dark surfaces with light text.
+ * Brand accent blocks and pure-white text (hero, chips, badges) are left
+ * untouched so they stay punchy.
+ */
+:root {
+    --c-bg: #101317;
+    --c-surface: #171b21;
+    --c-surface-2: #1c2129;
+    --c-faint: #6f757d;
+}
+
+/* Surfaces */
+.bg-white { background-color: var(--c-surface) !important; }
+.bg-white\/90 { background-color: rgba(23, 27, 33, 0.92) !important; }
+.bg-white\/80 { background-color: rgba(23, 27, 33, 0.86) !important; }
+.bg-gray-50 { background-color: var(--c-surface) !important; }
+.bg-gray-100 { background-color: #15191f !important; }
+.bg-gray-200 { background-color: #2a2f38 !important; }
+.bg-gray-300 { background-color: #3a4150 !important; }
+
+/* Text */
+.text-black { color: #e8ebef !important; }
+.text-gray-900 { color: #edeff3 !important; }
+.text-gray-800 { color: #c4c9d0 !important; }
+.text-gray-700 { color: #b9bfc7 !important; }
+.text-gray-600 { color: #a0a6ae !important; }
+.text-gray-500 { color: #91979f !important; }
+.text-gray-400 { color: #6f757d !important; }
+
+/* Borders / dividers */
+.border-black { border-color: rgba(255, 255, 255, 0.16) !important; }
+.border-black\/5 { border-color: rgba(255, 255, 255, 0.05) !important; }
+.border-black\/10 { border-color: rgba(255, 255, 255, 0.08) !important; }
+.border-black\/20 { border-color: rgba(255, 255, 255, 0.14) !important; }
+.border-black\/30 { border-color: rgba(255, 255, 255, 0.22) !important; }
+.divide-black\/10 { border-color: rgba(255, 255, 255, 0.08) !important; }
