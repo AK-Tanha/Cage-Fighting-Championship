@@ -1,84 +1,144 @@
+<div align="center">
+
 # Cage Fighting Championship (CFC)
 
-A modern, high-performance web application for the global leader in elite MMA competition. Built with Next.js, this platform provides features for fans to view events and fighter profiles, and includes a secure admin panel for staff to manage the site.
+A full-stack web platform for an elite MMA organization — pairing a **Next.js** fan-facing site with a **FastAPI** admin backend.
 
-## 🚀 Tech Stack
+**TypeScript · Next.js · React · Tailwind CSS · Python · FastAPI · MongoDB**
 
-- **Framework:** [Next.js](https://nextjs.org/) (App Router)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **Data Fetching:** [Axios](https://axios-http.com/)
-- **Icons:** FontAwesome
+</div>
 
-## 🛠️ Getting Started
+---
 
-First, run the development server:
+## Table of Contents
+
+- [About](#about)
+- [Tech Stack](#tech-stack)
+- [Key Features](#key-features)
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Design System](#design-system)
+- [Scripts](#scripts)
+
+---
+
+## About
+
+**Cage Fighting Championship (CFC)** is a production-quality web application for a global leader in MMA competition. It's split into two sides:
+
+- A **modern, responsive public site** where fight fans browse ranked fighters, upcoming events, and full fight cards.
+- A **secure admin panel** where staff manage fighters, events, and site content through a role-protected dashboard.
+
+The product is built with a bold, aggressive visual language — fitting for a premier cage-fighting brand — and is optimized for performance and SEO.
+
+---
+
+## Tech Stack
+
+| Layer            | Technology                                        |
+| ---------------- | ------------------------------------------------- |
+| Frontend         | Next.js (App Router) · React · TypeScript         |
+| Styling          | Tailwind CSS                                      |
+| Data Fetching    | Axios + TanStack Query                            |
+| Tables           | TanStack Table                                    |
+| Icons            | Lucide React                                      |
+| Backend          | FastAPI (Python)                                  |
+| Database         | MongoDB (Motor, async)                            |
+| Auth             | JWT (HTTP-Only cookies)                           |
+
+---
+
+## Key Features
+
+### Public Site
+
+- **Fighter rankings & detailed profile pages** — data-driven fighter cards.
+- **Event schedules & fight cards** — upcoming bouts and full matchups in one place.
+- **Fully responsive, modern UI** built on a hand-crafted design system.
+- **SEO-ready** — pre-configured Metadata API, `robots.txt`, `sitemap.ts`, and dynamic Open Graph images for social sharing.
+
+### Admin Panel
+
+- **Secure staff portal** at `/admin`; protected with HTTP-Only cookies inside Next.js Server Components.
+- **Metrics dashboard** — at-a-glance key numbers for the organization.
+- **Fighter & referee roster management** — add and manage talent.
+- **Event scheduling & fight card builder**.
+- **Flexible site settings & content config** (hero slides, uploads, and more).
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18.17+ (LTS recommended)
+
+### Run locally
 
 ```bash
+# Install dependencies
+npm install
+
+# Start the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the main site.
+Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Authentication
+> The app expects the CFC backend running on `http://localhost:8000`. See the [backend README](../cfc-backend/readme.md) for setup.
 
-The site includes a secure staff administration portal located at `/admin`.
-To access this dashboard during development, use the following default credentials:
+### Admin access (development)
+
+The secure staff portal lives at `/admin`. To try it during development:
 
 - **Email:** `admin@cfc.com`
 - **Password:** `admin123`
 
-## 📁 Project Structure
+---
+
+## Project Structure
 
 ```
+Cage-Fighting-Championship/
 ├── package.json
 ├── src/
 │   ├── app/                  # Next.js App Router root
 │   │   ├── admin/            # Secure admin dashboard routes
-│   │   ├── api/              # API routes (Auth, Proxy)
+│   │   ├── api/              # API routes (auth proxy, image proxy)
 │   │   ├── events/           # Public event pages
-│   │   └── fighters/         # Public fighter profiles
+│   │   ├── fighters/         # Public fighter profile pages
+│   │   ├── layout.tsx        # Root layout
+│   │   ├── page.tsx          # Homepage
+│   │   ├── robots.ts         # SEO robots config
+│   │   └── sitemap.ts        # SEO sitemap
 │   ├── components/           # Reusable React components
-│   │   ├── admin/            # Admin-specific components (Sidebar, Topbar)
-│   │   └── ...               # Public UI components (Navbar, Footer, Event Cards)
-│   └── lib/                  # Utilities and API configurations
+│   │   ├── admin/            # Admin components (Sidebar, Topbar, Tables)
+│   │   └── ...               # Public UI (Navbar, Footer, Event/Fighter Cards)
+│   └── lib/                  # Utilities & API configuration
 └── tailwind.config.ts        # Tailwind configuration and theme
 ```
 
-## 🎨 Design System
+---
 
-The application utilizes a bold, aggressive design system fitting for a premier MMA organization:
+## Design System
 
-- **Primary Colors:** Black (`#000000`), White (`#FFFFFF`), and CFC Red (`#FE0002`)
-- **Typography:**
-  - Primary/Display headers: `Montserrat`
-  - Body/Sans text: `Rubik`
-- **Aesthetic focus:** Sharp edges, heavy uppercase usage, clean borders, and high contrast.
+The interface uses a **bold, aggressive aesthetic** that matches the brand:
 
-## 📝 Key Features
+- **Primary palette:** Black `#000000`, White `#FFFFFF`, CFC Red `#FE0002`
+- **Typography:** `Montserrat` for display/headers, `Rubik` for body text
+- **Aesthetic:** sharp edges, heavy uppercase, clean borders, high contrast
 
-- **Public Site**
-  - Fighter Rankings & detailed Profile pages
-  - Live Event Schedules & Fight Cards
-  - Fully responsive, modern frontend UI
-  - Optimized SEO with pre-configured Metadata, robots.txt, and sitemap.ts
+---
 
-- **Admin Portal**
-  - Secured via HTTP-Only cookies inside Next.js Server Components
-  - Metrics Dashboard overview
-  - Fighter Roster Management interface
-  - Event Scheduling Interface
-  - Settings and Site Configurations
+## Scripts
 
-## 🔧 Scripts
+| Command         | Description                            |
+| --------------- | -------------------------------------- |
+| `npm run dev`   | Start the Next.js dev server (webpack) |
+| `npm run build` | Build the app for production           |
+| `npm run start` | Run the production server              |
+| `npm run lint`  | Run ESLint                             |
 
-- `npm run dev`: Starts the local Next.js development server
-- `npm run build`: Builds the production-ready application
-- `npm run start`: Runs the production server
-- `npm run lint`: Runs ESLint for code formatting and standard checking
+---
+
+**Built with TypeScript, Next.js, and a passion for clean, scalable front-end architecture.**
