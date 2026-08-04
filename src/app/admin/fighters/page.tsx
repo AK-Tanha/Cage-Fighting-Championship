@@ -178,7 +178,7 @@ export default function AdminFightersPage() {
                   </div>
                   <div className="min-w-0">
                     <div className="font-display font-black uppercase text-sm tracking-tighter truncate">{pi.full_name}</div>
-                    <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">{pa.weight_class}</div>
+                    <div className="text-[10px] text-black-300 font-bold uppercase tracking-widest mt-0.5">{pa.weight_class}</div>
                   </div>
                   <div className="ml-auto text-center">
                     <div className="font-bold text-gray-700 text-sm">{recordStr}</div>
@@ -202,7 +202,7 @@ export default function AdminFightersPage() {
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr
                   key={headerGroup.id}
-                  className="bg-white text-[10px] text-gray-400 font-bold uppercase tracking-widest border-b border-black/5"
+                  className="bg-white text-[10px] text-gray-300 font-bold uppercase tracking-widest border-b border-black/5"
                 >
                   {headerGroup.headers.map((header) => (
                     <th key={header.id} className="p-6">
@@ -216,7 +216,7 @@ export default function AdminFightersPage() {
               {table.getRowModel().rows.map((row) => (
                 <tr
                   key={row.id}
-                  className="border-b border-black/5 hover:bg-gray-50 transition-colors"
+                  className="border-b border-black/5 hover:bg-gray-100 hover:text-black transition-colors"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className="p-6">

@@ -93,7 +93,7 @@ export default function AdminRefereesPage() {
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white text-[10px] text-gray-400 font-bold uppercase tracking-widest border-b border-black/5">
+              <tr className="bg-white text-[10px] text-gray-600 font-bold uppercase tracking-widest border-b border-black/5">
                 <th className="p-6">Referee</th>
                 <th className="p-6 text-center">Record</th>
                 <th className="p-6">Nationality</th>
@@ -105,7 +105,7 @@ export default function AdminRefereesPage() {
               {referees.map((referee, i) => (
                 <tr
                   key={i}
-                  className="border-b border-black/5 hover:bg-gray-50 transition-colors"
+                  className="border-b border-black/5 hover:bg-gray-100 hover:text-black transition-colors"
                 >
                   <td className="p-6">
                     <div className="flex items-center gap-4">
@@ -125,13 +125,13 @@ export default function AdminRefereesPage() {
                       </div>
                     </div>
                   </td>
-                  <td className="p-6 text-center font-bold text-gray-700">
+                  <td className="p-6 text-center font-bold text-gray-700 hover:text-black">
                     {referee.record}
                   </td>
-                  <td className="p-6 uppercase text-gray-500 text-[10px] tracking-widest font-bold">
+                  <td className="p-6 uppercase text-gray-600 text-[10px] tracking-widest font-bold hover:text-black">
                     {referee.nationality}
                   </td>
-                  <td className="p-6 text-center text-gray-500">
+                  <td className="p-6 text-center text-gray-600 hover:text-black">
                     {referee.date_of_birth}
                   </td>
                   <td className="p-6 text-right space-x-2 whitespace-nowrap">

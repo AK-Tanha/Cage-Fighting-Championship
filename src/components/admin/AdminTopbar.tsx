@@ -60,7 +60,7 @@ const AdminTopbar: React.FC<AdminTopbarProps> = ({ onMenuOpen }) => {
                     <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-black/10 rounded-sm shadow-lg py-1">
                         <button
                             onClick={handleLogout}
-                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                         >
                             <i className="fa-solid fa-arrow-right-from-bracket text-gray-400"></i>
                             Sign Out

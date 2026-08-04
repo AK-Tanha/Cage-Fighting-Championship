@@ -89,7 +89,7 @@ export default function AdminJudgesPage() {
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white text-[10px] text-gray-400 font-bold uppercase tracking-widest border-b border-black/5">
+              <tr className="bg-white text-[10px] text-gray-600 font-bold uppercase tracking-widest border-b border-black/5">
                 <th className="p-6">Judge</th>
                 <th className="p-6">Nationality</th>
                 <th className="p-6 text-center">Date of Birth</th>
@@ -100,7 +100,7 @@ export default function AdminJudgesPage() {
               {judges.map((judge, i) => (
                 <tr
                   key={i}
-                  className="border-b border-black/5 hover:bg-gray-50 transition-colors"
+                  className="border-b border-black/5 hover:bg-gray-100 hover:text-black transition-colors"
                 >
                   <td className="p-6">
                     <div className="flex items-center gap-4">
@@ -120,10 +120,10 @@ export default function AdminJudgesPage() {
                       </div>
                     </div>
                   </td>
-                  <td className="p-6 uppercase text-gray-500 text-[10px] tracking-widest font-bold">
+                  <td className="p-6 uppercase text-gray-600 text-[10px] tracking-widest font-bold hover:text-black">
                     {judge.nationality}
                   </td>
-                  <td className="p-6 text-center text-gray-500">
+                  <td className="p-6 text-center text-gray-600 hover:text-black">
                     {judge.date_of_birth}
                   </td>
                   <td className="p-6 text-right space-x-2 whitespace-nowrap">

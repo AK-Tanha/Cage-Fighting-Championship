@@ -92,7 +92,7 @@ export default function AdminHeroPage() {
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white text-[10px] text-gray-400 font-bold uppercase tracking-widest border-b border-black/5">
+              <tr className="bg-white text-[10px] text-gray-600 font-bold uppercase tracking-widest border-b border-black/5">
                 <th className="p-6">Thumbnail</th>
                 <th className="p-6">Title</th>
                 <th className="p-6">Subtitle</th>
@@ -118,7 +118,7 @@ export default function AdminHeroPage() {
                 slides.map((slide) => (
                   <tr
                     key={slide._id}
-                    className="border-b border-black/5 hover:bg-gray-50 transition-colors"
+                    className="border-b border-black/5 hover:bg-gray-100 hover:text-black transition-colors"
                   >
                     <td className="p-6">
                       <div className="w-20 h-10 bg-black rounded-sm overflow-hidden relative">
@@ -136,7 +136,7 @@ export default function AdminHeroPage() {
                         {slide.title || "Untitled"}
                       </div>
                     </td>
-                    <td className="p-6 text-gray-500 text-[10px] tracking-widest font-bold max-w-xs truncate">
+                    <td className="p-6 text-gray-600 text-[10px] tracking-widest font-bold max-w-xs truncate hover:text-black">
                       {slide.subtitle || ""}
                     </td>
                     <td className="p-6 text-center">
@@ -144,7 +144,7 @@ export default function AdminHeroPage() {
                         {slide.is_active ? "Active" : "Inactive"}
                       </span>
                     </td>
-                    <td className="p-6 text-center font-bold text-gray-700">
+                    <td className="p-6 text-center font-bold text-gray-700 hover:text-black">
                       {slide.order}
                     </td>
                     <td className="p-6 text-right space-x-2 whitespace-nowrap">

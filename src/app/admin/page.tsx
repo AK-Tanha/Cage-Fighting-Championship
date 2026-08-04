@@ -101,7 +101,7 @@ export default function AdminDashboardPage() {
                                     return (
                                         <div
                                             key={event._id}
-                                            className="flex items-start gap-4 pb-4 border-b border-black/5 last:border-0 last:pb-0 cursor-pointer hover:bg-gray-50 -mx-2 px-2 rounded-sm transition-colors"
+                                            className="flex items-start gap-4 pb-4 border-b border-black/5 last:border-0 last:pb-0 cursor-pointer hover:bg-gray-100 -mx-2 px-2 rounded-sm transition-colors"
                                             onClick={() => router.push(`/admin/events/${event._id}`)}
                                         >
                                             <div className={`w-2 h-2 mt-2 rounded-full shrink-0 ${isPast ? "bg-gray-300" : "bg-[#FE0002]"}`}></div>
