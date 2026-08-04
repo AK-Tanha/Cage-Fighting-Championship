@@ -17,6 +17,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
         { name: 'Hero Section', path: '/admin/hero', icon: 'fa-solid fa-images' },
         { name: 'Fighters', path: '/admin/fighters', icon: 'fa-solid fa-user-ninja' },
         { name: 'Referees', path: '/admin/referees', icon: 'fa-solid fa-gavel' },
+        { name: 'Judges', path: '/admin/judges', icon: 'fa-solid fa-scale-balanced' },
         { name: 'Events', path: '/admin/events', icon: 'fa-solid fa-calendar-days' },
         { name: 'Settings', path: '/admin/settings', icon: 'fa-solid fa-gear' },
     ];

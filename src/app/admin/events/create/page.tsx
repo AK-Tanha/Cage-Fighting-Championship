@@ -1,8 +1,9 @@
 "use client";
 
-import { createEvent, getAllFighters, getAllReferees, uploadImage } from "@/lib/api";
-import { Fighter, Referee } from "@/types";
+import { createEvent, getAllFighters, getAllJudges, getAllReferees, uploadImage } from "@/lib/api";
+import { Fighter, Judge, Referee } from "@/types";
 import SelectWithImage from "@/components/SelectWithImage";
+import JudgeScorecardEditor from "@/components/JudgeScorecardEditor";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,6 +15,8 @@ const initialFight = {
   fighter1: "",
   fighter2: "",
   referee: "",
+  judges: [] as string[],
+  scorecards: [] as any[],
   weight_class: "",
   weight_limit_lbs: undefined as number | undefined,
   title_fight: false,
@@ -41,16 +44,19 @@ const EventCreate = () => {
   const [success, setSuccess] = useState(false);
   const [fighters, setFighters] = useState<Fighter[]>([]);
   const [referees, setReferees] = useState<Referee[]>([]);
+  const [judges, setJudges] = useState<Judge[]>([]);
 
   useEffect(() => {
     const fetchFightersAndReferees = async () => {
       try {
-        const [fightersData, refereesData] = await Promise.all([
+        const [fightersData, refereesData, judgesData] = await Promise.all([
           getAllFighters(),
-          getAllReferees()
+          getAllReferees(),
+          getAllJudges(),
         ]);
         setFighters(fightersData);
         setReferees(refereesData);
+        setJudges(judgesData);
       } catch (err) {
         console.error("Failed to load fighters or referees for selection", err);
       }
@@ -94,6 +100,12 @@ const EventCreate = () => {
       ...prev,
       fights: [...prev.fights, { ...initialFight, order: prev.fights.length + 1 }],
     }));
+  };
+
+  const handleJudgesChange = (index: number, patch: { judges?: string[]; scorecards?: any[] }) => {
+    const newFights = [...data.fights];
+    newFights[index] = { ...newFights[index], ...patch };
+    setData((prev) => ({ ...prev, fights: newFights }));
   };
 
   const removeFight = (index: number) => {
@@ -153,6 +165,12 @@ const EventCreate = () => {
     label: r.name,
     imageUrl: r.image_url,
   })), [referees]);
+
+  const judgeOptions = useMemo(() => judges.map((j) => ({
+    value: j._id,
+    label: j.name,
+    imageUrl: j.image_url,
+  })), [judges]);
 
   const tabs: { key: Section; label: string; icon: string }[] = [
     { key: "event-info", label: "Event Info", icon: "fa-solid fa-calendar" },
@@ -556,6 +574,16 @@ const EventCreate = () => {
                             </select>
                           </div>
                         </div>
+
+                        <JudgeScorecardEditor
+                          options={judgeOptions}
+                          judges={fight.judges || []}
+                          scorecards={fight.scorecards || []}
+                          rounds={fight.rounds || 3}
+                          fighter1Name={f1?.personal_info?.full_name}
+                          fighter2Name={f2?.personal_info?.full_name}
+                          onChange={(patch) => handleJudgesChange(index, patch)}
+                        />
 
                         {/* Collapsible details */}
                         <details className="group">

@@ -58,68 +58,119 @@ const FightCard: React.FC<{ fight: FightRecord; showResult: boolean }> = ({
   fight,
   showResult,
 }) => (
-  <div className="flex items-center gap-3 md:gap-8">
-    <div className="w-14 h-14 md:w-20 md:h-20 bg-white/10 flex items-center justify-center font-display font-black text-xl md:text-3xl italic overflow-hidden rounded-full shrink-0">
-      {fight.opponent_image ? (
-        <Image
-          src={fight.opponent_image}
-          alt={fight.opponent_name}
-          className="w-full h-full object-cover"
-          width={80}
-          height={80}
-        />
-      ) : (
-        <span className="text-[#FE0002]">
-          {fight.opponent_name.charAt(0)}
-        </span>
-      )}
-    </div>
-    <div className="flex-1 min-w-0">
-      {showResult && (
-        <p className="text-gray-400 text-[10px] md:text-xs uppercase font-black tracking-[0.2em] mb-1">
-          {fight.method === "Draw" || fight.method === "No Contest" ? (
-            <span className="text-amber-400">{fight.method}</span>
-          ) : fight.result ? (
-            fight.result === "win" ? (
-              <span className="text-green-400">WIN</span>
-            ) : (
-              <span className="text-red-400">LOSS</span>
-            )
-          ) : null}
-          {fight.method && fight.method !== "Draw" && fight.method !== "No Contest" && (
-            <span> &mdash; {fight.method}</span>
+  <div>
+    <div className="flex items-center gap-3 md:gap-8">
+      <div className="w-14 h-14 md:w-20 md:h-20 bg-white/10 flex items-center justify-center font-display font-black text-xl md:text-3xl italic overflow-hidden rounded-full shrink-0">
+        {fight.opponent_image ? (
+          <Image
+            src={fight.opponent_image}
+            alt={fight.opponent_name}
+            className="w-full h-full object-cover"
+            width={80}
+            height={80}
+          />
+        ) : (
+          <span className="text-[#FE0002]">
+            {fight.opponent_name.charAt(0)}
+          </span>
+        )}
+      </div>
+      <div className="flex-1 min-w-0">
+        {showResult && (
+          <p className="text-gray-400 text-[10px] md:text-xs uppercase font-black tracking-[0.2em] mb-1">
+            {fight.method === "Draw" || fight.method === "No Contest" ? (
+              <span className="text-amber-400">{fight.method}</span>
+            ) : fight.result ? (
+              fight.result === "win" ? (
+                <span className="text-green-400">WIN</span>
+              ) : (
+                <span className="text-red-400">LOSS</span>
+              )
+            ) : null}
+            {fight.method && fight.method !== "Draw" && fight.method !== "No Contest" && (
+              <span> &mdash; {fight.method}</span>
+            )}
+            {fight.round_ended && <span> &mdash; R{fight.round_ended}</span>}
+            {fight.time_ended && <span> &mdash; {fight.time_ended}</span>}
+          </p>
+        )}
+        {!showResult && (
+          <p className="text-gray-400 text-[10px] md:text-xs uppercase font-black tracking-[0.2em] mb-1">
+            Next Fight
+          </p>
+        )}
+        <p className="text-base md:text-2xl font-display font-black uppercase italic leading-none mb-1 truncate">
+          vs {fight.opponent_name}
+        </p>
+        <p className="text-[11px] md:text-sm text-gray-400 font-bold tracking-wide truncate">
+          {fight.event_name}
+          {fight.is_title_fight && fight.title_name && (
+            <span className="ml-1 md:ml-2 text-[#FE0002]">({fight.title_name})</span>
           )}
-          {fight.round_ended && <span> &mdash; R{fight.round_ended}</span>}
-          {fight.time_ended && <span> &mdash; {fight.time_ended}</span>}
+          {fight.event_date && (
+            <>
+              <span className="mx-1 md:mx-2">&middot;</span>
+              {fight.event_date}
+            </>
+          )}
+          {fight.event_location && (
+            <>
+              <span className="mx-1 md:mx-2">&middot;</span>
+              {fight.event_location}
+            </>
+          )}
         </p>
-      )}
-      {!showResult && (
-        <p className="text-gray-400 text-[10px] md:text-xs uppercase font-black tracking-[0.2em] mb-1">
-          Next Fight
-        </p>
-      )}
-      <p className="text-base md:text-2xl font-display font-black uppercase italic leading-none mb-1 truncate">
-        vs {fight.opponent_name}
-      </p>
-      <p className="text-[11px] md:text-sm text-gray-400 font-bold tracking-wide truncate">
-        {fight.event_name}
-        {fight.is_title_fight && fight.title_name && (
-          <span className="ml-1 md:ml-2 text-[#FE0002]">({fight.title_name})</span>
-        )}
-        {fight.event_date && (
-          <>
-            <span className="mx-1 md:mx-2">&middot;</span>
-            {fight.event_date}
-          </>
-        )}
-        {fight.event_location && (
-          <>
-            <span className="mx-1 md:mx-2">&middot;</span>
-            {fight.event_location}
-          </>
-        )}
-      </p>
+      </div>
     </div>
+    {(fight.scorecards || []).length > 0 && (
+      <div className="mt-4 overflow-hidden rounded-lg border border-white/10 bg-white/5">
+        <p className="px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-white/50 border-b border-white/10">
+          Judges&apos; Scorecards (10-Point Must)
+        </p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="text-[8px] text-white/40 font-bold uppercase tracking-widest border-b border-white/10">
+                <th className="p-2 pl-3">Judge</th>
+                {Array.from({ length: fight.round_ended || 3 }, (_, i) => (
+                  <th key={i} className="p-2 text-center">R{i + 1}</th>
+                ))}
+                <th className="p-2 text-center">Total</th>
+              </tr>
+            </thead>
+            <tbody className="text-[10px] font-bold">
+              {fight.scorecards!.map((sc, i) => (
+                <tr key={sc.judge_id} className="border-b border-white/10 last:border-b-0">
+                  <td className="p-2 pl-3 uppercase tracking-tight text-white/80 whitespace-nowrap">
+                    Judge {i + 1}
+                  </td>
+                  {Array.from({ length: fight.round_ended || 3 }, (_, rIdx) => {
+                    const r = (sc.rounds || []).find((x) => x.round_number === rIdx + 1);
+                    if (!r) return <td key={rIdx} className="p-2 text-center text-white/30">—</td>;
+                    return (
+                      <td key={rIdx} className="p-2 text-center whitespace-nowrap">
+                        <span className="text-red-400">{r.fighter1_score}</span>
+                        <span className="text-white/30 mx-1">-</span>
+                        <span className="text-blue-400">{r.fighter2_score}</span>
+                      </td>
+                    );
+                  })}
+                  <td className="p-2 text-center whitespace-nowrap">
+                    <span className="text-red-400">
+                      {(sc.rounds || []).reduce((s, r) => s + (r.fighter1_score || 0), 0)}
+                    </span>
+                    <span className="text-white/30 mx-1">-</span>
+                    <span className="text-blue-400">
+                      {(sc.rounds || []).reduce((s, r) => s + (r.fighter2_score || 0), 0)}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    )}
   </div>
 );
 

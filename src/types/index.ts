@@ -128,10 +128,48 @@ export interface RefereeUpdate {
     image_url?: string
 }
 
+export interface Judge {
+    _id: string
+    name: string
+    nationality?: string
+    date_of_birth?: string
+    bio?: string
+    image_url?: string
+}
+
+export interface JudgeCreate {
+    name: string
+    nationality?: string
+    date_of_birth?: string
+    bio?: string
+    image_url?: string
+}
+
+export interface JudgeUpdate {
+    name?: string
+    nationality?: string
+    date_of_birth?: string
+    bio?: string
+    image_url?: string
+}
+
+export interface JudgeRoundScore {
+    round_number: number
+    fighter1_score: number
+    fighter2_score: number
+}
+
+export interface JudgeScorecard {
+    judge_id: string
+    rounds: JudgeRoundScore[]
+}
+
 export interface Fight {
     fighter1: string
     fighter2: string
     referee?: string
+    judges?: string[]
+    scorecards?: JudgeScorecard[]
     weight_class: string
     weight_limit_lbs?: number
     title_fight?: boolean
@@ -181,6 +219,8 @@ export interface StandaloneFight {
     is_main_event?: boolean
     is_co_main_event?: boolean
     referee?: string
+    judges?: string[]
+    scorecards?: JudgeScorecard[]
     status: "scheduled" | "completed" | "cancelled"
     result?: "win" | "loss" | "draw" | "no_contest"
     method?: "KO/TKO" | "Submission" | "Decision" | "Disqualification" | "No Contest" | "Draw"
@@ -212,6 +252,9 @@ export interface FightRecord {
     is_co_main_event: boolean
     fight_type?: string
     fight_order: number
+    referee?: string
+    judges?: string[]
+    scorecards?: JudgeScorecard[]
 }
 
 export interface FighterProfile extends Fighter {

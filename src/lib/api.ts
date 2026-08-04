@@ -10,6 +10,9 @@ import {
     Referee,
     RefereeCreate,
     RefereeUpdate,
+    Judge,
+    JudgeCreate,
+    JudgeUpdate,
     FighterProfile
 } from '@/types';
 import axios from 'axios';
@@ -157,6 +160,57 @@ export const updateReferee = async (id: string, referee: RefereeUpdate) => {
 export const deleteReferee = async (id: string) => {
     try {
         const response = await api.delete(`/referees/${id}/`);
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// Judges
+export const createJudge = async (judge: JudgeCreate) => {
+    try {
+        const response = await api.post('/judges/', judge);
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const getAllJudges = async () => {
+    try {
+        const response = await api.get('/judges/');
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const getJudgeById = async (id: string) => {
+    try {
+        const response = await api.get(`/judges/${id}/`);
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const updateJudge = async (id: string, judge: JudgeUpdate) => {
+    try {
+        const response = await api.put(`/judges/${id}/`, judge);
+        return response.data;
+    } catch (error: any) {
+        console.error('API Error:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const deleteJudge = async (id: string) => {
+    try {
+        const response = await api.delete(`/judges/${id}/`);
         return response.data;
     } catch (error: any) {
         console.error('API Error:', error.response?.data || error.message);

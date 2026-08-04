@@ -1,7 +1,8 @@
 "use client";
-import { getAllFighters, getAllReferees, getEventById, updateEvent } from "@/lib/api";
+import { getAllFighters, getAllJudges, getAllReferees, getEventById, updateEvent } from "@/lib/api";
 import { Fighter, FightEvent, formatRecord } from "@/types";
 import SelectWithImage from "@/components/SelectWithImage";
+import JudgeScorecardEditor from "@/components/JudgeScorecardEditor";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -11,6 +12,8 @@ const initialFight = {
   fighter1: "",
   fighter2: "",
   referee: "",
+  judges: [] as string[],
+  scorecards: [] as any[],
   weight_class: "",
   weight_limit_lbs: undefined as number | undefined,
   title_fight: false,
@@ -35,6 +38,7 @@ const EventDetailsPage = () => {
   const [event, setEvent] = useState<FightEvent | null>(null);
   const [fighters, setFighters] = useState<Record<string, Fighter>>({});
   const [referees, setReferees] = useState<Record<string, any>>({});
+  const [judges, setJudges] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [fighterHoverCard, setFighterHoverCard] = useState<Fighter | null>(
@@ -51,10 +55,11 @@ const EventDetailsPage = () => {
     const loadData = async () => {
       if (!params?.id) return;
       try {
-        const [eventData, fightersData, refereesData] = await Promise.all([
+        const [eventData, fightersData, refereesData, judgesData] = await Promise.all([
           getEventById(params.id as string),
           getAllFighters(),
           getAllReferees(),
+          getAllJudges(),
         ]);
         setEvent(eventData);
 
@@ -69,6 +74,12 @@ const EventDetailsPage = () => {
           refereeMap[r._id] = r;
         });
         setReferees(refereeMap);
+
+        const judgeMap: Record<string, any> = {};
+        judgesData.forEach((j: any) => {
+          judgeMap[j._id] = j;
+        });
+        setJudges(judgeMap);
       } catch (err: any) {
         setError(err.message || "Failed to load event details");
       } finally {
@@ -101,6 +112,18 @@ const EventDetailsPage = () => {
     label: r.name,
     imageUrl: r.image_url,
   })), [refereeList]);
+
+  const judgeList = useMemo(() => Object.values(judges), [judges]);
+  const judgeOptions = useMemo(() => judgeList.map((j: any) => ({
+    value: j._id,
+    label: j.name,
+    imageUrl: j.image_url,
+  })), [judgeList]);
+
+  const handleJudgesChange = (patch: { judges?: string[]; scorecards?: any[] }) => {
+    if (!editFight) return;
+    setEditFight((prev: any) => ({ ...prev, ...patch }));
+  };
 
   const handleEditChange = (field: string, value: any) => {
     if (!editFight) return;
@@ -475,6 +498,16 @@ const EventDetailsPage = () => {
                     </label>
                   </div>
                 </div>
+
+                <JudgeScorecardEditor
+                  options={judgeOptions}
+                  judges={editFight.judges || []}
+                  scorecards={editFight.scorecards || []}
+                  rounds={editFight.rounds || 3}
+                  fighter1Name={editFight.fighter1 && fighters[editFight.fighter1]?.personal_info?.full_name}
+                  fighter2Name={editFight.fighter2 && fighters[editFight.fighter2]?.personal_info?.full_name}
+                  onChange={handleJudgesChange}
+                />
                 <div className="flex gap-3">
                   <button onClick={saveBout} disabled={saving} className="bg-[#FE0002] text-white px-6 py-2 text-xs font-bold uppercase tracking-widest hover:bg-black transition-colors rounded-sm">
                     {saving ? "Saving..." : "Save Bout"}

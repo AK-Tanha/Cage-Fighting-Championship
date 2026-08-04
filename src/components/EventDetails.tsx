@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React, { useRef } from "react";
-import { getAllFighters, getAllReferees, getEventById } from "../lib/api";
+import { getAllFighters, getAllJudges, getAllReferees, getEventById } from "../lib/api";
 import { FightEvent, Fighter, formatRecord } from "../types";
 import { useQuery } from "@tanstack/react-query";
 import { EventDetailsSkeleton } from "./Skeleton";
@@ -15,6 +15,7 @@ const FightRow: React.FC<{
   fight: any;
   fighters: Record<string, Fighter>;
   referees: Record<string, any>;
+  judges: Record<string, any>;
   index: number;
   setFighterHoverCard?: (f: Fighter | null) => void;
   setHoverPos?: (pos: { x: number; y: number }) => void;
@@ -22,6 +23,7 @@ const FightRow: React.FC<{
   fight,
   fighters,
   referees,
+  judges,
   index,
   setFighterHoverCard,
   setHoverPos,
@@ -33,6 +35,7 @@ const FightRow: React.FC<{
   const resolved = !!(fight.winner_id || methodText === "draw" || methodText === "no_contest");
 
   return (
+    <>
     <div className="group relative bg-white border border-black/5 hover:border-[#FE0002]/30 transition-all rounded-sm p-3 sm:p-4 md:p-4 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-6 shadow-sm">
       <div
         className="flex-1 flex items-center gap-2 md:gap-4 w-full md:w-auto min-w-0"
@@ -102,6 +105,21 @@ const FightRow: React.FC<{
                 : "Pending"}
             </p>
           </div>
+          {(fight.judges || []).filter((jid: string) => jid).length > 0 && (
+            <div className="flex flex-col items-center">
+              <p className="text-[6px] md:text-[7px] font-black uppercase tracking-widest text-gray-400 opacity-60">
+                Judges
+              </p>
+              <p className="text-[8px] md:text-[9px] font-bold uppercase tracking-tight text-gray-500 whitespace-nowrap">
+                {(fight.judges || [])
+                  .filter((jid: string) => jid)
+                  .map((jid: string) =>
+                    judges[jid] ? judges[jid].name.split(" ")[0] : "Judge",
+                  )
+                  .join(", ")}
+              </p>
+            </div>
+          )}
           {fight.title_fight && (
             <span className="bg-black text-white text-[7px] font-black px-2 py-0.5 uppercase tracking-widest shrink-0">
               TITLE
@@ -153,6 +171,57 @@ const FightRow: React.FC<{
         <div className="w-6 shrink-0 hidden md:block" />
       </div>
     </div>
+    {(fight.scorecards || []).length > 0 && (
+      <div className="mt-3 border border-black/10 bg-gray-50/80 rounded-sm overflow-hidden">
+        <div className="px-3 py-2 bg-black text-white text-[8px] font-black uppercase tracking-widest flex items-center justify-between">
+          <span>Judges&apos; Scorecards (10-Point Must)</span>
+          <span>{fight.judges?.filter((j: string) => j).length || 0} Judges</span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="text-[8px] text-gray-400 font-bold uppercase tracking-widest border-b border-black/5">
+                <th className="p-2 pl-3">Judge</th>
+                {Array.from({ length: fight.rounds || 3 }, (_, i) => (
+                  <th key={i} className="p-2 text-center">R{i + 1}</th>
+                ))}
+                <th className="p-2 text-center">Total</th>
+              </tr>
+            </thead>
+            <tbody className="text-[10px] font-bold">
+              {fight.scorecards.map((sc: any) => (
+                <tr key={sc.judge_id} className="border-b border-black/5 last:border-b-0">
+                  <td className="p-2 pl-3 uppercase tracking-tight text-gray-700 whitespace-nowrap">
+                    {judges[sc.judge_id]?.name || "Judge"}
+                  </td>
+                  {Array.from({ length: fight.rounds || 3 }, (_, i) => {
+                    const r = (sc.rounds || []).find((x: any) => x.round_number === i + 1);
+                    if (!r) return <td key={i} className="p-2 text-center text-gray-300">—</td>;
+                    return (
+                      <td key={i} className="p-2 text-center whitespace-nowrap">
+                        <span className="text-red-600">{r.fighter1_score}</span>
+                        <span className="text-gray-300 mx-1">-</span>
+                        <span className="text-blue-600">{r.fighter2_score}</span>
+                      </td>
+                    );
+                  })}
+                  <td className="p-2 text-center whitespace-nowrap">
+                    <span className="text-red-600">
+                      {(sc.rounds || []).reduce((s: number, r: any) => s + (r.fighter1_score || 0), 0)}
+                    </span>
+                    <span className="text-gray-300 mx-1">-</span>
+                    <span className="text-blue-600">
+                      {(sc.rounds || []).reduce((s: number, r: any) => s + (r.fighter2_score || 0), 0)}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    )}
+  </>
   );
 };
 
@@ -191,6 +260,19 @@ const EventDetails: React.FC = () => {
         refereeMap[r._id] = r;
       });
       return refereeMap;
+    },
+    enabled: !!params?.id,
+  });
+
+  const { data: judgesMap = {} } = useQuery({
+    queryKey: ["judges"],
+    queryFn: async () => {
+      const data = await getAllJudges();
+      const judgeMap: Record<string, any> = {};
+      (Array.isArray(data) ? data : []).forEach((j: any) => {
+        judgeMap[j._id] = j;
+      });
+      return judgeMap;
     },
     enabled: !!params?.id,
   });
@@ -361,6 +443,7 @@ const EventDetails: React.FC = () => {
                   fight={fight}
                   fighters={fightersMap}
                   referees={refereesMap}
+                  judges={judgesMap}
                   index={idx}
                   setFighterHoverCard={setFighterHoverCard}
                   setHoverPos={setHoverPos}
